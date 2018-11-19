@@ -1,0 +1,38 @@
+Template: oracle-java8-unlimited-jce-policy/local
+Type: string
+Default: 
+Description: Location to the local file:
+ Have you already downloaded the zip
+ package from the Internet? If so, please enter the directory you downloaded
+ it into. Do not include the filename here. If you
+ have not already downloaded it, leave this blank and the package will be
+ downloaded automatically.
+
+Template: oracle-java8-unlimited-jce-policy/not_exist
+Type: error
+Description: File not found
+ The .zip file does not exist in the directory you entered.
+ Please try again. Enter the path of the directory that the package is in
+ (don't type the filename at the end of the path).
+
+Template: shared/present-oracle-license-v1-1
+Type: note
+Description: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX 
+ .
+ You MUST agree to the license available in http://java.com/license if you want to use Oracle JDK.
+
+Template: shared/accepted-oracle-license-v1-1
+Type: boolean
+Default: false
+Description: Do you accept the Oracle Binary Code license terms?
+ In order to install this package, you must accept the license terms, the
+ "Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX ". Not accepting
+ will cancel the installation.
+
+Template: shared/error-oracle-license-v1-1
+Type: error
+Description: Declined "Oracle Binary Code License for Java"
+ If you do not agree to the license terms you cannot install this software.
+ .
+ The installation of this package will be canceled.
+

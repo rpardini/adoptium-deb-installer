@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Oracle Java 8 Plugin Control Panel
+Comment=Oracle Java 8 Plugin Control Panel
+Exec=/usr/lib/jvm/java-8-oracle/bin/ControlPanel
+Terminal=false
+Type=Application
+Icon=oracle_java8
+Categories=Settings;

@@ -1,0 +1,76 @@
+This package was debianized by Alin Andrei <webupd8@gmail.com> on
+Mon, 16 Jan 2011 00:58:32 +0000.
+
+
+Copyright Holder:
+- The original installer script using ruby:
+  Copyright 2001-2006 Takuo KITAME <kitame@northeye.org>
+- The rewritten installer script using sh,
+  later integrated into the debian/p* scripts:
+  Copyright 2006-2007 Bart Martens <bartm@knars.be>
+- Script modified for JDK 7,8 and 9:
+  Copyright 2012 Bruce Ingalls <Bruce.Ingalls@gmail.com>
+  Copyright 2012-2017 Alin Andrei <andrew@webupd8.org>
+
+Files: debian/*
+Copyright: 2012-2017 Alin Andrei <andrew@webupd8.org>
+           2012 Bruce Ingalls <Bruce.Ingalls@gmail.com>
+           2001-2006 Takuo KITAME <kitame@northeye.org>
+           2006-2007 Bart Martens <bartm@knars.be>
+License: GPL-3+
+
+Files: debian/icons/*
+Copyright: 2017 dAKirby309 (Michael) (http://dakirby309.deviantart.com)
+License: CC Attribution-Noncommercial 4.0
+
+License: GPL-3+
+
+  This package is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version. 
+  .
+  This package is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details. 
+  .
+  You should have received a copy of the GNU General Public License
+  along with this package; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+  On Debian systems, the complete text of the GNU General
+  Public License can be found in `/usr/share/common-licenses/GPL-3'.
+  .
+  Note that this package does not contain any software from Oracle.  This
+  package does however contain a script to download and install Oracle JDK.
+  All information regarding Java itself can be found on this website:
+  http://www.oracle.com/
+
+License: CC Attribution-Noncommercial 4.0
+
+  You are free to:
+  Share — copy and redistribute the material in any medium or format
+  Adapt — remix, transform, and build upon the material
+  The licensor cannot revoke these freedoms as long as you follow the license 
+  terms.
+  .
+  Under the following terms:
+  Attribution — You must give appropriate credit, provide a link to the 
+  license, and indicate if changes were made.   
+  You may do so in any reasonable manner, but not in any way that suggests 
+  the licensor endorses you or your use.
+  NonCommercial — You may not use the material for commercial purposes.
+  No additional restrictions — You may not apply legal terms or technological 
+  measures that legally restrict others from doing anything the license permits.
+ 
+  Notices:
+  .
+  You do not have to comply with the license for elements of the material in 
+  the public domain or where your use is permitted by an applicable exception 
+  or limitation.
+  No warranties are given. The license may not give you all of the permissions 
+  necessary for your intended use. For example, other rights such as publicity, 
+  privacy, or moral rights may limit how you use the material.
+  .
+  The license is available at: https://creativecommons.org/licenses/by-nc/4.0/
+  The icon was downloaded from: http://www.iconarchive.com/show/simply-styled-icons-by-dakirby309/Java-icon.html

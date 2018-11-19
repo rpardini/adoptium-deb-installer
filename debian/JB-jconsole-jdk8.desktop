@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Oracle Java 8 Console
+Comment=Oracle Java 8 Monitoring & Management Console
+Exec=/usr/lib/jvm/java-8-oracle/bin/jconsole
+Terminal=false
+Type=Application
+Icon=oracle_java8
+Categories=Application;System;

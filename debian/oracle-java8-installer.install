@@ -1,0 +1,15 @@
+debian/javaws-wrapper.sh /var/cache/oracle-jdk8-installer/
+debian/jar.binfmt /var/cache/oracle-jdk8-installer/
+debian/fontconfig.Ubuntu.properties /var/cache/oracle-jdk8-installer/
+#debian/oracle_java8.xpm /usr/share/pixmaps/
+#debian/oracle_java8.png /usr/share/pixmaps/
+debian/icons/16/oracle_java8.png usr/share/icons/hicolor/16x16/apps/
+debian/icons/22/oracle_java8.png usr/share/icons/hicolor/22x22/apps/
+debian/icons/24/oracle_java8.png usr/share/icons/hicolor/24x24/apps/
+debian/icons/32/oracle_java8.png usr/share/icons/hicolor/32x32/apps/
+debian/icons/48/oracle_java8.png usr/share/icons/hicolor/48x48/apps/
+debian/icons/128/oracle_java8.png usr/share/icons/hicolor/128x128/apps/
+debian/*.desktop /usr/share/applications/
+debian/*.applications /usr/share/application-registry/
+debian/*.mime /usr/share/mime-info/
+debian/*.keys /usr/share/mime-info/

@@ -1,0 +1,89 @@
+#!/bin/sh
+
+set -e
+
+case $(dpkg --print-architecture) in
+  'i386'|'i586'|'i686'    ) arch=i386; dld=i586
+   ;;
+  'amd64'  ) arch=amd64; dld=x64
+   ;;
+	arm*      )
+  arch=arm
+	if [ `uname -m` = "armv7l" ] || [ `uname -m` = "armv6l" ]; then
+		if [ -x /usr/bin/readelf ] ; then
+			HARDFLOAT=`readelf -A /proc/self/exe | grep Tag_ABI_VFP_args`
+			if [ -z "$HARDFLOAT" ]; then
+				# Softfloat
+				echo "Oracle Java 8 only supports ARM v6/v7 hardfloat ABI."
+				#dld='arm-vfp-sflt'
+			else
+				# Hardfloat
+				dld='arm-vfp-hflt'
+			fi
+		fi
+	else
+		echo "Oracle JDK 8 only supports ARM v6/v7 hardfloat."
+		arch=''
+	fi
+	;;
+  *         )
+    echo "Please report to author unsupported platform '`uname -m`'.";
+    echo "Proceeding without web browser plugin support";
+    arch='';
+esac
+
+J_INSTALL_DIR=/usr/lib/jvm/java-8-oracle
+
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ] || [ "$1" = "purge" ]; then
+
+    #This will issue ignorable warnings for alternatives that are not part of a group
+    if [ -d "$J_INSTALL_DIR/man/man1" ];then
+        for f in $J_INSTALL_DIR/man/man1/*; do
+            name=`basename $f .1.gz`;
+            #some files, like jvisualvm might not be links. Further assume this for corresponding man page
+            if [ ! -f "/usr/bin/$name" -o -L "/usr/bin/$name" ]; then
+                if [ ! -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]; then
+                    name=`basename $f .1`;          #handle any legacy uncompressed pages
+                fi
+                update-alternatives --remove $name $J_INSTALL_DIR/bin/$name
+            fi
+        done
+
+    else  #no man pages available
+				if [ -e $J_INSTALL_DIR/bin/ ]; then
+      		for f in $J_INSTALL_DIR/bin/*; do
+        		  name=`basename $f`;
+        		  if [ ! -f "/usr/bin/$name" -o -L "/usr/bin/$name" ]; then  #some files, like jvisualvm might not be links
+        		      update-alternatives --remove $name $J_INSTALL_DIR/bin/$name
+         			fi
+      		done
+				fi
+    fi
+
+
+if which update-binfmts >/dev/null; then
+    # try to remove and ignore the error
+    if [ -e /var/lib/binfmts/jar ]; then
+        update-binfmts --package oracle-java8 --remove jar /usr/bin/jexec || true
+    fi
+fi
+
+#Remove links without man pages
+[ -f $J_INSTALL_DIR/jre/bin/java_vm ]     && update-alternatives --remove     java_vm     $J_INSTALL_DIR/jre/bin/java_vm
+[ -f $J_INSTALL_DIR/bin/jcontrol ]    && update-alternatives --remove    jcontrol    $J_INSTALL_DIR/bin/jcontrol
+
+#Remove manually installed jre
+[ -f $J_INSTALL_DIR/jre/lib/jexec ] && update-alternatives --remove jexec $J_INSTALL_DIR/jre/lib/jexec
+[ -f $J_INSTALL_DIR/jre/bin/java ] && update-alternatives --remove java $J_INSTALL_DIR/jre/bin/java
+
+#Remove Firefox (and compatible) plugin.
+[ -f $J_INSTALL_DIR/jre/lib/$arch/libnpjp2.so ] && update-alternatives --remove mozilla-javaplugin.so $J_INSTALL_DIR/jre/lib/$arch/libnpjp2.so
+
+fi
+
+
+#DEBHELPER#
+
+exit 0
+
+# vim: ts=2 sw=2

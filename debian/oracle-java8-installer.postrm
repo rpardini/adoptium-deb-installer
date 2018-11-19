@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+  purge|remove|abort-install)
+    rm -rf "/usr/lib/jvm/java-8-oracle"
+    rm -rf "/var/cache/oracle-jdk8-installer"
+    rm -rf "/usr/lib/oracle-jdk8-installer-unpackdir"
+    rm -rf "/usr/lib/jvm/.java-8-oracle.jinfo"
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
+# vim: ts=2 sw=2

@@ -1,0 +1,122 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+
+### Variables
+VER='0.7'
+
+# Folders
+J_INSTALL_DIR=/usr/lib/jvm/java-8-oracle/jre/lib/security
+OLDDIR=/usr/lib/oracle-jdk8-installer-unpackdir
+NEWDIR=/var/cache/oracle-jdk8-installer
+
+SHA256SUM_TGZ="f3020a3922efd6626c2fff45695d527f34a8020e938a49292561f18ad1320b59"
+J_DIR=UnlimitedJCEPolicyJDK8
+FILENAME=jce_policy-8.zip
+PARTNER_URL=http://download.oracle.com/otn-pub/java/jce/8/$FILENAME
+
+
+### Functions
+fp_exit_with_error() {
+	echo $1
+	echo "Unlimited JCE Policy for Oracle Java 8."
+	db_fset oracle-java8-unlimited-jce-policy/local seen false
+	exit 1
+}
+
+fp_download_and_unpack() {
+	cd /var/cache/oracle-jdk8-installer
+
+	db_get oracle-java8-unlimited-jce-policy/local
+	if [ -d "$RET" -a -f "$RET"/$FILENAME ]; then
+		echo "Installing from local file $RET/$FILENAME"
+		cp -f -p "$RET"/$FILENAME ${FILENAME}_TEMP
+		mv -f ${FILENAME}_TEMP $FILENAME
+	else # no local file
+		# use apt proxy
+		APT_PROXIES=$(apt-config shell \
+		http_proxy Acquire::http::Proxy \
+		https_proxy Acquire::https::Proxy \
+		ftp_proxy Acquire::ftp::Proxy \
+		dl_direct Acquire::http::Proxy::download.oracle.com \
+		dl_direct Acquire::http::Proxy::*.java.net \
+		)
+
+		[ -n "$APT_PROXIES" ] && eval export $APT_PROXIES
+
+		if [ "$dl_direct" = "DIRECT" ]; then
+			unset http_proxy
+			unset https_proxy
+			unset ftp_proxy
+		fi
+
+		# if /var/cache/oracle-jdk8-installer/wgetrc exists, use it for downloading java
+		if [ -f /var/cache/oracle-jdk8-installer/wgetrc ]; then
+
+			# downloading Unlimited JCE Policy for Oracle Java 8
+			echo "Using wget settings from /var/cache/oracle-jdk8-installer/wgetrc"
+			echo "Downloading Unlimited JCE Policy for Oracle Java 8..."
+			WGETRC=wgetrc wget --continue --no-check-certificate -O $FILENAME --header "Cookie: oraclelicense=a" $PARTNER_URL \
+				|| fp_exit_with_error "download failed"
+			echo "Download done."
+
+		#if it's not, use the settings below (which also creates /var/cache/oracle-jdk8-installer/wgetrc)
+		else
+
+			# setting wget options
+			:> wgetrc
+			echo "noclobber = off" >> wgetrc
+			echo "dir_prefix = ." >> wgetrc
+			echo "dirstruct = off" >> wgetrc
+			echo "verbose = on" >> wgetrc
+			echo "progress = dot:mega" >> wgetrc
+			echo "tries = 5" >> wgetrc
+
+			# downloading Unlimited JCE Policy for Oracle Java 8
+			echo "No /var/cache/oracle-jdk8-installer/wgetrc file found."
+			echo "Creating /var/cache/oracle-jdk8-installer/wgetrc and"
+			echo "using default oracle-java8-installer wgetrc settings for it."
+			echo "Downloading Unlimited JCE Policy for Oracle Java 8..."
+			WGETRC=wgetrc wget --continue --no-check-certificate -O $FILENAME --header "Cookie: oraclelicense=a" $PARTNER_URL \
+				|| fp_exit_with_error "download failed"
+			echo "Download done."
+
+		fi
+	fi
+
+	# Removing outdated cached downloads
+	echo "Removing outdated cached downloads..."
+	rm -vrf $J_DIR
+
+	# Verify SHA256 checksum of (copied or downloaded) tarball
+        echo "$SHA256SUM_TGZ  $FILENAME" | sha256sum -c > /dev/null 2>&1 \
+		|| fp_exit_with_error "sha256sum mismatch $FILENAME"
+
+	# Unpacking and checking the plugin
+	unzip $FILENAME || fp_exit_with_error "Cannot unpack Unlimited JCE Policy for Oracle Java 8"
+}
+
+### Main
+
+# Create dirs
+mkdir -p /var/cache/oracle-jdk8-installer /usr/lib/jvm /usr/lib/oracle-jdk8-installer-unpackdir
+
+fp_download_and_unpack
+
+# Copy it to the right dir
+if [ -e /usr/lib/jvm/java-8-oracle/jre/lib/security ]; then
+	cp -rf $NEWDIR/$J_DIR/*.jar /usr/lib/jvm/java-8-oracle/jre/lib/security/
+fi
+
+db_fset oracle-java8-unlimited-jce-policy/local seen false
+
+echo "Unlimited JCE Policy for Oracle Java 8 istalled"
+
+#DEBHELPER#
+
+exit 0
+
+# vim: ts=2 sw=2

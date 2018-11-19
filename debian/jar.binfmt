@@ -1,0 +1,3 @@
+package oracle-java8
+interpreter /usr/lib/jvm/java-8-oracle/jre/lib/jexec
+magic PK\x03\x04

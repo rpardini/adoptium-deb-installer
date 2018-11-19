@@ -1,0 +1,9 @@
+#!/bin/sh
+
+update-java-alternatives -s java-8-oracle > /dev/null 2>&1
+
+#DEBHELPER#
+
+exit 0
+
+# vim: ts=2 sw=2

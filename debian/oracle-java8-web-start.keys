@@ -1,0 +1,6 @@
+application/x-java-jnlp-file
+        description=Oracle Java 8 Web Start Application
+        icon_filename=oracle_java8
+        default_action_type=application
+        default_application_id=java-web-start
+        short_list_application_user_additions=java-web-start

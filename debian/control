@@ -1,0 +1,74 @@
+Source: oracle-java8-installer
+Section: non-free/java
+Priority: optional
+Maintainer: Alin Andrei <webupd8@gmail.com>
+Build-Depends: debhelper, lsb-release
+Standards-Version: 3.9.8
+Homepage: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+
+Package: oracle-java8-installer
+Section: non-free/java
+Architecture: all
+Pre-Depends: wget, binutils, debconf (>= 0.5) | debconf-2.0
+Depends: java-common (>= 0.24), locales, ${misc:Depends}
+Conflicts: j2se-common
+Recommends: gsfonts-x11, oracle-java8-set-default
+Suggests: binfmt-support, visualvm,
+          ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming,
+          firefox | firefox-2 | iceweasel | mozilla-firefox | iceape-browser | mozilla-browser | epiphany-gecko | epiphany-webkit | epiphany-browser | galeon | midbrowser | moblin-web-browser | xulrunner | xulrunner-1.9 | konqueror | chromium-browser | midori | google-chrome
+Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless,
+          java-runtime, java2-runtime, java5-runtime, java6-runtime, java7-runtime, java8-runtime,
+          java-runtime-headless, java2-runtime-headless, java5-runtime-headless, java6-runtime-headless, java7-runtime-headless, java8-runtime-headless,
+          java-jdk, java2-jdk, java5-jdk, java6-jdk, java7-jdk,
+          java-sdk, java2-sdk, java5-sdk, java6-sdk, java7-sdk,
+          openjdk-6-jre, openjdk-6-jre-headless, icedtea-6-plugin,
+          openjdk-7-jre, openjdk-7-jre-headless, openjdk-7-jdk, icedtea-7-plugin,
+          oracle-java7-bin, oracle-java7-jre, oracle-java7-jdk, oracle-java7-fonts, oracle-java7-plugin, oracle-java8-bin, oracle-java8-jre, oracle-java8-jdk, oracle-java8-fonts, oracle-java8-plugin, java8-jdk, java8-sdk, openjdk-8-jdk, openjdk-8-jre, openjdk-8-jre-headless, openjdk-8-jdk-headless, icedtea-8-plugin
+Replaces: openjdk-6-jre, openjdk-6-jre-headless, icedtea-6-plugin,
+          openjdk-7-jre, openjdk-7-jre-headless, openjdk-7-jdk, icedtea-7-plugin,
+          oracle-java7-bin, oracle-java7-jre, oracle-java7-jdk, oracle-java7-fonts, oracle-java7-plugin,
+          oracle-jdk7-installer, oracle-java8-bin, oracle-java8-jre, oracle-java8-jdk, oracle-java8-fonts, oracle-java8-plugin, oracle-jdk8-installer
+Xb-Npp-Applications: ec8030f7-c20a-464f-9b0e-13a3a9e97384, 92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a
+Xb-Npp-Name: The Java(TM) Plug-in, Java SE 8
+Xb-Npp-MimeType: application/x-java-vm, application/x-java-applet, application/x-java-applet;version=1.1, application/x-java-applet;version=1.1.1, application/x-java-applet;version=1.1.2, application/x-java-applet;version=1.1.3, application/x-java-applet;version=1.2, application/x-java-applet;version=1.2.1, application/x-java-applet;version=1.2.2, application/x-java-applet;version=1.3, application/x-java-applet;version=1.3.1, application/x-java-applet;version=1.4, application/x-java-applet;version=1.4.1, application/x-java-applet;version=1.4.2, application/x-java-applet;version=1.5, application/x-java-applet;version=1.6, application/x-java-applet;jpi-version=1.6.0_07, application/x-java-bean, application/x-java-bean;version=1.1, application/x-java-bean;version=1.1.1, application/x-java-bean;version=1.1.2, application/x-java-bean;version=1.1.3, application/x-java-bean;version=1.2, application/x-java-bean;version=1.2.1, application/x-java-bean;version=1.2.2, application/x-java-bean;version=1.3, application/x-java-bean;version=1.3.1, application/x-java-bean;version=1.4, application/x-java-bean;version=1.4.1, application/x-java-bean;version=1.4.2, application/x-java-bean;version=1.5, application/x-java-bean;version=1.6, application/x-java-bean;jpi-version=1.8.0_b54, application/x-java-jnlp-file
+Description: Oracle Java(TM) Development Kit (JDK) 8
+ The JDK(TM) is a development environment for building and running
+ applications, applets, and components using the Java programming language.
+ .
+ The JDK(TM) includes Java Runtime Environment (JRE) for running applications,
+ Java Plug-in for running applets in web browsers and tools useful for
+ developing and testing programs written in the Java programming language.
+ .
+ Note that this package does not contain any software from Oracle. This
+ package does however contain a script to download and install Oracle JDK 8.
+ All information regarding Java itself can be found on this website:
+ http://www.oracle.com/
+
+Package: oracle-java8-set-default
+Section: non-free/java
+Architecture: all
+Pre-Depends: oracle-java8-installer
+Depends: ${misc:Depends}
+Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
+Replaces: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
+Description: Set Oracle JDK 8 as default Java
+ This package sets Java 8 as default (JAVA_HOME, PATH, etc.)
+
+Package: oracle-java8-unlimited-jce-policy
+Section: non-free/java
+Architecture: all
+Pre-Depends: unzip, oracle-java8-installer (>= ${source:Version})
+Depends: ${misc:Depends}
+Description: Unlimited JCE Policy for Oracle Java 8
+ Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy
+ for Oracle Java 8
+ .
+ Due to import control restrictions of some countries, the version of
+ the JCE policy files that are bundled in the Java Runtime Environment,
+ or JRE(TM), 8 environment allow "strong" but limited cryptography to be
+ used. This download bundle (the one including this README file)
+ provides "unlimited strength" policy files which contain no
+ restrictions on cryptographic strengths.
+ .
+ This package only works properly if it's installed AFTER installing the
+ Oracle Java 8 package!
