@@ -1,8 +1,5 @@
 #!/bin/sh
 
-. /usr/share/debconf/confmodule
-
-# Theres no license to accept.
-exit 0
-
 #DEBHELPER#
+
+exit 0
