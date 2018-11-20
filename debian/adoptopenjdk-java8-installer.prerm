@@ -32,7 +32,7 @@ case $(dpkg --print-architecture) in
     arch='';
 esac
 
-J_INSTALL_DIR=/usr/lib/jvm/java-8-oracle
+J_INSTALL_DIR=/usr/lib/jvm/java-8-adoptopenjdk
 
 if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ] || [ "$1" = "purge" ]; then
 

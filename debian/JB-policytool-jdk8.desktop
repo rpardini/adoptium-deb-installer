@@ -3,7 +3,7 @@
 Encoding=UTF-8
 Name=Oracle Java 8 Policy Tool
 Comment=Oracle Java 8 Policy Tool
-Exec=/usr/lib/jvm/java-8-oracle/bin/policytool
+Exec=/usr/lib/jvm/java-8-adoptopenjdk/bin/policytool
 Terminal=false
 Type=Application
 Icon=oracle_java8

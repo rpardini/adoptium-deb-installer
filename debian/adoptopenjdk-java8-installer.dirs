@@ -1,2 +1,2 @@
-usr/lib/jvm/java-8-oracle
+usr/lib/jvm/java-8-adoptopenjdk
 var/cache/oracle-jdk8-installer

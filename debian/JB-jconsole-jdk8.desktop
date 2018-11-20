@@ -3,7 +3,7 @@
 Encoding=UTF-8
 Name=Oracle Java 8 Console
 Comment=Oracle Java 8 Monitoring & Management Console
-Exec=/usr/lib/jvm/java-8-oracle/bin/jconsole
+Exec=/usr/lib/jvm/java-8-adoptopenjdk/bin/jconsole
 Terminal=false
 Type=Application
 Icon=oracle_java8

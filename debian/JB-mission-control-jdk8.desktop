@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/lib/jvm/java-8-oracle/bin/jmc
+Exec=/usr/lib/jvm/java-8-adoptopenjdk/bin/jmc
 Icon=oracle_java8
 Name=Oracle Java 8 Mission Control
 StartupNotify=true
