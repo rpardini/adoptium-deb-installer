@@ -2,19 +2,21 @@ Source: adoptopenjdk-java8-installer
 Section: java
 Priority: optional
 Maintainer: Ricardo Pardini <ricardo@pardini.net>
-Build-Depends: debhelper, lsb-release
+Build-Depends: debhelper, lsb-release, bash
 Standards-Version: 3.9.7
 Homepage: https://adoptopenjdk.net/
 
 Package: adoptopenjdk-java8-installer
 Section: java
 Architecture: all
-Pre-Depends: wget, binutils, ca-certificates
+Pre-Depends: wget, binutils, ca-certificates, bash
 Depends: java-common (>= 0.24), locales, ${misc:Depends}
 Conflicts: j2se-common
-Recommends: gsfonts-x11, oracle-java8-set-default
+Recommends: gsfonts-x11, adoptopenjdk-java8-set-default
 Suggests: binfmt-support,
-          ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming
+          ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic,
+          ttf-kochi-mincho | ttf-sazanami-mincho,
+          ttf-arphic-uming
 Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless,
           java-runtime, java2-runtime, java5-runtime, java6-runtime, java7-runtime, java8-runtime,
           java-runtime-headless, java2-runtime-headless, java5-runtime-headless, java6-runtime-headless, java7-runtime-headless, java8-runtime-headless,
@@ -48,7 +50,7 @@ Depends: ${misc:Depends}
 Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
 Replaces: oracle-java8-set-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
 Description: Set AdoptOpenJDK JDK 8 as default Java
- This package sets Java 8 as default (JAVA_HOME, PATH, etc.)
+ This package sets Java 8 as default (JAVA_HOME, PATH, update-alternatives, etc.)
 
 Package: adoptopenjdk-java8-unlimited-jce-policy
 Section: non-free/java

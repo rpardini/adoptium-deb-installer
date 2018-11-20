@@ -179,9 +179,6 @@ cp -rf java-8-adoptopenjdk /usr/lib/jvm/
 # Install jar.binfmt
 install -m 755 jar.binfmt $J_INSTALL_DIR/jre/lib/jar.binfmt
 
-# Install OpenJDK's font config
-install -m 755 fontconfig.Ubuntu.properties $J_INSTALL_DIR/jre/lib/
-
 # Clean up
 rm -rf java-8-adoptopenjdk
 

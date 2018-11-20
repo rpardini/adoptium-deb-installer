@@ -8,8 +8,8 @@ RUN apt-get -y --no-install-recommends install devscripts build-essential lintia
 RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
 
 # Pre-download and cache this as to alleviate the load of developing against github
-#RUN mkdir -p /var/cache/adoptopenjdk-jdk8-installer
-#RUN wget --continue -O /var/cache/adoptopenjdk-jdk8-installer/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
+RUN mkdir -p /var/cache/adoptopenjdk-jdk8-installer
+RUN wget --continue -O /var/cache/adoptopenjdk-jdk8-installer/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
 
 WORKDIR /opt/build
 COPY . /opt/build/
@@ -22,3 +22,5 @@ RUN dpkg -i ../*unlimited*.deb
 # Some tests...
 RUN java -version
 RUN javac -version
+
+CMD bash

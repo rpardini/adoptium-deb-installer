@@ -4,5 +4,4 @@
 		<comment>Java Archive</comment>
 		<glob pattern="*.jar"/>
 	</mime-type>
-
 </mime-info>
