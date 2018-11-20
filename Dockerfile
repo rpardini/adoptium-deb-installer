@@ -1,14 +1,18 @@
 FROM ubuntu:xenial
 
-WORKDIR /usr/src
-RUN mkdir -p /usr/src/adoptopenjdk-java8-installer
-WORKDIR /usr/src/adoptopenjdk-java8-installer
-
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
-RUN apt-get -y install devscripts build-essential lintian debhelper
+# build dependencies
+RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release
+# install dependencies
+RUN apt-get -y --no-install-recommends install java-common wget locales unzip
 
+# @TODO: why unzip?
 
-COPY debian /usr/src/adoptopenjdk-java8-installer/debian
-RUN ls -la
+WORKDIR /opt/build
+COPY . /opt/build/
 RUN debuild -us -uc
-RUN ls -la ../
+
+RUN dpkg -i ../*installer*.deb
+RUN dpkg -i ../*set-default*.deb
+RUN dpkg -i ../*unlimited*.deb
