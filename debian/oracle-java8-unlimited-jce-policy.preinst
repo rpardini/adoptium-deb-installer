@@ -1,8 +1,0 @@
-#!/bin/sh
-
-. /usr/share/debconf/confmodule
-
-# no license needed here
-exit 0
-
-#DEBHELPER#
