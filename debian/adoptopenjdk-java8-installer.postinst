@@ -1,14 +1,4 @@
 #!/bin/sh
-#jinstall - Command line script to easily add new java directories to
-#'alternatives'. This sets the java as default, and you can switch your
-#default java with update-java-alternatives
-#
-#Copyright 2014 Bruce.Ingalls at gmail & Alin Andrei <webupd8@gmail.com>
-#GPL v3 Affero license at http://www.gnu.org/
-#Downloads & discussion at http://www.webupd8.org/
-#Tested on Ubuntu Oneiric; should require few changes for other modern Unix systems
-#Currently tested only with JDK, not JRE.
-# Not fully internationalized, including japanese man pages
 
 set -e
 set -x
@@ -85,14 +75,6 @@ J_INSTALL_DIR=/usr/lib/jvm/java-8-adoptopenjdk
 ########Create dirs
 mkdir -p /var/cache/adoptopenjdk-jdk8-installer
 mkdir -p /usr/lib/jvm
-mkdir -p /usr/lib/adoptopenjdk-jdk8-installer-unpackdir
-#without this, an error is displayed if the folder doesn't exist:
-mkdir -p /usr/lib/mozilla/plugins
-if [ $arch = "arm" ]; then
-	#apparently this dir doesn't exist on some arm machines
-	mkdir -p /usr/share/man/man1
-fi
-
 #############
 
 
@@ -103,107 +85,96 @@ fp_exit_with_error() {
 	exit 1
 }
 
-fp_download_and_unpack() {
 
-	RET=/var/cache/adoptopenjdk-jdk8-installer
-	cd ${RET}
+# Download and unpack, either from existing local file or download.
+RET=/var/cache/adoptopenjdk-jdk8-installer
+cd ${RET}
 
-	if [ -d "$RET" -a -f "$RET"/$FILENAME ]; then
-		echo "Installing from local file $RET/$FILENAME"
-		cp -f -p "$RET"/$FILENAME ${FILENAME}_TEMP
-		mv -f ${FILENAME}_TEMP $FILENAME
-	else # no local file
+if [ -d "$RET" -a -f "$RET"/$FILENAME ]; then
+  echo "Installing from local file $RET/$FILENAME"
+  cp -f -p "$RET"/$FILENAME ${FILENAME}_TEMP
+  mv -f ${FILENAME}_TEMP $FILENAME
+else # no local file
 
-	  echo "No local file detected, will download."
-	  echo "RET: $RET "
-	  echo "FILENAME: $FILENAME "
-	  echo "Full: $RET/$FILENAME "
+  echo "No local file detected, will download."
+  echo "RET: $RET "
+  echo "FILENAME: $FILENAME "
+  echo "Full: $RET/$FILENAME "
 
 
-		# use apt proxy
-		# @TODO: fix for github/amazons3
-		APT_PROXIES=$(apt-config shell \
-		http_proxy Acquire::http::Proxy \
-		https_proxy Acquire::https::Proxy \
-		ftp_proxy Acquire::ftp::Proxy \
-		dl_direct Acquire::http::Proxy::download.oracle.com \
-		dl_direct Acquire::http::Proxy::edelivery.oracle.com \
-		dl_direct Acquire::http::Proxy::*.java.net \
-		)
+  # use apt proxy
+  # @TODO: fix for github/amazons3
+  APT_PROXIES=$(apt-config shell \
+  http_proxy Acquire::http::Proxy \
+  https_proxy Acquire::https::Proxy \
+  ftp_proxy Acquire::ftp::Proxy \
+  dl_direct Acquire::http::Proxy::download.oracle.com \
+  dl_direct Acquire::http::Proxy::edelivery.oracle.com \
+  dl_direct Acquire::http::Proxy::*.java.net \
+  )
 
-		if [ -n "$APT_PROXIES" ]; then
-			eval export $APT_PROXIES
-		fi
+  if [ -n "$APT_PROXIES" ]; then
+    eval export $APT_PROXIES
+  fi
 
-    if [ "$dl_direct" = "DIRECT" ]; then
-        unset http_proxy
-        unset https_proxy
-        unset ftp_proxy
-    fi
+  if [ "$dl_direct" = "DIRECT" ]; then
+      unset http_proxy
+      unset https_proxy
+      unset ftp_proxy
+  fi
 
-		# if /var/cache/adoptopenjdk-jdk8-installer/wgetrc exists, use it for downloading java
-		if [ -f /var/cache/adoptopenjdk-jdk8-installer/wgetrc ]; then
-      echo "Using wget settings from /var/cache/adoptopenjdk-jdk8-installer/wgetrc"
-		#if it's not, use the settings below (which also creates /var/cache/adoptopenjdk-jdk8-installer/wgetrc)
-		else
-			# setting wget options
-			:> wgetrc
-			echo "noclobber = off" >> wgetrc
-			echo "dir_prefix = ." >> wgetrc
-			echo "dirstruct = off" >> wgetrc
-			echo "verbose = on" >> wgetrc
-			echo "progress = dot:mega" >> wgetrc
-			echo "tries = 5" >> wgetrc
-
-			# downloading jdk8
-			echo "No /var/cache/adoptopenjdk-jdk8-installer/wgetrc file found."
-			echo "Creating /var/cache/adoptopenjdk-jdk8-installer/wgetrc and"
-			echo "using default adoptopenjdk-java8-installer wgetrc settings for it."
-		fi
+  # if /var/cache/adoptopenjdk-jdk8-installer/wgetrc exists, use it for downloading java
+  if [ -f /var/cache/adoptopenjdk-jdk8-installer/wgetrc ]; then
+    echo "Using wget settings from /var/cache/adoptopenjdk-jdk8-installer/wgetrc"
+  #if it's not, use the settings below (which also creates /var/cache/adoptopenjdk-jdk8-installer/wgetrc)
+  else
+    # setting wget options
+    :> wgetrc
+    echo "noclobber = off" >> wgetrc
+    echo "dir_prefix = ." >> wgetrc
+    echo "dirstruct = off" >> wgetrc
+    echo "verbose = on" >> wgetrc
+    echo "progress = dot:mega" >> wgetrc
+    echo "tries = 5" >> wgetrc
 
     # downloading jdk8
-    echo "Downloading AdoptOpenJDK Java 8..."
-    WGETRC=wgetrc wget --continue -O ${FILENAME} ${PARTNER_URL} || fp_exit_with_error "download failed"
-    echo "Download done."
+    echo "No /var/cache/adoptopenjdk-jdk8-installer/wgetrc file found."
+    echo "Creating /var/cache/adoptopenjdk-jdk8-installer/wgetrc and"
+    echo "using default adoptopenjdk-java8-installer wgetrc settings for it."
+  fi
 
-	fi # end if local file
+  # downloading jdk8
+  echo "Downloading AdoptOpenJDK Java 8..."
+  WGETRC=wgetrc wget --continue -O ${FILENAME} ${PARTNER_URL} || fp_exit_with_error "download failed"
+  echo "Download done."
 
-	# Removing outdated cached downloads
-	echo "Removing outdated cached downloads..."
-	rm -vf $FILENAMES_OLD
-	rm -vf $FILENAMES_OLD1
-	rm -vf $FILENAMES_OLD2
-	rm -vf $FILENAMES_OLD_N
-	rm -vf $FILENAMES_OLD_NA
-	if [ ! $arch = "arm" ]; then
-		rm -vf jdk-8-linux* #temp
-	fi
+fi # end if local file
 
-  # @TODO: wtf?
-	rm -rf jdk*/
+# Removing outdated cached downloads
+echo "Removing outdated cached downloads..."
+rm -vf $FILENAMES_OLD
+rm -vf $FILENAMES_OLD1
+rm -vf $FILENAMES_OLD2
+rm -vf $FILENAMES_OLD_N
+rm -vf $FILENAMES_OLD_NA
+if [ ! $arch = "arm" ]; then
+  rm -vf jdk-8-linux* #temp
+fi
 
-	# verify SHA256 checksum of (copied or downloaded) tarball
-  echo "$SHA256SUM_TGZ  $FILENAME" | sha256sum -c > /dev/null 2>&1 || fp_exit_with_error "sha256sum mismatch $FILENAME"
+# @TODO: wtf?
+rm -rf jdk*/
 
-	# unpacking
-	tar xzf $FILENAME || fp_exit_with_error "cannot unpack jdk8"
-}
+# verify SHA256 checksum of (copied or downloaded) tarball
+echo "$SHA256SUM_TGZ  $FILENAME" | sha256sum -c > /dev/null 2>&1 || fp_exit_with_error "sha256sum mismatch $FILENAME"
 
-NEWDIR=/var/cache/adoptopenjdk-jdk8-installer
+# unpacking
+tar xzf $FILENAME || fp_exit_with_error "cannot unpack jdk8"
 
-fp_download_and_unpack
 
 # Copy JDK to the right dir
 mv $J_DIR java-8-adoptopenjdk
 rm -rf /usr/lib/jvm/java-8-adoptopenjdk
 cp -rf java-8-adoptopenjdk /usr/lib/jvm/
-
-# There's no javaws on arm
-if [ ! $arch = "arm" ]; then
-	# Install javaws-wrapper.sh
-	mv $J_INSTALL_DIR/jre/bin/javaws $J_INSTALL_DIR/jre/bin/javaws.real
-	install -m 755 javaws-wrapper.sh $J_INSTALL_DIR/jre/bin/javaws
-fi
 
 # Install jar.binfmt
 install -m 755 jar.binfmt $J_INSTALL_DIR/jre/lib/jar.binfmt
@@ -292,12 +263,6 @@ else  #no man pages available
     done
 fi
 
-# Hide javaws and jvisualvm desktop files on arm since these files don't exist on this architecture
-if [ $arch = "arm" ]; then
-echo "NoDisplay=true" >> /usr/share/applications/JB-javaws-jdk8.desktop
-echo "NoDisplay=true" >> /usr/share/applications/JB-jvisualvm-jdk8.desktop
-fi
-
 # Use cacerts form ca-certificates-java if it's installed:
 if [ -e /etc/ssl/certs/java/cacerts ]; then
   cd /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/security
@@ -327,12 +292,6 @@ done
 if which update-binfmts >/dev/null && [ -r /usr/share/binfmts/jar ]; then
     update-binfmts --package oracle-java8 --import jar || true
 fi
-
-# Install Firefox (and compatible) plugin. $arch will be empty for unknown platform
-# No plugin for arm architecture yet
-[ -f $J_INSTALL_DIR/jre/lib/$arch/libnpjp2.so ] && \
-	update-alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so mozilla-javaplugin.so $J_INSTALL_DIR/jre/lib/$arch/libnpjp2.so $PRIORITY && \
-	echo "plugin mozilla-javaplugin.so $J_INSTALL_DIR/jre/lib/$arch/libnpjp2.so" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo && \
 
 echo "Oracle JDK 8 installed"
 echo ""

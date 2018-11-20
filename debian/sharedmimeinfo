@@ -5,8 +5,4 @@
 		<glob pattern="*.jar"/>
 	</mime-type>
 
-	<mime-type type="application/x-java-jnlp-file">
-		<comment>Java Web Start application</comment>
-		<glob pattern="*.jnlp"/>
-	</mime-type>
 </mime-info>

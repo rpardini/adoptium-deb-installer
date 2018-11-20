@@ -1,4 +1,3 @@
-debian/javaws-wrapper.sh /var/cache/adoptopenjdk-jdk8-installer/
 debian/jar.binfmt /var/cache/adoptopenjdk-jdk8-installer/
 debian/fontconfig.Ubuntu.properties /var/cache/adoptopenjdk-jdk8-installer/
 #debian/oracle_java8.xpm /usr/share/pixmaps/

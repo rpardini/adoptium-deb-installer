@@ -6,7 +6,6 @@ case "$1" in
   purge|remove|abort-install)
     rm -rf "/usr/lib/jvm/java-8-adoptopenjdk"
     rm -rf "/var/cache/adoptopenjdk-jdk8-installer"
-    rm -rf "/usr/lib/adoptopenjdk-jdk8-installer-unpackdir"
     rm -rf "/usr/lib/jvm/.java-8-adoptopenjdk.jinfo"
     ;;
 esac
@@ -14,5 +13,3 @@ esac
 #DEBHELPER#
 
 exit 0
-
-# vim: ts=2 sw=2
