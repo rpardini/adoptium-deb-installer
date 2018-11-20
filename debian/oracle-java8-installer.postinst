@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 #jinstall - Command line script to easily add new java directories to
 #'alternatives'. This sets the java as default, and you can switch your
 #default java with update-java-alternatives
@@ -17,10 +17,10 @@ VER='0.6alpha'
 case $(dpkg --print-architecture) in
 'i386'|'i586'|'i686') arch=i386; dld=i586;
   SHA256SUM_TGZ="640333e749f24428b78c2b10422f7174f8fbd0b8acde27526c195024fad8b6b6" #must be modified for each release
-  ;; 
+  ;;
 'amd64'  ) arch=amd64; dld=x64;
-  SHA256SUM_TGZ="53c29507e2405a7ffdbba627e6d64856089b094867479edc5ede4105c1da0d65" #must be modified for each release 
-  ;; 
+  SHA256SUM_TGZ="53c29507e2405a7ffdbba627e6d64856089b094867479edc5ede4105c1da0d65" #must be modified for each release
+  ;;
 arm*      )
   arch=arm
 	if [ `uname -m` = "armv7l" ] || [ `uname -m` = "armv6l" ]; then
@@ -97,7 +97,7 @@ fi
 fp_exit_with_error() {
 	echo $1
 	echo "Oracle JDK 8 is NOT installed."
-	db_fset oracle-java8-installer/local seen false
+	db_fset adoptopenjdk-java8-installer/local seen false
 	exit 1
 }
 
@@ -105,7 +105,7 @@ fp_download_and_unpack() {
 
 	cd /var/cache/oracle-jdk8-installer
 
-	db_get oracle-java8-installer/local
+	db_get adoptopenjdk-java8-installer/local
 	if [ -d "$RET" -a -f "$RET"/$FILENAME ]; then
 
 		echo "Installing from local file $RET/$FILENAME"
@@ -158,7 +158,7 @@ fp_download_and_unpack() {
 			# downloading jdk8
 			echo "No /var/cache/oracle-jdk8-installer/wgetrc file found."
 			echo "Creating /var/cache/oracle-jdk8-installer/wgetrc and"
-			echo "using default oracle-java8-installer wgetrc settings for it."
+			echo "using default adoptopenjdk-java8-installer wgetrc settings for it."
 			echo "Downloading Oracle Java 8..."
 			WGETRC=wgetrc wget --continue --no-check-certificate -O $FILENAME --header "Cookie: oraclelicense=a" $PARTNER_URL \
 				|| fp_exit_with_error "download failed"
@@ -226,7 +226,7 @@ rmdir $OLDDIR 2> /dev/null || true
 #remove previous versions, if they exist
 
 
-db_fset oracle-java8-installer/local seen false
+db_fset adoptopenjdk-java8-installer/local seen false
 
 # This step is optional, recommended, and affects code below.
 ls $J_INSTALL_DIR/man/man1/*.1 >/dev/null 2>&1 && \
@@ -265,7 +265,7 @@ for f in $J_INSTALL_DIR/jre/bin/*; do
 						[ ! $name = "javaws" ] && [ ! $name = "jvisualvm" ] && [ ! $name = "jmc" ] && echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> /usr/lib/jvm/.java-8-oracle.jinfo
 					fi
          else #no man pages available
-            # [ ! $name = "javaws.real" ] = skip javaws.real     
+            # [ ! $name = "javaws.real" ] = skip javaws.real
             [ ! $name = "javaws.real" ] && update-alternatives --install /usr/bin/$name $name $J_INSTALL_DIR/jre/bin/$name $PRIORITY
             [ ! $name = "javaws.real" ] && echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> /usr/lib/jvm/.java-8-oracle.jinfo
          fi

@@ -1,4 +1,4 @@
-Template: oracle-java8-installer/local
+Template: adoptopenjdk-java8-installer/local
 Type: string
 Default:
 Description: Location to the local file:
@@ -8,7 +8,7 @@ Description: Location to the local file:
  have not already downloaded it, leave this blank and the package will be
  downloaded automatically.
 
-Template: oracle-java8-installer/not_exist
+Template: adoptopenjdk-java8-installer/not_exist
 Type: error
 Description: File not found
  The .tar.gz file does not exist in the directory you entered.
