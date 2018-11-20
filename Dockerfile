@@ -16,3 +16,7 @@ RUN debuild -us -uc
 RUN dpkg -i ../*installer*.deb
 RUN dpkg -i ../*set-default*.deb
 RUN dpkg -i ../*unlimited*.deb
+
+# Some tests...
+RUN java -version
+RUN javac -version

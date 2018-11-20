@@ -27,7 +27,8 @@ Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless
 Replaces: openjdk-6-jre, openjdk-6-jre-headless, icedtea-6-plugin,
           openjdk-7-jre, openjdk-7-jre-headless, openjdk-7-jdk, icedtea-7-plugin,
           oracle-java7-bin, oracle-java7-jre, oracle-java7-jdk, oracle-java7-fonts, oracle-java7-plugin,
-          oracle-jdk7-installer, oracle-java8-bin, oracle-java8-jre, oracle-java8-jdk, oracle-java8-fonts, oracle-java8-plugin, oracle-jdk8-installer
+          oracle-jdk7-installer, oracle-java8-bin, oracle-java8-jre, oracle-java8-jdk, oracle-java8-fonts,
+          oracle-java8-plugin, oracle-jdk8-installer, oracle-java8-installer
 Description: AdoptOpenJDK Java(TM) Development Kit (JDK) 8
  The JDK(TM) is a development environment for building and running
  applications, applets, and components using the Java programming language.
@@ -43,7 +44,7 @@ Architecture: all
 Pre-Depends: adoptopenjdk-java8-installer
 Depends: ${misc:Depends}
 Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
-Replaces: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
+Replaces: oracle-java8-set-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
 Description: Set AdoptOpenJDK JDK 8 as default Java
  This package sets Java 8 as default (JAVA_HOME, PATH, etc.)
 
@@ -51,6 +52,7 @@ Package: adoptopenjdk-java8-unlimited-jce-policy
 Section: non-free/java
 Architecture: all
 Pre-Depends: unzip, adoptopenjdk-java8-installer (>= ${source:Version})
+Replaces: oracle-java8-unlimited-jce-policy
 Depends: ${misc:Depends}
 Description: Transitional package for Unlimited JCE Policy for Java 8
  Webupd8 used to have a package like this, so I keep it for the easy upgrade.
