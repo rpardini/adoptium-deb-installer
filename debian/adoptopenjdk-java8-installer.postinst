@@ -78,9 +78,9 @@ done
 J_INSTALL_DIR=/usr/lib/jvm/java-8-adoptopenjdk
 
 ########Create dirs
-mkdir -p /var/cache/oracle-jdk8-installer
+mkdir -p /var/cache/adoptopenjdk-jdk8-installer
 mkdir -p /usr/lib/jvm
-mkdir -p /usr/lib/oracle-jdk8-installer-unpackdir
+mkdir -p /usr/lib/adoptopenjdk-jdk8-installer-unpackdir
 #without this, an error is displayed if the folder doesn't exist:
 mkdir -p /usr/lib/mozilla/plugins
 if [ $arch = "arm" ]; then
@@ -103,7 +103,7 @@ fp_exit_with_error() {
 
 fp_download_and_unpack() {
 
-	cd /var/cache/oracle-jdk8-installer
+	cd /var/cache/adoptopenjdk-jdk8-installer
 
 	db_get adoptopenjdk-java8-installer/local
 	if [ -d "$RET" -a -f "$RET"/$FILENAME ]; then
@@ -133,17 +133,17 @@ fp_download_and_unpack() {
         unset ftp_proxy
     fi
 
-		# if /var/cache/oracle-jdk8-installer/wgetrc exists, use it for downloading java
-		if [ -f /var/cache/oracle-jdk8-installer/wgetrc ]; then
+		# if /var/cache/adoptopenjdk-jdk8-installer/wgetrc exists, use it for downloading java
+		if [ -f /var/cache/adoptopenjdk-jdk8-installer/wgetrc ]; then
 
 			# downloading jdk8
-			echo "Using wget settings from /var/cache/oracle-jdk8-installer/wgetrc"
+			echo "Using wget settings from /var/cache/adoptopenjdk-jdk8-installer/wgetrc"
 			echo "Downloading Oracle Java 8..."
 			WGETRC=wgetrc wget --continue --no-check-certificate -O $FILENAME --header "Cookie: oraclelicense=a" $PARTNER_URL \
 				|| fp_exit_with_error "download failed"
 			echo "Download done."
 
-		#if it's not, use the settings below (which also creates /var/cache/oracle-jdk8-installer/wgetrc)
+		#if it's not, use the settings below (which also creates /var/cache/adoptopenjdk-jdk8-installer/wgetrc)
 		else
 
 			# setting wget options
@@ -156,8 +156,8 @@ fp_download_and_unpack() {
 			echo "tries = 5" >> wgetrc
 
 			# downloading jdk8
-			echo "No /var/cache/oracle-jdk8-installer/wgetrc file found."
-			echo "Creating /var/cache/oracle-jdk8-installer/wgetrc and"
+			echo "No /var/cache/adoptopenjdk-jdk8-installer/wgetrc file found."
+			echo "Creating /var/cache/adoptopenjdk-jdk8-installer/wgetrc and"
 			echo "using default adoptopenjdk-java8-installer wgetrc settings for it."
 			echo "Downloading Oracle Java 8..."
 			WGETRC=wgetrc wget --continue --no-check-certificate -O $FILENAME --header "Cookie: oraclelicense=a" $PARTNER_URL \
@@ -188,8 +188,8 @@ fp_download_and_unpack() {
 	tar xzf $FILENAME || fp_exit_with_error "cannot unpack jdk8"
 }
 
-OLDDIR=/usr/lib/oracle-jdk8-installer-unpackdir
-NEWDIR=/var/cache/oracle-jdk8-installer
+OLDDIR=/usr/lib/adoptopenjdk-jdk8-installer-unpackdir
+NEWDIR=/var/cache/adoptopenjdk-jdk8-installer
 
 safe_move() {
 	[ ! -f $OLDDIR/$1 ] || [ -f $NEWDIR/$1 ] || mv $OLDDIR/$1 $NEWDIR/$1 2> /dev/null || true

@@ -5,8 +5,8 @@ set -e
 case "$1" in
   purge|remove|abort-install)
     rm -rf "/usr/lib/jvm/java-8-adoptopenjdk"
-    rm -rf "/var/cache/oracle-jdk8-installer"
-    rm -rf "/usr/lib/oracle-jdk8-installer-unpackdir"
+    rm -rf "/var/cache/adoptopenjdk-jdk8-installer"
+    rm -rf "/usr/lib/adoptopenjdk-jdk8-installer-unpackdir"
     rm -rf "/usr/lib/jvm/.java-8-adoptopenjdk.jinfo"
     ;;
 esac
