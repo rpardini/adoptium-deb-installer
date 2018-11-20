@@ -1,4 +1,4 @@
-adoptopenjdk-java8-installer (8u191-1~webupd8~1) xenial; urgency=medium
+adoptopenjdk-java8-installer (8u192) xenial; urgency=medium
 
   * New upstream release
   * This release contains fixes for security vulnerabilities described

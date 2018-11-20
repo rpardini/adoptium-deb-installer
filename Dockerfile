@@ -24,3 +24,14 @@ RUN java -version
 RUN javac -version
 
 CMD bash
+
+# curl "https://api.adoptopenjdk.net/v2/latestAssets/releases/openjdk8?os=linux&heap_size=normal&openjdk_impl=hotspot&type=jdk" > jdk.json
+
+
+# On Launchpad:
+#  AMD x86-64 (amd64)
+#  ARM ARMv8 (arm64)
+#  PowerPC64 Little-Endian (ppc64el)
+#  IBM System z (s390x)
+
+

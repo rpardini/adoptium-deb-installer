@@ -1,3 +1,0 @@
-package adoptopenjdk-java8
-interpreter /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/jexec
-magic PK\x03\x04

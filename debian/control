@@ -2,19 +2,18 @@ Source: adoptopenjdk-java8-installer
 Section: java
 Priority: optional
 Maintainer: Ricardo Pardini <ricardo@pardini.net>
-Build-Depends: debhelper, lsb-release, bash
+Build-Depends: debhelper, lsb-release, bash (>= 4.0)
 Standards-Version: 3.9.7
 Homepage: https://adoptopenjdk.net/
 
 Package: adoptopenjdk-java8-installer
 Section: java
 Architecture: all
-Pre-Depends: wget, binutils, ca-certificates, bash
+Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, ${misc:Depends}
 Conflicts: j2se-common
 Recommends: gsfonts-x11, adoptopenjdk-java8-set-default
-Suggests: binfmt-support,
-          ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic,
+Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic,
           ttf-kochi-mincho | ttf-sazanami-mincho,
           ttf-arphic-uming
 Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless,
@@ -43,20 +42,23 @@ Description: AdoptOpenJDK Java(TM) Development Kit (JDK) 8
  .
 
 Package: adoptopenjdk-java8-set-default
-Section: non-free/java
+Section: java
 Architecture: all
 Pre-Depends: adoptopenjdk-java8-installer
 Depends: ${misc:Depends}
 Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
 Replaces: oracle-java8-set-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
 Description: Set AdoptOpenJDK JDK 8 as default Java
- This package sets Java 8 as default (JAVA_HOME, PATH, update-alternatives, etc.)
+ This package sets the AdoptOpenJDK JDK8 as the system default.
+ This will set JAVA_HOME, PATH, update-alternatives, etc.
 
 Package: adoptopenjdk-java8-unlimited-jce-policy
-Section: non-free/java
+Section: oldlibs
+Priority: extra
 Architecture: all
 Pre-Depends: adoptopenjdk-java8-installer (>= ${source:Version})
 Replaces: oracle-java8-unlimited-jce-policy
 Depends: ${misc:Depends}
-Description: Transitional package for Unlimited JCE Policy for Java 8
+Description: Empty/transitional package for Unlimited JCE Policy for Java 8
  Webupd8 used to have a package like this, so I keep it for the easy upgrade.
+ You do NOT have to install this to have high level encryption.

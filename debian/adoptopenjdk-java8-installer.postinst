@@ -1,132 +1,79 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
-set -x
 
-# https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
-# 19c91906c220c8eac38179fb661a810c451779a65b8be530c1d98e15b6bb2673  OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
+fp_exit_with_error() {
+	echo "AdoptOpenJDK JDK 8 is NOT installed: $@"
+	exit 1
+}
 
-case $(dpkg --print-architecture) in
-  'i386'|'i586'|'i686')
-    arch=i386;
-    dld=i586;
-    SHA256SUM_TGZ="640333e749f24428b78c2b10422f7174f8fbd0b8acde27526c195024fad8b6b6" #must be modified for each release
-  ;;
+DPKG_ARCH=$(dpkg --print-architecture)
+
+case ${DPKG_ARCH} in
   'amd64')
-    arch=amd64;
-    dld=x64;
-    SHA256SUM_TGZ="19c91906c220c8eac38179fb661a810c451779a65b8be530c1d98e15b6bb2673" #must be modified for each release
+    J_DIR_INSIDE_TAR_GZ=jdk8u192-b12
+    FILENAME_TAR_GZ=OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
+    DOWNLOAD_TAR_GZ_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
+    SHA256SUM_TGZ="19c91906c220c8eac38179fb661a810c451779a65b8be530c1d98e15b6bb2673"
   ;;
-  arm*)
-    arch=arm
-    if [ `uname -m` = "armv7l" ] || [ `uname -m` = "armv6l" ]; then
-      if [ -x /usr/bin/readelf ] ; then
-        HARDFLOAT=`readelf -A /proc/self/exe | grep Tag_ABI_VFP_args`
-        if [ -z "$HARDFLOAT" ]; then
-          # Softfloat
-          echo "Oracle Java 8 doesn't support ARM v6/v7 softfloat ABI."
-        else
-          # Hardfloat
-          dld='arm32-vfp-hflt'
-          SHA256SUM_TGZ="1b9c57eed403b1299b10c529b16b7ef7f9a62d75cc9a8b0bf3827d1b55caed71" #must be modified for each release
-        fi
-      fi
-    elif [ `uname -m` = "armv8l" ] || [ `uname -m` = "arm64" ] || [ `uname -m` = "aarch64" ]; then
-      dld='arm64-vfp-hflt'
-      SHA256SUM_TGZ="1f4f655e2d2d1d4263671a3fd81c9d3354613c499de43dfbc292cd982270fce5" #must be modified for each release
-    else
-      echo "Oracle JDK 8 only supports ARM v6/v7/v8 hardfloat."
-      arch=''
-    fi
+  'arm64')
+    echo "Hello aarch64!"
+    exit 2
 	;;
   *)
-    echo "Please report to author unsupported platform '`uname -m`'.";
-    echo "Proceeding without web browser plugin support";
-    arch='';
+    echo "Unsupported architecture."
+    echo "dpkg arch: $DPKG_ARCH"
+    echo "uname arch: $(uname -m)"
+    exit 1
 esac
 
-# https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
 
-if [ ! $arch = "arm" ]; then
-	JAVA_VERSION=8u192 #must be modified for each release
-	J_DIR=jdk8u192-b12 #must be modified for each release
-	#FILENAME=jdk-${JAVA_VERSION}-linux-${dld}.tar.gz
-	#PARTNER_URL=http://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/$FILENAME #must be modified for each release
-
-	FILENAME=OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
-  PARTNER_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
-
-	for JAVA_VERSION_OLD2 in `seq 1 190`; do #must be modified for each release
-	   FILENAMES_OLD2="jdk-8u${JAVA_VERSION_OLD2}-linux-${dld}*.tar.gz $FILENAMES_OLD2"
-	done
-else
-	JAVA_VERSION=8u191 #must be modified for each release jdk-8-linux-arm-vfp-hflt.tar.gz
-	J_DIR=jdk1.8.0_191 #must be modified for each release
-	FILENAME=jdk-${JAVA_VERSION}-linux-${dld}.tar.gz
-	PARTNER_URL=http://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/$FILENAME #must be modified for each release
-
-	for JAVA_VERSION_OLD1 in `seq 1 190`; do #must be modified for each release
-		FILENAMES_OLD1="jdk-8u${JAVA_VERSION_OLD1}-linux-${dld}*.tar.gz $FILENAMES_OLD1 jdk-8-*.tar.gz"
-	done
-fi
-
-J_INSTALL_DIR=/usr/lib/jvm/java-8-adoptopenjdk
+PRIORITY=1081 # The priority for the alternatives.
+J_ID=java-8-adoptopenjdk
+J_INSTALL_DIR=/usr/lib/jvm/${J_ID}
+INSTALLER_DIR=/var/cache/adoptopenjdk-jdk8-installer
+JINFO_MANIFEST_FILE=/usr/lib/jvm/.${J_ID}.jinfo
 
 ########Create dirs
-mkdir -p /var/cache/adoptopenjdk-jdk8-installer
+mkdir -p ${INSTALLER_DIR}
 mkdir -p /usr/lib/jvm
 #############
 
 
-
-fp_exit_with_error() {
-	echo $1
-	echo "Oracle JDK 8 is NOT installed."
-	exit 1
-}
-
-
 # Download and unpack, either from existing local file or download.
-RET=/var/cache/adoptopenjdk-jdk8-installer
-cd ${RET}
+cd ${INSTALLER_DIR}
 
-if [ -d "$RET" -a -f "$RET"/$FILENAME ]; then
-  echo "Installing from local file $RET/$FILENAME"
-  cp -f -p "$RET"/$FILENAME ${FILENAME}_TEMP
-  mv -f ${FILENAME}_TEMP $FILENAME
-else # no local file
-
+if [[ -d "${INSTALLER_DIR}" && -f "${INSTALLER_DIR}/$FILENAME_TAR_GZ" ]]; then
+  echo "Installing from local file ${INSTALLER_DIR}/$FILENAME_TAR_GZ"
+  cp -f -p "${INSTALLER_DIR}/${FILENAME_TAR_GZ}" ${FILENAME_TAR_GZ}_TEMP
+  mv -f ${FILENAME_TAR_GZ}_TEMP ${FILENAME_TAR_GZ}
+else
+  # no local file
   echo "No local file detected, will download."
-  echo "RET: $RET "
-  echo "FILENAME: $FILENAME "
-  echo "Full: $RET/$FILENAME "
 
-
-  # use apt proxy
-  # @TODO: fix for github/amazons3
+  # use apt proxy if configured.
   APT_PROXIES=$(apt-config shell \
   http_proxy Acquire::http::Proxy \
   https_proxy Acquire::https::Proxy \
   ftp_proxy Acquire::ftp::Proxy \
-  dl_direct Acquire::http::Proxy::download.oracle.com \
-  dl_direct Acquire::http::Proxy::edelivery.oracle.com \
-  dl_direct Acquire::http::Proxy::*.java.net \
+  dl_direct Acquire::http::Proxy::github.com \
+  dl_direct Acquire::http::Proxy::amazons3.com \
   )
 
-  if [ -n "$APT_PROXIES" ]; then
+  if [[ -n "$APT_PROXIES" ]]; then
     eval export $APT_PROXIES
   fi
 
-  if [ "$dl_direct" = "DIRECT" ]; then
+  if [[ "$dl_direct" = "DIRECT" ]]; then
       unset http_proxy
       unset https_proxy
       unset ftp_proxy
   fi
 
-  # if /var/cache/adoptopenjdk-jdk8-installer/wgetrc exists, use it for downloading java
-  if [ -f /var/cache/adoptopenjdk-jdk8-installer/wgetrc ]; then
-    echo "Using wget settings from /var/cache/adoptopenjdk-jdk8-installer/wgetrc"
-  #if it's not, use the settings below (which also creates /var/cache/adoptopenjdk-jdk8-installer/wgetrc)
+  # if $INSTALLER_DIR/wgetrc exists, use it for downloading.
+  # This allows for very specific edge cases to work.
+  if [[ -f ${INSTALLER_DIR}/wgetrc ]]; then
+    echo "Using wget settings from $INSTALLER_DIR/wgetrc"
   else
     # setting wget options
     :> wgetrc
@@ -137,167 +84,99 @@ else # no local file
     echo "progress = dot:mega" >> wgetrc
     echo "tries = 5" >> wgetrc
 
-    # downloading jdk8
-    echo "No /var/cache/adoptopenjdk-jdk8-installer/wgetrc file found."
-    echo "Creating /var/cache/adoptopenjdk-jdk8-installer/wgetrc and"
-    echo "using default adoptopenjdk-java8-installer wgetrc settings for it."
+    echo "No $INSTALLER_DIR/wgetrc file found."
+    echo "Creating $INSTALLER_DIR/wgetrc with default values."
   fi
 
-  # downloading jdk8
+  # Now actually download the .tar.gz file.
   echo "Downloading AdoptOpenJDK Java 8..."
-  WGETRC=wgetrc wget --continue -O ${FILENAME} ${PARTNER_URL} || fp_exit_with_error "download failed"
+  WGETRC=wgetrc wget --continue -O ${FILENAME_TAR_GZ} ${DOWNLOAD_TAR_GZ_URL} || fp_exit_with_error "download failed"
   echo "Download done."
-
-fi # end if local file
-
-# Removing outdated cached downloads
-echo "Removing outdated cached downloads..."
-rm -vf $FILENAMES_OLD
-rm -vf $FILENAMES_OLD1
-rm -vf $FILENAMES_OLD2
-rm -vf $FILENAMES_OLD_N
-rm -vf $FILENAMES_OLD_NA
-if [ ! $arch = "arm" ]; then
-  rm -vf jdk-8-linux* #temp
 fi
-
-# @TODO: wtf?
-rm -rf jdk*/
 
 # verify SHA256 checksum of (copied or downloaded) tarball
-echo "$SHA256SUM_TGZ  $FILENAME" | sha256sum -c > /dev/null 2>&1 || fp_exit_with_error "sha256sum mismatch $FILENAME"
+echo "$SHA256SUM_TGZ  $FILENAME_TAR_GZ" | sha256sum -c > /dev/null 2>&1 || fp_exit_with_error "sha256sum mismatch $FILENAME_TAR_GZ"
 
 # unpacking
-tar xzf $FILENAME || fp_exit_with_error "cannot unpack jdk8"
-
+tar xzf ${FILENAME_TAR_GZ} || fp_exit_with_error "cannot unpack jdk8"
 
 # Copy JDK to the right dir
-mv $J_DIR java-8-adoptopenjdk
-rm -rf /usr/lib/jvm/java-8-adoptopenjdk
-cp -rf java-8-adoptopenjdk /usr/lib/jvm/
-
-# Install jar.binfmt
-install -m 755 jar.binfmt $J_INSTALL_DIR/jre/lib/jar.binfmt
+mv ${J_DIR_INSIDE_TAR_GZ} ${J_ID}
+rm -rf ${J_INSTALL_DIR}
+cp -rf ${J_ID} /usr/lib/jvm/
 
 # Clean up
-rm -rf java-8-adoptopenjdk
+rm -rf ${J_ID}
 
-# This step is optional, recommended, and affects code below.
-ls $J_INSTALL_DIR/man/man1/*.1 >/dev/null 2>&1 &&  gzip -9 $J_INSTALL_DIR/man/man1/*.1 >/dev/null 2>&1
+echo "Removing outdated downloads..."
+find ${INSTALLER_DIR} -maxdepth 1 -name '*.tar.gz' ! -name ${FILENAME_TAR_GZ} -type f -print
 
-#Also assumes all Java helper programs (javaws, jcontrol, etc) at same version as java.
-#These helpers should be slaves, or in the same path as java; thus, a reasonable assumption.
-PRIORITY=1081
+# Gzips the man pages.
+gzip -9 ${J_INSTALL_DIR}/man/man1/*.1
 
-#create .java-8-adoptopenjdk.jinfo file header:
-if [ -e /usr/lib/jvm/.java-8-adoptopenjdk.jinfo ]; then
-   rm -f /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
-fi
-echo "name=java-8-adoptopenjdk
-alias=java-8-adoptopenjdk
-priority=$PRIORITY
-section=non-free
-" > /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
+# create .jinfo file header, for update-java-alternatives.
+cat << EOD > ${JINFO_MANIFEST_FILE}
+name=${J_ID}
+alias=${J_ID}
+priority=${PRIORITY}
+section=java
+EOD
 
-
-#link JRE files
-for f in $J_INSTALL_DIR/jre/bin/*; do
-    name=`basename $f`;
-    if [ ! -f "/usr/bin/$name" -o -L "/usr/bin/$name" ]; then  #some files, like jvisualvm might not be links
-        if [ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]; then
-					if [ ! $arch = "arm" ]; then
-            update-alternatives --install /usr/bin/$name $name $J_INSTALL_DIR/jre/bin/$name $PRIORITY --slave /usr/share/man/man1/$name.1.gz $name.1.gz $J_INSTALL_DIR/man/man1/$name.1.gz
-            echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
-					else
-						# There's no javaws, jvisualvm or jmc on arm
-						[ ! $name = "javaws" ] && [ ! $name = "jvisualvm" ] && [ ! $name = "jmc" ] && update-alternatives --install /usr/bin/$name $name $J_INSTALL_DIR/jre/bin/$name $PRIORITY --slave /usr/share/man/man1/$name.1.gz $name.1.gz $J_INSTALL_DIR/man/man1/$name.1.gz
-						[ ! $name = "javaws" ] && [ ! $name = "jvisualvm" ] && [ ! $name = "jmc" ] && echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
-					fi
-         else #no man pages available
-            # [ ! $name = "javaws.real" ] = skip javaws.real
-            [ ! $name = "javaws.real" ] && update-alternatives --install /usr/bin/$name $name $J_INSTALL_DIR/jre/bin/$name $PRIORITY
-            [ ! $name = "javaws.real" ] && echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
-         fi
+# Here we start from the binaries, and look for the man pages.
+# create alternatives for the jre binaries.
+# also add them to the .jinfo manifest for easy switching.
+for f in ${J_INSTALL_DIR}/jre/bin/*; do
+    name=`basename ${f}`;
+    if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
+        if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
+           # man page available, install as a slave of the tool
+           update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+           echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
+        else
+           # no man page available for this specific tool
+           update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
+           echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
+        fi
     fi
 done
 
+# For the non-JRE tools, we actually start from the man pages.
+for f in ${J_INSTALL_DIR}/man/man1/*; do
+  name=`basename $f .1.gz`;
+  if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
+    if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then #don't link already linked JRE files
+      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+      echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
+    fi
+  fi
+done
 
-#link JRE not in jre/bin
-[ -f $J_INSTALL_DIR/jre/lib/jexec ]    && update-alternatives --install /usr/bin/jexec    jexec    $J_INSTALL_DIR/jre/lib/jexec    $PRIORITY --slave /usr/share/binfmts/jar jexec-binfmt $J_INSTALL_DIR/jre/lib/jar.binfmt && echo "jre jexec $J_INSTALL_DIR/jre/lib/jexec" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
+# Place security config files in /etc so they are not overwritten on upgrade.
+# @TODO: pardini: I am not sure this is a good idea; new JDK versions can bring updated files?
 
-#This will issue ignorable warnings for alternatives that are not part of a group
-#Link JDK files with/without man pages
-if [ -d "$J_INSTALL_DIR/man/man1" ];then
-    for f in $J_INSTALL_DIR/man/man1/*; do
-        name=`basename $f .1.gz`;
-        #some files, like jvisualvm might not be links. Further assume this for corresponding man page
-        if [ ! -f "/usr/bin/$name" -o -L "/usr/bin/$name" ]; then
-            if [ ! -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]; then
-                name=`basename $f .1`;          #handle any legacy uncompressed pages
-            fi
-          		if [ ! -e $J_INSTALL_DIR/jre/bin/$name ]; then #don't link already linked JRE files
-								if [ ! $arch = "arm" ]; then
-              		update-alternatives --install /usr/bin/$name $name $J_INSTALL_DIR/bin/$name $PRIORITY --slave /usr/share/man/man1/$name.1.gz $name.1.gz $J_INSTALL_DIR/man/man1/$name.1.gz
-              		echo "jdk $name $J_INSTALL_DIR/bin/$name" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
-								else
-									# There's no javaws, jvisualvm or jmc on arm
-									[ ! $name = "javaws" ] && [ ! $name = "jvisualvm" ] && [ ! $name = "jmc" ] && update-alternatives --install /usr/bin/$name $name $J_INSTALL_DIR/bin/$name $PRIORITY --slave /usr/share/man/man1/$name.1.gz $name.1.gz $J_INSTALL_DIR/man/man1/$name.1.gz
-									[ ! $name = "javaws" ] && [ ! $name = "jvisualvm" ] && [ ! $name = "jmc" ] && echo "jdk $name $J_INSTALL_DIR/bin/$name" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
-								fi
-          		fi
-        fi
-    done
-
-else  #no man pages available
-    for f in $J_INSTALL_DIR/bin/*; do
-        name=`basename $f`;
-        if [ ! -f "/usr/bin/$name" -o -L "/usr/bin/$name" ]; then  #some files, like jvisualvm might not be links
-            if [ ! -e $J_INSTALL_DIR/jre/bin/$name ]; then #don't link already linked JRE files
-                update-alternatives --install /usr/bin/$name $name $J_INSTALL_DIR/bin/$name $PRIORITY
-                echo "jdk $name $J_INSTALL_DIR/bin/$name" >> /usr/lib/jvm/.java-8-adoptopenjdk.jinfo
-            fi
-        fi
-    done
-fi
-
-# Use cacerts form ca-certificates-java if it's installed:
-if [ -e /etc/ssl/certs/java/cacerts ]; then
-  cd /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/security
-  mv cacerts cacerts.original
-  ln -s /etc/ssl/certs/java/cacerts .
-fi
-
-# Place security config files in /etc so they are not overwritten on upgrade
-mkdir -p /etc/java-8-adoptopenjdk/security
-for configfile in blacklist blacklisted.certs java.policy java.security javaws.policy trusted.libraries
+mkdir -p /etc/${J_ID}/security
+for configfile in blacklist blacklisted.certs java.policy java.security trusted.libraries
 do
-	if [ ! -e /etc/java-8-adoptopenjdk/security/"$configfile" ] && [ -e /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/security/"$configfile" ]; then
-		mv /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/security/"$configfile" /etc/java-8-adoptopenjdk/security/
+	if [ ! -e /etc/${J_ID}/security/${configfile} ] && [ -e $J_INSTALL_DIR/jre/lib/security/${configfile} ]; then
+		mv ${J_INSTALL_DIR}/jre/lib/security/${configfile} /etc/${J_ID}/security/
 	else
-		rm -f /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/security/"$configfile"
+		rm -f ${J_INSTALL_DIR}/jre/lib/security/${configfile}
 	fi
 done
-for configfile in blacklist blacklisted.certs java.policy java.security javaws.policy trusted.libraries
+
+for configfile in blacklist blacklisted.certs java.policy java.security trusted.libraries
 do
-	if [ ! -e /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/security/"$configfile" ] && [ -e /etc/java-8-adoptopenjdk/security/"$configfile" ]; then
-		ln -s /etc/java-8-adoptopenjdk/security/"$configfile" /usr/lib/jvm/java-8-adoptopenjdk/jre/lib/security/
+	if [ ! -e ${J_INSTALL_DIR}/jre/lib/security/${configfile} ] && [ -e /etc/${J_ID}/security/${configfile} ]; then
+		ln -s /etc/${J_ID}/security/${configfile} ${J_INSTALL_DIR}/jre/lib/security/
 	fi
 done
 
-# register binfmt; ignore errors, the alternative may already be
-# registered by another JRE.
-if which update-binfmts >/dev/null && [ -r /usr/share/binfmts/jar ]; then
-    update-binfmts --package oracle-java8 --import jar || true
-fi
-
-echo "Oracle JDK 8 installed"
+echo "AdoptOpenJDK JDK 8 installed"
 echo ""
-echo "#####Important########"
-echo "To set Oracle JDK8 as default, install the \"oracle-java8-set-default\" package."
-echo "E.g.: sudo apt install oracle-java8-set-default"
-echo "On Ubuntu systems, oracle-java8-set-default is most probably installed"
-echo "automatically with this package."
-echo "######################"
+echo "##### Important ########"
+echo "To set AdoptOpenJDK JDK8 as default, install the \"adoptopenjdk-java8-set-default\" package."
+echo "E.g.: sudo apt install adoptopenjdk-java8-set-default"
+echo "########################"
 echo ""
 
 #DEBHELPER#
