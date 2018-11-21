@@ -1,10 +1,7 @@
-adoptopenjdk-java8-installer (8u192) xenial; urgency=medium
+adoptopenjdk-java8-installer (0.0.1) bionic; urgency=medium
 
-  * New upstream release
-  * This release contains fixes for security vulnerabilities described
-    in the Oracle Java SE Critical Patch Update Advisory:
-    http://www.oracle.com/technetwork/security-advisory/cpuoct2018-4428296.html
-  * Release notes:
-    https://www.oracle.com/technetwork/java/javase/8u191-relnotes-5032181.html
+  * New upstream release.
+  * Should list here the versions for which we're installing.
+  * Remember that different architectures may have different versions.
 
- -- Alin Andrei <webupd8@gmail.com>  Thu, 18 Oct 2018 17:23:26 +0200
+ -- Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>  Wed, 21 Nov 2018 10:00:00 +0100
