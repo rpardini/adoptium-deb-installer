@@ -2,8 +2,12 @@
 
 set -e
 
-J_INSTALL_DIR=/usr/lib/jvm/java-8-adoptopenjdk
+J_ID=java-8-adoptopenjdk
+JINFO_MANIFEST_FILE=/usr/lib/jvm/.${J_ID}.jinfo
+# @TODO: use the jinfo lines starting with jre/jdk to actually remove the alternatives?
 
+
+J_INSTALL_DIR=/usr/lib/jvm/java-8-adoptopenjdk
 case "$1" in
   remove|deconfigure|purge)
     for f in ${J_INSTALL_DIR}/man/man1/*; do

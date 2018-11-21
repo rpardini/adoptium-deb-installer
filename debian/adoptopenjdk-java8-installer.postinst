@@ -43,10 +43,8 @@ mkdir -p /usr/lib/jvm
 # Download and unpack, either from existing local file or download.
 cd ${INSTALLER_DIR}
 
-if [[ -d "${INSTALLER_DIR}" && -f "${INSTALLER_DIR}/$FILENAME_TAR_GZ" ]]; then
+if [[ -f "${INSTALLER_DIR}/$FILENAME_TAR_GZ" ]]; then
   echo "Installing from local file ${INSTALLER_DIR}/$FILENAME_TAR_GZ"
-  cp -f -p "${INSTALLER_DIR}/${FILENAME_TAR_GZ}" ${FILENAME_TAR_GZ}_TEMP
-  mv -f ${FILENAME_TAR_GZ}_TEMP ${FILENAME_TAR_GZ}
 else
   # no local file
   echo "No local file detected, will download."
@@ -97,7 +95,7 @@ fi
 # verify SHA256 checksum of (copied or downloaded) tarball
 echo "$SHA256SUM_TGZ  $FILENAME_TAR_GZ" | sha256sum -c > /dev/null 2>&1 || fp_exit_with_error "sha256sum mismatch $FILENAME_TAR_GZ"
 
-# unpacking
+# unpack.
 tar xzf ${FILENAME_TAR_GZ} || fp_exit_with_error "cannot unpack jdk8"
 
 # Copy JDK to the right dir
@@ -108,7 +106,8 @@ cp -rf ${J_ID} /usr/lib/jvm/
 # Clean up
 rm -rf ${J_ID}
 
-echo "Removing outdated downloads..."
+# @TODO: -print will become remove very soon
+echo "Listing outdated downloads..."
 find ${INSTALLER_DIR} -maxdepth 1 -name '*.tar.gz' ! -name ${FILENAME_TAR_GZ} -type f -print
 
 # Gzips the man pages.
@@ -126,23 +125,24 @@ EOD
 # create alternatives for the jre binaries.
 # also add them to the .jinfo manifest for easy switching.
 for f in ${J_INSTALL_DIR}/jre/bin/*; do
-    name=`basename ${f}`;
-    if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
-        if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
-           # man page available, install as a slave of the tool
-           update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
-           echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
-        else
-           # no man page available for this specific tool
-           update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
-           echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
-        fi
+  name=`basename ${f}`;
+  # @TODO: why does this check exist? We're installing, so it shouldn't matter if it already exists.
+  if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
+    if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
+      # man page available, install as a slave of the tool
+      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+    else
+      # no man page available for this specific tool
+      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
     fi
+    echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
+  fi
 done
 
 # For the non-JRE tools, we actually start from the man pages.
 for f in ${J_INSTALL_DIR}/man/man1/*; do
-  name=`basename $f .1.gz`;
+  name=`basename ${f} .1.gz`;
+  # @TODO: again this check. why?
   if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
     if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then #don't link already linked JRE files
       update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
@@ -171,14 +171,17 @@ do
 	fi
 done
 
+cat << 'EOD'
+    _       _             _    ___                       _ ____  _  __   ___
+   / \   __| | ___  _ __ | |_ / _ \ _ __   ___ _ __     | |  _ \| |/ /  ( _ )
+  / _ \ / _` |/ _ \| '_ \| __| | | | '_ \ / _ \ '_ \ _  | | | | | ' /   / _ \
+ / ___ \ (_| | (_) | |_) | |_| |_| | |_) |  __/ | | | |_| | |_| | . \  | (_) |
+/_/   \_\__,_|\___/| .__/ \__|\___/| .__/ \___|_| |_|\___/|____/|_|\_\  \___/
+                   |_|             |_|
+EOD
+
 echo "AdoptOpenJDK JDK 8 installed"
-echo ""
-echo "##### Important ########"
 echo "To set AdoptOpenJDK JDK8 as default, install the \"adoptopenjdk-java8-set-default\" package."
-echo "E.g.: sudo apt install adoptopenjdk-java8-set-default"
-echo "########################"
-echo ""
 
 #DEBHELPER#
 
-exit 0
