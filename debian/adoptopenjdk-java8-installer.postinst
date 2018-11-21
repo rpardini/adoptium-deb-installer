@@ -18,6 +18,8 @@ case ${DPKG_ARCH} in
   ;;
   'arm64')
     echo "Hello aarch64!"
+    echo "dpkg arch: $DPKG_ARCH"
+    echo "uname arch: $(uname -m)"
     exit 2
 	;;
   *)

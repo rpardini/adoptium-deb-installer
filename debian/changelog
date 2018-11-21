@@ -1,6 +1,6 @@
-adoptopenjdk-java8-installer (0.0.1) bionic; urgency=medium
+adoptopenjdk-java8-installer (0.0.2) xenial; urgency=medium
 
-  * New upstream release.
+  * Trying out different architecture options.
   * Should list here the versions for which we're installing.
   * Remember that different architectures may have different versions.
 

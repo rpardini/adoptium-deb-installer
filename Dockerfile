@@ -14,8 +14,6 @@ RUN wget --continue -O /var/cache/adoptopenjdk-jdk8-installer/OpenJDK8U-jdk_x64_
 WORKDIR /opt/adoptopenjdk/build
 COPY debian /opt/adoptopenjdk/build/debian
 
-RUN ls -la
-
 # Build the binary .debs. This is for testing only. -us -uc takes GPG out of the picture.
 RUN debuild -us -uc
 

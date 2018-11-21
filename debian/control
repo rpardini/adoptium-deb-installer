@@ -8,7 +8,7 @@ Homepage: https://adoptopenjdk.net/
 
 Package: adoptopenjdk-java8-installer
 Section: java
-Architecture: all
+Architecture: any
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, ${misc:Depends}
 Conflicts: j2se-common
@@ -43,7 +43,7 @@ Description: AdoptOpenJDK Java(TM) Development Kit (JDK) 8
 
 Package: adoptopenjdk-java8-set-default
 Section: java
-Architecture: all
+Architecture: any
 Pre-Depends: adoptopenjdk-java8-installer
 Depends: ${misc:Depends}
 Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
@@ -55,7 +55,7 @@ Description: Set AdoptOpenJDK JDK 8 as default Java
 Package: adoptopenjdk-java8-unlimited-jce-policy
 Section: oldlibs
 Priority: extra
-Architecture: all
+Architecture: any
 Pre-Depends: adoptopenjdk-java8-installer (>= ${source:Version})
 Replaces: oracle-java8-unlimited-jce-policy
 Depends: ${misc:Depends}
