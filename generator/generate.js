@@ -20,11 +20,14 @@ async function main () {
     var templateFiles = await walk("../templates");
     //console.log(aff);
 
-    let destPathBase = "../debian";
+    let destPathBase = "../generated/ubuntu/xenial";
+    let javaVersionPkg = "java8";
+
     for (let templateFile of templateFiles) {
         //console.log(templateFile);
 
-        let destFileTemplated = templateFile.file; // @TODO: maybe do some replacement here. eg javaX to java8, java9 etc
+        let destFileTemplated = templateFile.file.replace("javaX", javaVersionPkg);
+
         let destFileParentDir = destPathBase + "/" + templateFile.dirs;
         let fullDestPath = destPathBase + "/" + (templateFile.dirs ? templateFile.dirs + "/" : "") + destFileTemplated;
         console.log(`--> ${templateFile.fullpath} to ${fullDestPath} (in path ${destFileParentDir})`);
