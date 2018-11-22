@@ -15,6 +15,10 @@ async function main () {
         distribution: "trusty",
         version: "0.0.3~trusty"
     });
+    await processTemplates(templateFiles, "java8", `${generatedDirBase}/debian/jessie/debian`, {
+        distribution: "jessie",
+        version: "0.0.1~jessie"
+    });
 }
 
 async function walk (dir, filelist = [], dirbase = "") {
