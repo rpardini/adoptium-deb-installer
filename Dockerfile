@@ -13,13 +13,14 @@ ADD templates /gen/templates
 RUN node generate.js
 
 ## -- Now its the Ubuntu package builder's turn.
-##    We use bionic here, but supposedly any could be used.
-FROM ubuntu:bionic
+##    We use bionic here, but supposedly any could be used,
+##    since the packages are so simple.
+FROM ubuntu:bionic as ubuntuBuilder
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 # build-time dependencies
-RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release dput
+RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release
 # install-time dependencies (those are listed in Depends or Pre-Depends in debian/control file)
 RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
 
@@ -36,7 +37,20 @@ COPY --from=generator /gen/generated/ubuntu /opt/adoptopenjdk/ubuntu
 RUN ls -la /opt/adoptopenjdk/ubuntu
 
 ADD docker/build_packages_multi.sh /opt/adoptopenjdk/
+# those will be populated by the build script.
+RUN mkdir -p /binaries /sourcepkg
 RUN /opt/adoptopenjdk/build_packages_multi.sh
+
+## -- the final image produced from this Dockerfile
+##    is actually a simple Ubuntu image with dput
+##    meant to be used to upload the signed stuff
+##    to launchpad or a debian repo somewhere.
+##    @TODO: maybe it could be `FROM SCRATCH`, and have a separate dput image later.
+FROM ubuntu:bionic
+RUN apt-get update && apt-get -y --no-install-recommends install dput tree && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /binaries /sourcepkg /sourcepkg/ubuntu
+COPY --from=ubuntuBuilder /sourcepkg/* /sourcepkg/ubuntu/
+RUN tree /sourcepkg/
 
 ### # Build the binary .debs. This is for testing only. -us -uc takes GPG out of the picture.
 ### RUN debuild -us -uc

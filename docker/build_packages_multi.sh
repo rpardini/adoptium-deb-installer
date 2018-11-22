@@ -14,4 +14,8 @@ for oneDistribution in *; do
   debuild -S -us -uc # do the build, man.
   cd ${BASE_DIR}
   ls -la
+  # we dont need these .build or .buildinfo files, thanks.
+  rm adoptopenjdk*.build adoptopenjdk*.buildinfo
+  mv -v adoptopenjdk* /sourcepkg/
 done
+
