@@ -3,6 +3,7 @@
 Dockerfile
 .dockerignore
 .gitignore
+debian # this will be generated
 presign
 to_sign
 postsign

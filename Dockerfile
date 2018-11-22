@@ -12,7 +12,7 @@ RUN mkdir -p /var/cache/adoptopenjdk-jdk8-installer
 RUN wget --continue -O /var/cache/adoptopenjdk-jdk8-installer/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
 
 WORKDIR /opt/adoptopenjdk/build
-COPY debian /opt/adoptopenjdk/build/debian
+COPY templates /opt/adoptopenjdk/build/debian
 
 # Build the binary .debs. This is for testing only. -us -uc takes GPG out of the picture.
 RUN debuild -us -uc

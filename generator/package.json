@@ -1,0 +1,10 @@
+{
+  "name": "adoptopenjdk-deb-generator",
+  "version": "0.0.1",
+  "description": "",
+  "main": "generate.js",
+  "scripts": {
+  },
+  "author": "Ricardo Pardini <ricardo@pardini.net>",
+  "license": "Apache2.0"
+}
