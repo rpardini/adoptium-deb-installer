@@ -1,4 +1,4 @@
-adoptopenjdk-java8-installer ({{version}}) {{series}}; urgency=medium
+adoptopenjdk-java8-installer ({{version}}) {{distribution}}; urgency=medium
 
   * Trying out different architecture options.
   * Should list here the versions for which we're installing.
