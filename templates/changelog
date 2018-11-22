@@ -1,4 +1,4 @@
-adoptopenjdk-java8-installer (0.0.2) xenial; urgency=medium
+adoptopenjdk-java8-installer ({{version}}) {{series}}; urgency=medium
 
   * Trying out different architecture options.
   * Should list here the versions for which we're installing.

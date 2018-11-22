@@ -1,7 +1,22 @@
 const fs = require('fs').promises;
 const path = require('path');
+const mustache = require('mustache');
 
-const walk = async (dir, filelist = [], dirbase = "") => {
+async function main () {
+    var templateFiles = await walk("../templates");
+    var generatedDirBase = "../generated";
+
+    await processTemplates(templateFiles, "java8", `${generatedDirBase}/ubuntu/xenial`, {
+        series: "xenial",
+        version: "0.0.2"
+    });
+    await processTemplates(templateFiles, "java8", `${generatedDirBase}/ubuntu/trusty`, {
+        series: "trusty",
+        version: "0.0.3"
+    });
+}
+
+async function walk (dir, filelist = [], dirbase = "") {
     const files = await fs.readdir(dir);
     for (let file of files) {
         const filepath = path.join(dir, file);
@@ -14,18 +29,10 @@ const walk = async (dir, filelist = [], dirbase = "") => {
         }
     }
     return filelist;
-};
+}
 
-async function main () {
-    var templateFiles = await walk("../templates");
-    //console.log(aff);
-
-    let destPathBase = "../generated/ubuntu/xenial";
-    let javaVersionPkg = "java8";
-
+async function processTemplates (templateFiles, javaVersionPkg, destPathBase, view) {
     for (let templateFile of templateFiles) {
-        //console.log(templateFile);
-
         let destFileTemplated = templateFile.file.replace("javaX", javaVersionPkg);
 
         let destFileParentDir = destPathBase + "/" + templateFile.dirs;
@@ -33,17 +40,13 @@ async function main () {
         console.log(`--> ${templateFile.fullpath} to ${fullDestPath} (in path ${destFileParentDir})`);
 
         let originalContents = await fs.readFile(templateFile.fullpath, 'utf8');
-        //console.log(originalContents);
-
-        let modifiedContents = originalContents; // @TODO: do the template processing here. its gonna be all globals.
+        let modifiedContents = mustache.render(originalContents, view);
 
         // ready to write to dest? lets go...
         await fs.mkdir(destFileParentDir, {recursive: true});
         await fs.writeFile(fullDestPath, modifiedContents, 'utf8');
-
     }
 }
-
 
 main().then(value => {
     console.log("done.");

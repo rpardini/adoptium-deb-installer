@@ -3,3 +3,4 @@ presign
 to_sign
 postsign
 generated
+generator/node_modules
