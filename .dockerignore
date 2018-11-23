@@ -3,7 +3,8 @@
 Dockerfile
 .dockerignore
 .gitignore
-debian # this will be generated
+generated
+generator/node_modules
 presign
 to_sign
 postsign

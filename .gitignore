@@ -4,3 +4,4 @@ to_sign
 postsign
 generated
 generator/node_modules
+generator/jdk_*.json

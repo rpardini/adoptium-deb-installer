@@ -1,18 +1,19 @@
-Source: adoptopenjdk-java8-installer
+Source: {{sourcePackageName}}
 Section: java
 Priority: optional
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Build-Depends: debhelper, lsb-release, bash (>= 4.0)
+Architecture: {{debArch}}
 Standards-Version: 3.9.7
 Homepage: https://adoptopenjdk.net/
 
-Package: adoptopenjdk-java8-installer
+Package: {{sourcePackageName}}
 Section: java
-Architecture: any
+Architecture: {{debArch}}
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, ${misc:Depends}
 Conflicts: j2se-common
-Recommends: gsfonts-x11, adoptopenjdk-java8-set-default
+Recommends: gsfonts-x11, {{setDefaultPackageName}}
 Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic,
           ttf-kochi-mincho | ttf-sazanami-mincho,
           ttf-arphic-uming
@@ -41,23 +42,22 @@ Description: AdoptOpenJDK Java(TM) Development Kit (JDK) 8
  programming language.
  .
 
-Package: adoptopenjdk-java8-set-default
+Package: {{setDefaultPackageName}}
 Section: java
-Architecture: any
-Pre-Depends: adoptopenjdk-java8-installer
+Architecture: {{debArch}}
+Pre-Depends: {{sourcePackageName}}
 Depends: ${misc:Depends}
 Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
 Replaces: oracle-java8-set-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
-Description: Set AdoptOpenJDK JDK 8 as default Java
+Description: Set AdoptOpenJDK JDK {{jdkVersion}} as default Java
  This package sets the AdoptOpenJDK JDK8 as the system default.
  This will set JAVA_HOME, PATH, update-alternatives, etc.
 
-Package: adoptopenjdk-java8-unlimited-jce-policy
+Package: {{unlimitedPackageName}}
 Section: oldlibs
 Priority: extra
-Architecture: any
-Pre-Depends: adoptopenjdk-java8-installer (>= ${source:Version})
-Replaces: oracle-java8-unlimited-jce-policy
+Architecture: {{debArch}}
+Pre-Depends: {{sourcePackageName}} (>= ${source:Version})
 Depends: ${misc:Depends}
 Description: Empty/transitional package for Unlimited JCE Policy for Java 8
  Webupd8 used to have a package like this, so I keep it for the easy upgrade.
