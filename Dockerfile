@@ -74,7 +74,10 @@ FROM ubuntu:bionic
 RUN apt-get update && apt-get -y --no-install-recommends install dput tree && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /binaries /sourcepkg /sourcepkg/ubuntu
 COPY --from=ubuntuBuilder /sourcepkg/* /sourcepkg/ubuntu/
+COPY --from=ubuntuBuilder /binaries/* /binaries/ubuntu/
 ## ubuntuOnlyForNow ## COPY --from=debianBuilder /sourcepkg/* /sourcepkg/debian/
+## ubuntuOnlyForNow ## COPY --from=debianBuilder /binaries/* /binaries/debian/
+RUN tree /binaries/
 RUN tree /sourcepkg/
 
 # Hack: use volumes to "exfiltrate" the source files back to the host machine.

@@ -49,13 +49,13 @@ async function main () {
                     await processTemplates(
                         templateFiles,
                         `java${archJdkVersion.jdkVersion}`,
-                        `${generatedDirBase}/${linux.name}/java-${archJdkVersion.jdkVersion}/${archJdkVersion.arch}/${distroLinux}/debian`, {
+                        `${generatedDirBase}/${linux.name}/java-${archJdkVersion.jdkVersion}/${archJdkVersion.debArch}/${distroLinux}/debian`, {
                             jdkVersion: archJdkVersion.jdkVersion,
                             debArch: archJdkVersion.debArch,
                             jdkArch: archJdkVersion.jdkArch,
                             slug: archJdkVersion.slug,
                             distribution: `${distroLinux}`,
-                            version: `0.0.4~${distroLinux}~${archJdkVersion.jdkArch}~${archJdkVersion.cleanedSlug}`,
+                            version: `0.0.5~${distroLinux}~${archJdkVersion.jdkArch}~${archJdkVersion.cleanedSlug}`,
                             sourcePackageName: `adoptopenjdk-java${archJdkVersion.jdkVersion}-installer`,
                             setDefaultPackageName: `adoptopenjdk-java${archJdkVersion.jdkVersion}-set-default`,
                             unlimitedPackageName: `adoptopenjdk-java${archJdkVersion.jdkVersion}-unlimited-jce-policy`,

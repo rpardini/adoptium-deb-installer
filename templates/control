@@ -3,7 +3,6 @@ Section: java
 Priority: optional
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Build-Depends: debhelper, lsb-release, bash (>= 4.0)
-Architecture: {{debArch}}
 Standards-Version: 3.9.7
 Homepage: https://adoptopenjdk.net/
 
