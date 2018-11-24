@@ -13,12 +13,20 @@ for oneJavaVersion in *; do
   for oneDistribution in *; do
     echo "Building Distribution: $oneDistribution"
 
-    # First, check if we can build binary packages for this combination.
-    # This serves as a basic sanity check only.
     echo "BINARY $oneJavaVersion $oneDistribution" | figlet
     cd ${BUILD_BASE_DIR}/${oneDistribution}
     debuild -us -uc # binary build, no signing.
     cd ${BUILD_BASE_DIR}
+
+    # check if we can install these binaries. this serves as a basic sanity check.
+    # in practive this only "tests" amd64 packages, and for the distro in the FROM ubuntu:xxx
+    # line in the dockerfile, but is better than nothing.
+    #if [[ "${oneJavaVersion}" == "java-11" ]]; then
+      if [[ "$(lsb_release -c -s)" == "$oneDistribution" ]]; then
+        dpkg -i adoptopenjdk-java*-installer_*_amd64.deb
+      fi
+    #fi
+
     mv -v adoptopenjdk* /binaries/
 
     echo "$oneJavaVersion $oneDistribution" | figlet

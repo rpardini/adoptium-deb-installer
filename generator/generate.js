@@ -27,10 +27,10 @@ const goodGuy = require('good-guy-http')({
 
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x']);
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x'}; //subtle differences
+//const wantedJavaVersions = new Set([8, 9, 10, 11]);
 const wantedJavaVersions = new Set([8, 9, 10, 11]);
-//const wantedJavaVersions = new Set([8]);
 const linuxesAndDistros = new Set([
-    {name: 'ubuntu', distros: new Set([/*'trusty',*/ 'xenial', 'bionic'])},
+    {name: 'ubuntu', distros: new Set(['trusty', 'xenial', 'bionic'])},
     {name: 'debian', distros: new Set(['wheezy', 'jessie'])}
 ]);
 
@@ -55,33 +55,31 @@ async function main () {
     for (const linux of linuxesAndDistros) {
         for (const distroLinux of linux.distros) {
             for (const javaX of jdkBuildsPerArch.values()) {
-                // 8, 9, 10, 11
-                for (const archJdkVersion of javaX.arches.values()) {
+                // the per-Java templates...
+                let destPath = `${generatedDirBase}/${linux.name}/java-${javaX.jdkVersion}/${distroLinux}/debian`;
+                let fnView = {javaX: `java${javaX.jdkVersion}`};
+                let javaXview = {
+                    jdkVersion: javaX.jdkVersion,
+                    allDebArches: javaX.allDebArches,
+                    distribution: `${distroLinux}`,
+                    version: `${javaX.baseJoinedVersion}~${distroLinux}`,
+                    sourcePackageName: `adoptopenjdk-java${javaX.jdkVersion}-installer`,
+                    setDefaultPackageName: `adoptopenjdk-java${javaX.jdkVersion}-set-default`,
+                    unlimitedPackageName: `adoptopenjdk-java${javaX.jdkVersion}-unlimited-jce-policy`,
+                    debChangeLogArches: javaX.debChangeLogArches,
+                    buildDateChangelog: buildDateChangelog,
+                    buildDateYear: buildDateYear,
+                    signerName: signerName,
+                    signerEmail: signerEmail
+                };
 
-                    console.log(linux, distroLinux, archJdkVersion);
+                await processTemplates(templateFilesPerJava, destPath, fnView, javaXview);
 
-                    await processTemplates(
-                        templateFilesPerJava,
-                        `java${javaX.jdkVersion}`,
-                        `${generatedDirBase}/${linux.name}/java-${javaX.jdkVersion}/${distroLinux}/debian`, {
-                            jdkVersion: javaX.jdkVersion,
-                            allDebArches: javaX.allDebArches,
+                for (const arch of javaX.arches.values()) {
+                    let archFnView = Object.assign({archX: arch.debArch}, fnView);
+                    let archXview = Object.assign(arch, javaXview); // yes, all of it.
 
-                            //slug: archJdkVersion.slug,
-                            distribution: `${distroLinux}`,
-                            version: `${javaX.baseJoinedVersion}~${distroLinux}`,
-                            sourcePackageName: `adoptopenjdk-java${javaX.jdkVersion}-installer`,
-                            setDefaultPackageName: `adoptopenjdk-java${javaX.jdkVersion}-set-default`,
-                            unlimitedPackageName: `adoptopenjdk-java${javaX.jdkVersion}-unlimited-jce-policy`,
-                            debChangeLogArches: javaX.debChangeLogArches,
-                            buildDateChangelog: buildDateChangelog,
-                            buildDateYear: buildDateYear,
-                            signerName: signerName,
-                            signerEmail: signerEmail
-
-                        }
-                    );
-
+                    await processTemplates(templateFilesPerArch, destPath, archFnView, archXview);
                 }
             }
         }
@@ -132,7 +130,7 @@ async function processAPIData (jdkVersion, wantedArchs) {
     }
 
     let finalVersion = calculateJoinedVersionForAllArches(slugs);
-
+    console.log(`Composed version for JDK ${jdkVersion} is ${finalVersion}`);
 
     return {
         arches: archData,
@@ -155,22 +153,18 @@ function calculateJoinedVersionForAllArches (slugs) {
     let counter = 0;
     for (let oneArchesPlusSlug of slugArr) {
         let archList = oneArchesPlusSlug.archList + ":";
-        if (counter === 0) archList = "";
+        if (counter === 0) archList = ""; // we wont list the most common combo
         versionsByArch.push(archList + oneArchesPlusSlug.slug);
         counter++;
     }
 
     // use zero as epoch so we can use other colons in the version
-    let finalVersion = "0:" + buildDateTimestamp + "~" + versionsByArch.join("+");
-
-    // now sort the array by count decreasing.
-    console.log(finalVersion);
-    return finalVersion;
+    return `0:${buildDateTimestamp}~${versionsByArch.join("+")}`;
 }
 
 async function getShaSum (url) {
     let httpResponse = await goodGuy(url);
-    return httpResponse.body.trim().split(" ")[0].toUpperCase();
+    return httpResponse.body.trim().split(" ")[0];
 }
 
 async function walk (dir, filelist = [], dirbase = "") {
@@ -195,9 +189,13 @@ async function walk (dir, filelist = [], dirbase = "") {
     return filelist;
 }
 
-async function processTemplates (templateFiles, javaVersionPkg, destPathBase, view) {
+async function processTemplates (templateFiles, destPathBase, fnView, view) {
     for (let templateFile of templateFiles) {
-        let destFileTemplated = templateFile.file.replace("javaX", javaVersionPkg);
+
+        let destFileTemplated = templateFile.file;
+        for (let fnKey in fnView) {
+            destFileTemplated = destFileTemplated.replace(fnKey, fnView[fnKey]);
+        }
 
         let destFileParentDir = destPathBase + "/" + templateFile.dirs;
         let fullDestPath = destPathBase + "/" + (templateFile.dirs ? templateFile.dirs + "/" : "") + destFileTemplated;

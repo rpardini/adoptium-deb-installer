@@ -2,39 +2,25 @@
 
 set -e
 
+set -x
+
 fp_exit_with_error() {
-	echo "AdoptOpenJDK JDK 8 is NOT installed: $@"
+	echo "AdoptOpenJDK JDK {{jdkVersion}} is NOT installed: $@"
 	exit 1
 }
 
 DPKG_ARCH=$(dpkg --print-architecture)
 
-case ${DPKG_ARCH} in
-  'amd64')
-    J_DIR_INSIDE_TAR_GZ=jdk8u192-b12
-    FILENAME_TAR_GZ=OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
-    DOWNLOAD_TAR_GZ_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
-    SHA256SUM_TGZ="19c91906c220c8eac38179fb661a810c451779a65b8be530c1d98e15b6bb2673"
-  ;;
-  'arm64')
-    echo "Hello aarch64!"
-    echo "dpkg arch: $DPKG_ARCH"
-    echo "uname arch: $(uname -m)"
-    exit 2
-	;;
-  *)
-    echo "Unsupported architecture."
-    echo "dpkg arch: $DPKG_ARCH"
-    echo "uname arch: $(uname -m)"
-    exit 1
-esac
-
+J_DIR_INSIDE_TAR_GZ="{{{slug}}}"
+FILENAME_TAR_GZ="{{{filename}}}"
+DOWNLOAD_TAR_GZ_URL="{{{downloadUrl}}}"
+SHA256SUM_TGZ="{{sha256sum}}"
+J_ID=java-{{jdkVersion}}-adoptopenjdk
+INSTALLER_DIR=/var/cache/adoptopenjdk-jdk{{jdkVersion}}-installer
 
 PRIORITY=1081 # The priority for the alternatives.
-J_ID=java-8-adoptopenjdk
-J_INSTALL_DIR=/usr/lib/jvm/${J_ID}
-INSTALLER_DIR=/var/cache/adoptopenjdk-jdk8-installer
 JINFO_MANIFEST_FILE=/usr/lib/jvm/.${J_ID}.jinfo
+J_INSTALL_DIR=/usr/lib/jvm/${J_ID}
 
 ########Create dirs
 mkdir -p ${INSTALLER_DIR}
@@ -126,20 +112,22 @@ EOD
 # Here we start from the binaries, and look for the man pages.
 # create alternatives for the jre binaries.
 # also add them to the .jinfo manifest for easy switching.
-for f in ${J_INSTALL_DIR}/jre/bin/*; do
-  name=`basename ${f}`;
-  # @TODO: why does this check exist? We're installing, so it shouldn't matter if it already exists.
-  if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
-    if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
-      # man page available, install as a slave of the tool
-      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
-    else
-      # no man page available for this specific tool
-      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
+if [ -d ${J_INSTALL_DIR}/jre/bin ]; then # only jdk8 has this, so skip if not
+  for f in ${J_INSTALL_DIR}/jre/bin/*; do
+    name=`basename ${f}`;
+    # @TODO: why does this check exist? We're installing, so it shouldn't matter if it already exists.
+    if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
+      if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
+        # man page available, install as a slave of the tool
+        update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+      else
+        # no man page available for this specific tool
+        update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
+      fi
+      echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
     fi
-    echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
-  fi
-done
+  done
+fi
 
 # For the non-JRE tools, we actually start from the man pages.
 for f in ${J_INSTALL_DIR}/man/man1/*; do
@@ -174,16 +162,16 @@ do
 done
 
 cat << 'EOD'
-    _       _             _    ___                       _ ____  _  __   ___
-   / \   __| | ___  _ __ | |_ / _ \ _ __   ___ _ __     | |  _ \| |/ /  ( _ )
-  / _ \ / _` |/ _ \| '_ \| __| | | | '_ \ / _ \ '_ \ _  | | | | | ' /   / _ \
- / ___ \ (_| | (_) | |_) | |_| |_| | |_) |  __/ | | | |_| | |_| | . \  | (_) |
-/_/   \_\__,_|\___/| .__/ \__|\___/| .__/ \___|_| |_|\___/|____/|_|\_\  \___/
+    _       _             _    ___                       _ ____  _  __
+   / \   __| | ___  _ __ | |_ / _ \ _ __   ___ _ __     | |  _ \| |/ /
+  / _ \ / _` |/ _ \| '_ \| __| | | | '_ \ / _ \ '_ \ _  | | | | | ' /
+ / ___ \ (_| | (_) | |_) | |_| |_| | |_) |  __/ | | | |_| | |_| | . \
+/_/   \_\__,_|\___/| .__/ \__|\___/| .__/ \___|_| |_|\___/|____/|_|\_\
                    |_|             |_|
 EOD
 
-echo "AdoptOpenJDK JDK 8 installed"
-echo "To set AdoptOpenJDK JDK8 as default, install the \"adoptopenjdk-java8-set-default\" package."
+echo "AdoptOpenJDK {{jdkVersion}} installed"
+echo "To set AdoptOpenJDK {{jdkVersion}} as default, install the \"adoptopenjdk-java{{jdkVersion}}-set-default\" package."
 
 #DEBHELPER#
 

@@ -28,8 +28,19 @@ RUN apt-get -y --no-install-recommends install devscripts build-essential lintia
 RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
 
 # Pre-download and (docker-layer-)cache this as a way to 1) test local file support and 2) alleviate the load of developing against github
-#RUN mkdir -p /var/cache/adoptopenjdk-jdk8-installer
-#RUN wget --continue -O /var/cache/adoptopenjdk-jdk8-installer/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
+RUN mkdir -p /var/cache/adoptopenjdk-jdk8-installer
+RUN wget --continue -O /var/cache/adoptopenjdk-jdk8-installer/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
+
+RUN mkdir -p /var/cache/adoptopenjdk-jdk9-installer
+RUN wget --continue -O /var/cache/adoptopenjdk-jdk9-installer/OpenJDK9U-jdk_x64_linux_hotspot_9.0.4_11.tar.gz https://github.com/AdoptOpenJDK/openjdk9-binaries/releases/download/jdk-9.0.4%2B11/OpenJDK9U-jdk_x64_linux_hotspot_9.0.4_11.tar.gz
+
+RUN mkdir -p /var/cache/adoptopenjdk-jdk10-installer
+RUN wget --continue -O /var/cache/adoptopenjdk-jdk10-installer/OpenJDK10_x64_Linux_jdk-10.0.2.13.tar.gz https://github.com/AdoptOpenJDK/openjdk10-releases/releases/download/jdk-10.0.2%2B13/OpenJDK10_x64_Linux_jdk-10.0.2.13.tar.gz
+
+RUN mkdir -p /var/cache/adoptopenjdk-jdk11-installer
+RUN wget --continue -O /var/cache/adoptopenjdk-jdk11-installer/OpenJDK11U-jdk_x64_linux_hotspot_11.0.1_13.tar.gz https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.1%2B13/OpenJDK11U-jdk_x64_linux_hotspot_11.0.1_13.tar.gz
+
+
 
 WORKDIR /opt/adoptopenjdk/ubuntu
 COPY --from=generator /gen/generated/ubuntu /opt/adoptopenjdk/ubuntu
