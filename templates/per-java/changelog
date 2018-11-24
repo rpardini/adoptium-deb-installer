@@ -2,5 +2,6 @@
 
   * Installer for AdoptOpenJDK {{jdkVersion}}
   * Java {{jdkVersion}} composed version {{version}}.
+{{debChangeLogArches}}
 
  -- {{signerName}} <{{signerEmail}}>  {{buildDateChangelog}}

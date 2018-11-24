@@ -37,6 +37,7 @@ const linuxesAndDistros = new Set([
 // the date-based stuff. both the version and the changelog use it.
 const buildDate = moment();
 const buildDateTimestamp = buildDate.format('YYYYMMDDHHmm');
+const buildDateYear = buildDate.format('YYYY');
 const buildDateChangelog = buildDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ');
 
 // the person building and signing the packages.
@@ -72,7 +73,9 @@ async function main () {
                             sourcePackageName: `adoptopenjdk-java${javaX.jdkVersion}-installer`,
                             setDefaultPackageName: `adoptopenjdk-java${javaX.jdkVersion}-set-default`,
                             unlimitedPackageName: `adoptopenjdk-java${javaX.jdkVersion}-unlimited-jce-policy`,
+                            debChangeLogArches: javaX.debChangeLogArches,
                             buildDateChangelog: buildDateChangelog,
+                            buildDateYear: buildDateYear,
                             signerName: signerName,
                             signerEmail: signerEmail
 
@@ -102,6 +105,7 @@ async function processAPIData (jdkVersion, wantedArchs) {
     let archData = new Map(); // builds per-architecture
     let slugs = new Map();
     let allDebArches = [];
+    let debChangeLogArches = [];
 
     for (let oneRelease of jsonContents) {
         if (!wantedArchs.has(oneRelease.architecture)) continue;
@@ -124,6 +128,7 @@ async function processAPIData (jdkVersion, wantedArchs) {
         slugs.get(slugKey).push(buildInfo.jdkArch);
 
         allDebArches.push(debArch);
+        debChangeLogArches.push(`  * For ${debArch} JDK version is ${oneRelease.release_name}`);
     }
 
     let finalVersion = calculateJoinedVersionForAllArches(slugs);
@@ -133,7 +138,8 @@ async function processAPIData (jdkVersion, wantedArchs) {
         arches: archData,
         baseJoinedVersion: finalVersion,
         jdkVersion: jdkVersion,
-        allDebArches: allDebArches.join(' ')
+        allDebArches: allDebArches.join(' '),
+        debChangeLogArches: debChangeLogArches.join("\n")
     };
 }
 
