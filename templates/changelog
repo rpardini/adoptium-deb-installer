@@ -1,6 +1,0 @@
-{{sourcePackageName}} ({{version}}) {{distribution}}; urgency=medium
-
-  * Package for {{debArch}} (JDK name {{jdkArch}})
-  * Java {{jdkVersion}} version {{slug}}.
-
- -- Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>  Wed, 21 Nov 2018 10:00:00 +0100

@@ -8,7 +8,7 @@ Homepage: https://adoptopenjdk.net/
 
 Package: {{sourcePackageName}}
 Section: java
-Architecture: {{debArch}}
+Architecture: {{allDebArches}}
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, ${misc:Depends}
 Conflicts: j2se-common
@@ -43,7 +43,7 @@ Description: AdoptOpenJDK Java(TM) Development Kit (JDK) 8
 
 Package: {{setDefaultPackageName}}
 Section: java
-Architecture: {{debArch}}
+Architecture: {{allDebArches}}
 Pre-Depends: {{sourcePackageName}}
 Depends: ${misc:Depends}
 Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
@@ -55,7 +55,7 @@ Description: Set AdoptOpenJDK JDK {{jdkVersion}} as default Java
 Package: {{unlimitedPackageName}}
 Section: oldlibs
 Priority: extra
-Architecture: {{debArch}}
+Architecture: {{allDebArches}}
 Pre-Depends: {{sourcePackageName}} (>= ${source:Version})
 Depends: ${misc:Depends}
 Description: Empty/transitional package for Unlimited JCE Policy for Java 8

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+  purge|remove|abort-install)
+    rm -rf "/usr/lib/jvm/java-{{jdkVersion}}-adoptopenjdk"
+    rm -rf "/var/cache/adoptopenjdk-jdk{{jdkVersion}}-installer"
+    rm -rf "/usr/lib/jvm/.java-{{jdkVersion}}-adoptopenjdk.jinfo"
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

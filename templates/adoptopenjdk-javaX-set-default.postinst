@@ -1,7 +1,0 @@
-#!/bin/sh
-
-update-java-alternatives -s java-8-adoptopenjdk > /dev/null 2>&1
-
-#DEBHELPER#
-
-exit 0
