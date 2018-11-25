@@ -28,7 +28,6 @@ const goodGuy = require('good-guy-http')({
 
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x']);
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x'}; //subtle differences
-//const wantedJavaVersions = new Set([8, 9, 10, 11]);
 const wantedJavaVersions = new Set([8, 9, 10, 11]);
 const linuxesAndDistros = new Set([
     {name: 'ubuntu', distros: new Set(['trusty', 'xenial', 'bionic'])},
