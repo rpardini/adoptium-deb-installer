@@ -35,7 +35,8 @@ where they're built and hosted. The final packages produced are essentially
 just downloader scripts, and try to handle proxy usage, SHA256 checksumming,
 `update-alternatives` and `update-java-alternatives` as per `java-common` standards.
 
-A huge amount of the actual installer scripting was stolen from (@TODO: find Alin Andrei's info)
+A huge amount of the actual installer scripting was stolen from [Alin Andrei](https://launchpad.net/~webupd8team/+archive/ubuntu/java)
+'s `oracle-java8-installer`
 and it shows -- all the update-alternatives, manpages, etc stuff is clearly in need of work.
 The proxy handling also needs to be confirmed; a few of his provisions like using a custom 
 `wgetrc` was kept, but a lot of cosmetic stuff like icons were removed.
@@ -123,10 +124,11 @@ for details.
 * Investigate and _maybe_ support the "large heap" builds
 * Investigate `/usr/lib/jvm/default-java` and its implications
 * If in download mode, emit instructions for the final user on how to use pre-downloaded file mode.
+* Figure out the actual copyright for this, it says GPL-3 but I'm not sure
 
 # Credits
 
-* Of course, AdoptOpenJDK for all of actual amazing work, and for the API.
-* Alin Andrei for the original oracle-jdk8-installer @TODO
-* Some guy for providing debsign_osx.sh @TODO
+* Of course, [AdoptOpenJDK](https://adoptopenjdk.net/) for all of actual amazing work, and for the API.
+* [Alin Andrei/webupd8](https://launchpad.net/~webupd8team/+archive/ubuntu/java) for the original `oracle-jdk8-installer` from which I started this work
+* Jesper Birkestrøm for providing [debsign_osx.sh](https://gist.github.com/birkestroem/ad4866ae7b823820bf51)
 * Launchpad for actually building on many architectures and hosting the whole thing
