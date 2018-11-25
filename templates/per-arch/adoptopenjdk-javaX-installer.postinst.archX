@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-
 set -x
 
 fp_exit_with_error() {
@@ -85,6 +84,9 @@ echo "$SHA256SUM_TGZ  $FILENAME_TAR_GZ" | sha256sum -c > /dev/null 2>&1 || fp_ex
 
 # unpack.
 tar xzf ${FILENAME_TAR_GZ} || fp_exit_with_error "cannot unpack jdk8"
+
+# make it owned by root, OpenJDK sends it with uid 500 or something.
+chown -R root:root ${J_DIR_INSIDE_TAR_GZ}
 
 # Copy JDK to the right dir
 mv ${J_DIR_INSIDE_TAR_GZ} ${J_ID}

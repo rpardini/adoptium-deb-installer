@@ -1,5 +1,6 @@
 'use strict';
 
+
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
 const fs = regular_fs.promises;
@@ -65,7 +66,6 @@ async function main () {
                     version: `${javaX.baseJoinedVersion}~${distroLinux}`,
                     sourcePackageName: `adoptopenjdk-java${javaX.jdkVersion}-installer`,
                     setDefaultPackageName: `adoptopenjdk-java${javaX.jdkVersion}-set-default`,
-                    unlimitedPackageName: `adoptopenjdk-java${javaX.jdkVersion}-unlimited-jce-policy`,
                     debChangeLogArches: javaX.debChangeLogArches,
                     buildDateChangelog: buildDateChangelog,
                     buildDateYear: buildDateYear,
@@ -152,14 +152,13 @@ function calculateJoinedVersionForAllArches (slugs) {
     let versionsByArch = [];
     let counter = 0;
     for (let oneArchesPlusSlug of slugArr) {
-        let archList = oneArchesPlusSlug.archList + ":";
+        let archList = oneArchesPlusSlug.archList + "~";
         if (counter === 0) archList = ""; // we wont list the most common combo
         versionsByArch.push(archList + oneArchesPlusSlug.slug);
         counter++;
     }
 
-    // use zero as epoch so we can use other colons in the version
-    return `0:${buildDateTimestamp}~${versionsByArch.join("+")}`;
+    return `${buildDateTimestamp}~${versionsByArch.join("+")}`;
 }
 
 async function getShaSum (url) {
