@@ -45,9 +45,10 @@ const signerName = "Ricardo Pardini (Pardini Yubi 2017)";
 const signerEmail = "ricardo@pardini.net";
 
 async function main () {
-    const templateFilesPerJava = await walk("../templates/per-java/");
-    const templateFilesPerArch = await walk("../templates/per-arch/");
-    const generatedDirBase = "../generated";
+    const basePath = path.dirname(__dirname) ;
+    const templateFilesPerJava = await walk(`${basePath}/templates/per-java/`);
+    const templateFilesPerArch = await walk(`${basePath}/templates/per-arch/`);
+    const generatedDirBase = `${basePath}/generated`;
 
     const jdkBuildsPerArch = await getJDKInfosFromAdoptOpenJDKAPI();
 
