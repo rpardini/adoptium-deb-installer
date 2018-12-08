@@ -4,9 +4,9 @@ set -e
 
 case "$1" in
   purge|remove|abort-install)
-    rm -rf "/usr/lib/jvm/java-{{jdkVersion}}-adoptopenjdk"
-    rm -rf "/var/cache/adoptopenjdk-jdk{{jdkVersion}}-installer"
-    rm -rf "/usr/lib/jvm/.java-{{jdkVersion}}-adoptopenjdk.jinfo"
+    rm -rf "/usr/lib/jvm/{{destDir}}"
+    rm -rf "/var/cache/{{destDir}}-installer"
+    rm -rf "/usr/lib/jvm/.{{destDir}}.jinfo"
     ;;
 esac
 

@@ -1,2 +1,2 @@
-usr/lib/jvm/java-{{jdkVersion}}-adoptopenjdk
-var/cache/adoptopenjdk-jdk{{jdkVersion}}-installer
+usr/lib/jvm/{{destDir}}
+var/cache/{{destDir}}-installer

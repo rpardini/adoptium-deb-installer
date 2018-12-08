@@ -1,25 +1,28 @@
 #!/bin/bash
 
 set -e
-set -x
+#set -x
 
 fp_exit_with_error() {
-	echo "AdoptOpenJDK JDK {{jdkVersion}} is NOT installed: $@"
+  echo ""
+	echo "{{fullHumanTitle}} is NOT installed: $@"
 	exit 1
 }
 
 DPKG_ARCH=$(dpkg --print-architecture)
 
-J_DIR_INSIDE_TAR_GZ="{{{slug}}}"
+J_DIR_INSIDE_TAR_GZ="{{{dirInsideTarGz}}}"
+J_DIR_INSIDE_TAR_GZ_SHORT="{{{dirInsideTarGzShort}}}"
 FILENAME_TAR_GZ="{{{filename}}}"
 DOWNLOAD_TAR_GZ_URL="{{{downloadUrl}}}"
 SHA256SUM_TGZ="{{sha256sum}}"
-J_ID=java-{{jdkVersion}}-adoptopenjdk
-INSTALLER_DIR=/var/cache/adoptopenjdk-jdk{{jdkVersion}}-installer
+# @TODO: maybe remove J_ID
+J_ID={{destDir}}
+INSTALLER_DIR=/var/cache/{{destDir}}-installer
 
 PRIORITY=1081 # The priority for the alternatives.
-JINFO_MANIFEST_FILE=/usr/lib/jvm/.${J_ID}.jinfo
-J_INSTALL_DIR=/usr/lib/jvm/${J_ID}
+JINFO_MANIFEST_FILE=/usr/lib/jvm/.{{destDir}}.jinfo
+J_INSTALL_DIR=/usr/lib/jvm/{{destDir}}
 
 ########Create dirs
 mkdir -p ${INSTALLER_DIR}
@@ -60,31 +63,48 @@ else
   if [[ -f ${INSTALLER_DIR}/wgetrc ]]; then
     echo "Using wget settings from $INSTALLER_DIR/wgetrc"
   else
-    # setting wget options
-    :> wgetrc
-    echo "noclobber = off" >> wgetrc
-    echo "dir_prefix = ." >> wgetrc
-    echo "dirstruct = off" >> wgetrc
-    echo "verbose = on" >> wgetrc
-    echo "progress = dot:mega" >> wgetrc
-    echo "tries = 5" >> wgetrc
-
     echo "No $INSTALLER_DIR/wgetrc file found."
     echo "Creating $INSTALLER_DIR/wgetrc with default values."
+
+    # setting wget options
+    :> ${INSTALLER_DIR}/wgetrc
+    echo "noclobber = off" >> ${INSTALLER_DIR}/wgetrc
+    echo "dir_prefix = ." >> ${INSTALLER_DIR}/wgetrc
+    echo "dirstruct = off" >> ${INSTALLER_DIR}/wgetrc
+    echo "dot_style = giga" >> ${INSTALLER_DIR}/wgetrc
+    echo "tries = 5" >> ${INSTALLER_DIR}/wgetrc
   fi
 
   # Now actually download the .tar.gz file.
-  echo "Downloading AdoptOpenJDK Java 8..."
-  WGETRC=wgetrc wget --continue -O ${FILENAME_TAR_GZ} ${DOWNLOAD_TAR_GZ_URL} || fp_exit_with_error "download failed"
+  echo "Downloading {{fullHumanTitle}}..."
+  wget --config=$INSTALLER_DIR/wgetrc --continue -O ${FILENAME_TAR_GZ} ${DOWNLOAD_TAR_GZ_URL} || fp_exit_with_error "download failed"
   echo "Download done."
 fi
 
 # verify SHA256 checksum of (copied or downloaded) tarball
+echo -n "Checking SHA256 checksum: "
 echo "$SHA256SUM_TGZ  $FILENAME_TAR_GZ" | sha256sum -c > /dev/null 2>&1 || fp_exit_with_error "sha256sum mismatch $FILENAME_TAR_GZ"
+echo "done, checksum $SHA256SUM_TGZ matched."
 
 # unpack.
-tar xzf ${FILENAME_TAR_GZ} || fp_exit_with_error "cannot unpack jdk8"
+echo -n "Unpacking: "
+tar xzf ${FILENAME_TAR_GZ} || fp_exit_with_error "cannot unpack"
+echo "done."
 
+if [[ ! -d ${J_DIR_INSIDE_TAR_GZ} ]]; then
+
+  # Check if we can find the short version.
+  if [[ -d ${J_DIR_INSIDE_TAR_GZ_SHORT} ]]; then
+    J_DIR_INSIDE_TAR_GZ=${J_DIR_INSIDE_TAR_GZ_SHORT}
+  else
+    echo "Could not find '${J_DIR_INSIDE_TAR_GZ}' or '${J_DIR_INSIDE_TAR_GZ_SHORT}' after unpacking."
+    echo "This is an installer bug, please report: "
+    echo " -> expected './${J_DIR_INSIDE_TAR_GZ}' or './${J_DIR_INSIDE_TAR_GZ_SHORT}' but got '$(find . -type d -maxdepth 1 | grep -v "^.$" | xargs)'."
+    fp_exit_with_error ".tar.gz does not contain expected dir"
+  fi
+fi
+
+echo -n "Putting '{{fullHumanTitle}}' in place: "
 # make it owned by root, OpenJDK sends it with uid 500 or something.
 chown -R root:root ${J_DIR_INSIDE_TAR_GZ}
 
@@ -95,6 +115,8 @@ cp -rf ${J_ID} /usr/lib/jvm/
 
 # Clean up
 rm -rf ${J_ID}
+
+echo "done."
 
 # @TODO: -print will become remove very soon
 echo "Listing outdated downloads..."
@@ -172,8 +194,8 @@ cat << 'EOD'
                    |_|             |_|
 EOD
 
-echo "AdoptOpenJDK {{jdkVersion}} installed"
-echo "To set AdoptOpenJDK {{jdkVersion}} as default, install the \"adoptopenjdk-java{{jdkVersion}}-set-default\" package."
+echo "{{fullHumanTitle}} installed"
+echo "To set {{fullHumanTitle}} as default, install the \"{{setDefaultPackageName}}\" package."
 
 #DEBHELPER#
 

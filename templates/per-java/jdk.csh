@@ -1,1 +1,1 @@
-setenv JAVA_HOME /usr/lib/jvm/java-{{jdkVersion}}-adoptopenjdk
+setenv JAVA_HOME /usr/lib/jvm/{{destDir}}

@@ -1,7 +1,7 @@
 {{sourcePackageName}} ({{version}}) {{distribution}}; urgency=medium
 
-  * Installer for AdoptOpenJDK {{jdkVersion}}
-  * Java {{jdkVersion}} composed version {{version}}.
+  * Installer for AdoptOpenJDK {{JDKorJREupper}} {{jdkVersion}} with {{jvmTypeDesc}}
+  * {{JDKorJREupper}} {{jdkVersion}} composed version {{version}}.
 {{debChangeLogArches}}
 
  -- {{signerName}} <{{signerEmail}}>  {{buildDateChangelog}}

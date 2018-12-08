@@ -1,1 +1,1 @@
-export JAVA_HOME=/usr/lib/jvm/java-{{jdkVersion}}-adoptopenjdk
+export JAVA_HOME=/usr/lib/jvm/{{destDir}}

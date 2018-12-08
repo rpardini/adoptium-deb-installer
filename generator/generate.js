@@ -26,8 +26,9 @@ const goodGuy = require('good-guy-http')({
 });
 
 
-const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x']);
-const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x'}; //subtle differences
+const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
+// @TODO: is 'arm' really 'armel'?
+const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
 const wantedJavaVersions = new Set([8, 9, 10, 11]);
 const linuxesAndDistros = new Set([
     {name: 'ubuntu', distros: new Set(['trusty', 'xenial', 'bionic'])},
@@ -45,33 +46,44 @@ const signerName = "Ricardo Pardini (Pardini Yubi 2017)";
 const signerEmail = "ricardo@pardini.net";
 
 async function main () {
-    const basePath = path.dirname(__dirname) ;
+    let allPromises = [];
+    allPromises.push(generateForGivenKitAndJVM("jdk", "hotspot"));
+    allPromises.push(generateForGivenKitAndJVM("jdk", "openj9"));
+    allPromises.push(generateForGivenKitAndJVM("jre", "hotspot"));
+    allPromises.push(generateForGivenKitAndJVM("jre", "openj9"));
+    await Promise.all(allPromises);
+}
+
+async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
+    console.log(`Generating for ${jdkOrJre}+${hotspotOrOpenJ9}...`);
+
+    const basePath = path.dirname(__dirname);
     const templateFilesPerJava = await walk(`${basePath}/templates/per-java/`);
     const templateFilesPerArch = await walk(`${basePath}/templates/per-arch/`);
     const generatedDirBase = `${basePath}/generated`;
 
-    const jdkBuildsPerArch = await getJDKInfosFromAdoptOpenJDKAPI();
+    const jdkBuildsPerArch = await getJDKInfosFromAdoptOpenJDKAPI(jdkOrJre, hotspotOrOpenJ9);
 
     // who DOESN'T love 4 nested for-loops?
     for (const linux of linuxesAndDistros) {
         for (const distroLinux of linux.distros) {
             for (const javaX of jdkBuildsPerArch.values()) {
                 // the per-Java templates...
-                let destPath = `${generatedDirBase}/${linux.name}/java-${javaX.jdkVersion}/${distroLinux}/debian`;
-                let fnView = {javaX: `java${javaX.jdkVersion}`};
-                let javaXview = {
-                    jdkVersion: javaX.jdkVersion,
-                    allDebArches: javaX.allDebArches,
+                let destPath = `${generatedDirBase}/${linux.name}/${javaX.jdkJreVersionJvmType}/${distroLinux}/debian`;
+                let fnView = {javaX: `${javaX.jdkJreVersionJvmType}`};
+                let javaXview_extra = {
                     distribution: `${distroLinux}`,
                     version: `${javaX.baseJoinedVersion}~${distroLinux}`,
-                    sourcePackageName: `adoptopenjdk-java${javaX.jdkVersion}-installer`,
-                    setDefaultPackageName: `adoptopenjdk-java${javaX.jdkVersion}-set-default`,
-                    debChangeLogArches: javaX.debChangeLogArches,
+                    virtualPackageName: `adoptopenjdk-${javaX.jdkVersion}-installer`,
+                    commentForVirtualPackage: javaX.isDefaultForVirtualPackage ? "" : "#",
+                    sourcePackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer`,
+                    setDefaultPackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-set-default`,
                     buildDateChangelog: buildDateChangelog,
                     buildDateYear: buildDateYear,
                     signerName: signerName,
                     signerEmail: signerEmail
                 };
+                let javaXview = Object.assign(javaXview_extra, javaX); // yes, all of it.
 
                 await processTemplates(templateFilesPerJava, destPath, fnView, javaXview);
 
@@ -87,78 +99,123 @@ async function main () {
 }
 
 
-async function getJDKInfosFromAdoptOpenJDKAPI () {
+async function getJDKInfosFromAdoptOpenJDKAPI (jdkOrJre, hotspotOrOpenJ9) {
     let javaBuildArchsPerVersion = new Map();
     for (let wantedJavaVersion of wantedJavaVersions) {
-        javaBuildArchsPerVersion.set(wantedJavaVersion, await processAPIData(wantedJavaVersion, architectures));
+        try {
+            let apiData = await processAPIData(wantedJavaVersion, architectures, jdkOrJre, hotspotOrOpenJ9);
+            javaBuildArchsPerVersion.set(wantedJavaVersion, apiData);
+        } catch (e) {
+            console.error(`Error getting release data for ${wantedJavaVersion} ${jdkOrJre} ${hotspotOrOpenJ9}: ${e.message}`);
+        }
     }
     return javaBuildArchsPerVersion;
 }
 
-async function processAPIData (jdkVersion, wantedArchs) {
+async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ9) {
 
-    let httpResponse = await goodGuy(`https://api.adoptopenjdk.net/v2/latestAssets/releases/openjdk${jdkVersion}?os=linux&heap_size=normal&openjdk_impl=hotspot&type=jdk`);
-    let jsonContents = JSON.parse(httpResponse.body);
+    let jsonStringAPIResponse;
+    let apiURL = `https://api.adoptopenjdk.net/v2/latestAssets/releases/openjdk${jdkVersion}?os=linux&heap_size=normal&openjdk_impl=${hotspotOrOpenJ9}&type=${jdkOrJre}`;
+
+    try {
+        let httpResponse = await goodGuy(apiURL);
+        jsonStringAPIResponse = httpResponse.body;
+    } catch (e) {
+        throw new Error(`${e.message} from URL ${apiURL}`)
+    }
+
+    let jsonContents = JSON.parse(jsonStringAPIResponse);
 
     let archData = new Map(); // builds per-architecture
     let slugs = new Map();
     let allDebArches = [];
     let debChangeLogArches = [];
 
+    let jdkJreVersionJvmType = `${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`;
+
+    let commonProps = {
+        jdkVersion: jdkVersion,
+        destDir: `adoptopenjdk-${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`,
+        jdkJre: jdkOrJre,
+        JDKorJREupper: jdkOrJre.toUpperCase(),
+        jvmType: hotspotOrOpenJ9,
+        jvmTypeDesc: (hotspotOrOpenJ9 === "openj9" ? "OpenJ9" : "Hotspot"),
+        jdkJreVersionJvmType: jdkJreVersionJvmType,
+    };
+
+    commonProps.fullHumanTitle = `AdoptOpenJDK ${commonProps.JDKorJREupper} ${commonProps.jdkVersion} with ${commonProps.jvmTypeDesc}`;
+    commonProps.isDefaultForVirtualPackage = (jdkOrJre === "jdk" && hotspotOrOpenJ9 === "hotspot");
+
     for (let oneRelease of jsonContents) {
-        if (!wantedArchs.has(oneRelease.architecture)) continue;
+        if (!wantedArchs.has(oneRelease.architecture)) {
+            console.warn(`Unhandled architecture: ${oneRelease.architecture} for ${jdkJreVersionJvmType} `);
+            continue;
+        }
         let debArch = archMapJdkToDebian[oneRelease.architecture];
-        let buildInfo = {
-            jdkVersion: jdkVersion,
-            arch: oneRelease.architecture,
-            jdkArch: oneRelease.architecture,
-            debArch: debArch,
-            slug: oneRelease.release_name,
-            cleanedSlug: oneRelease.release_name.replace("-", "").replace("jdk", "").replace("+", "b"), // cant have dashes in there...
-            filename: oneRelease.binary_name,
-            downloadUrl: oneRelease.binary_link,
-            sha256sum: await getShaSum(oneRelease.checksum_link)
-        };
+
+        // Hack, some builds have the openj9 version in them, some don't; normalize so none do
+        let slugKey = oneRelease.release_name.split(/_openj9/)[0];
+
+        let buildInfo = Object.assign(
+            {
+                arch: oneRelease.architecture,
+                jdkArch: oneRelease.architecture,
+                debArch: debArch,
+                dirInsideTarGz: oneRelease.release_name,
+                dirInsideTarGzShort: slugKey,
+                slug: oneRelease.release_name,
+                cleanedSlug: oneRelease.release_name.replace("-", "").replace("jdk", "").replace("jre", "").replace("+", "b"), // cant have dashes in there...
+                filename: oneRelease.binary_name,
+                downloadUrl: oneRelease.binary_link,
+                sha256sum: await getShaSum(oneRelease.checksum_link)
+            },
+            commonProps);
         archData.set(buildInfo.arch, buildInfo);
 
-        let slugKey = buildInfo.cleanedSlug;
         if (!slugs.has(slugKey)) slugs.set(slugKey, []);
         slugs.get(slugKey).push(buildInfo.jdkArch);
 
         allDebArches.push(debArch);
-        debChangeLogArches.push(`  * For ${debArch} JDK version is ${oneRelease.release_name}`);
+        debChangeLogArches.push(`  * Exact version for architecture ${debArch}: ${oneRelease.release_name}`);
     }
 
-    let finalVersion = calculateJoinedVersionForAllArches(slugs);
-    console.log(`Composed version for JDK ${jdkVersion} is ${finalVersion}`);
+    let calcVersion = calculateJoinedVersionForAllArches(slugs);
+    let finalVersion = calcVersion.finalVersion;
+    let commonArches = calcVersion.commonArches;
+    console.log(`Composed version for ${jdkJreVersionJvmType} is ${finalVersion} - common arches are ${commonArches}`);
 
-    return {
-        arches: archData,
-        baseJoinedVersion: finalVersion,
-        jdkVersion: jdkVersion,
-        allDebArches: allDebArches.join(' '),
-        debChangeLogArches: debChangeLogArches.join("\n")
-    };
+    return Object.assign(
+        {
+            arches: archData,
+            baseJoinedVersion: finalVersion,
+            allDebArches: allDebArches.join(' '),
+            debChangeLogArches: debChangeLogArches.join("\n")
+        },
+        commonProps);
 }
 
 function calculateJoinedVersionForAllArches (slugs) {
     let slugArr = [];
     for (let oneSlugKey of slugs.keys()) {
         let arches = slugs.get(oneSlugKey);
-        slugArr.push({slug: oneSlugKey, count: arches.length, archList: arches.sort().join(".")});
+        slugArr.push({slug: oneSlugKey, count: arches.length, archList: arches.sort().join("+")});
     }
     slugArr.sort((a, b) => b.count - a.count);
 
     let versionsByArch = [];
+    let commonArches = null;
     let counter = 0;
     for (let oneArchesPlusSlug of slugArr) {
         let archList = oneArchesPlusSlug.archList + "~";
-        if (counter === 0) archList = ""; // we wont list the most common combo
+        if (counter === 0) {
+            commonArches = oneArchesPlusSlug.archList;
+            archList = "";
+        } // we wont list the most common combo
         versionsByArch.push(archList + oneArchesPlusSlug.slug);
         counter++;
     }
 
-    return `${buildDateTimestamp}~${versionsByArch.join("+")}`;
+    return {finalVersion: `${buildDateTimestamp}~${versionsByArch.join("+")}`, commonArches: commonArches};
 }
 
 async function getShaSum (url) {
@@ -198,7 +255,7 @@ async function processTemplates (templateFiles, destPathBase, fnView, view) {
 
         let destFileParentDir = destPathBase + "/" + templateFile.dirs;
         let fullDestPath = destPathBase + "/" + (templateFile.dirs ? templateFile.dirs + "/" : "") + destFileTemplated;
-        console.log(`--> ${templateFile.fullpath} to ${fullDestPath} (in path ${destFileParentDir}) [exec: ${templateFile.executable}]`);
+        //console.log(`--> ${templateFile.fullpath} to ${fullDestPath} (in path ${destFileParentDir}) [exec: ${templateFile.executable}]`);
 
         let originalContents = await fs.readFile(templateFile.fullpath, 'utf8');
         let modifiedContents = mustache.render(originalContents, view);

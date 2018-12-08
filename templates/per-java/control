@@ -21,22 +21,24 @@ Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless
           java-runtime-headless, java2-runtime-headless, java5-runtime-headless,
           java6-runtime-headless, java7-runtime-headless, java8-runtime-headless,
           java-jdk, java2-jdk, java5-jdk, java6-jdk, java7-jdk, java8-jdk
-Description: AdoptOpenJDK Java(TM) Development Kit (JDK) 8
- The JDK(TM) is a development environment for building and running
- applications, applets, and components using the Java programming language.
- .
- The JDK(TM) includes Java Runtime Environment (JRE) for running applications,
- and tools useful for developing and testing programs written in the Java
- programming language.
- .
+Description: {{fullHumanTitle}}
+ Installer package for {{fullHumanTitle}}.
+ This package does not contain binary files, but is only a downloader/installer.
+ To set this a system-wide default, install the package {{setDefaultPackageName}}
 
 Package: {{setDefaultPackageName}}
 Section: java
 Architecture: {{allDebArches}}
 Pre-Depends: {{sourcePackageName}}
 Depends: ${misc:Depends}
-Conflicts: oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
-Replaces: oracle-java8-set-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java9-set-default
-Description: Set AdoptOpenJDK JDK {{jdkVersion}} as default Java
- This package sets the AdoptOpenJDK {{jdkVersion}} as the system default.
+Description: Set {{fullHumanTitle}} as default
+ Sets {{fullHumanTitle}} as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
+
+{{commentForVirtualPackage}}Package: {{virtualPackageName}}
+{{commentForVirtualPackage}}Section: java
+{{commentForVirtualPackage}}Architecture: {{allDebArches}}
+{{commentForVirtualPackage}}Depends: {{sourcePackageName}}, ${misc:Depends}
+{{commentForVirtualPackage}}Description: Virtual package for {{fullHumanTitle}}
+{{commentForVirtualPackage}} Virtual package depending {{fullHumanTitle}}
+{{commentForVirtualPackage}} This package depends on {{sourcePackageName}}

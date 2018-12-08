@@ -23,7 +23,8 @@ for oneJavaVersion in *; do
     # line in the dockerfile, but is better than nothing.
     #if [[ "${oneJavaVersion}" == "java-11" ]]; then
       if [[ "$(lsb_release -c -s)" == "$oneDistribution" ]]; then
-        dpkg -i adoptopenjdk-java*-installer_*_amd64.deb
+        ls -la adoptopenjdk-*-installer_*_amd64.deb || true
+        dpkg -i adoptopenjdk-*-installer_*_amd64.deb
       fi
     #fi
 
