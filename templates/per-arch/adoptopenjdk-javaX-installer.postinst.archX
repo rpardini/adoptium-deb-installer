@@ -164,8 +164,13 @@ for f in ${J_INSTALL_DIR}/man/man1/*; do
   # @TODO: again this check. why?
   if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
     if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then #don't link already linked JRE files
-      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
-      echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
+      if [[ ! -e ${J_INSTALL_DIR}/bin/${name} ]]; then
+        echo "** Missing executable ${J_INSTALL_DIR}/bin/${name} even though man page ${f} exists."
+        echo "** This is probably a bug in AdoptOpenJDK and should be reported upstream."
+      else
+        update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+        echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
+      fi
     fi
   fi
 done
