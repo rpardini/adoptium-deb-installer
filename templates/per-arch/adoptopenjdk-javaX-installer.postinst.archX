@@ -4,8 +4,8 @@ set -e
 #set -x
 
 fp_exit_with_error() {
-  echo ""
-	echo "{{fullHumanTitle}} is NOT installed: $@"
+  echo "" 1>&2
+	echo "{{fullHumanTitle}} is NOT installed: $@" 1>&2
 	exit 1
 }
 
@@ -101,9 +101,9 @@ if [[ ! -d ${J_DIR_INSIDE_TAR_GZ} ]]; then
     if [[ -d ${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE} ]]; then
       J_DIR_INSIDE_TAR_GZ=${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}
     else
-      echo "Could not find '${J_DIR_INSIDE_TAR_GZ}' or '${J_DIR_INSIDE_TAR_GZ_SHORT}' or '${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' after unpacking."
-      echo "This is an installer bug, please report: "
-      echo " -> expected './${J_DIR_INSIDE_TAR_GZ}' or './${J_DIR_INSIDE_TAR_GZ_SHORT}' or './${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' but got '$(find . -type d -maxdepth 1 | grep -v "^.$" | xargs)'."
+      echo "Could not find '${J_DIR_INSIDE_TAR_GZ}' or '${J_DIR_INSIDE_TAR_GZ_SHORT}' or '${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' after unpacking." 1>&2
+      echo "This is an installer bug, please report: " 1>&2
+      echo " -> expected './${J_DIR_INSIDE_TAR_GZ}' or './${J_DIR_INSIDE_TAR_GZ_SHORT}' or './${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' but got '$(find . -type d -maxdepth 1 | grep -v "^.$" | xargs)'." 1>&2
       fp_exit_with_error ".tar.gz does not contain expected dir"
     fi
   fi
@@ -144,33 +144,28 @@ EOD
 if [ -d ${J_INSTALL_DIR}/jre/bin ]; then # only jdk8 has this, so skip if not
   for f in ${J_INSTALL_DIR}/jre/bin/*; do
     name=`basename ${f}`;
-    # @TODO: why does this check exist? We're installing, so it shouldn't matter if it already exists.
-    if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
-      if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
-        # man page available, install as a slave of the tool
-        update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
-      else
-        # no man page available for this specific tool
-        update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
-      fi
-      echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
+    if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
+      # man page available, install as a slave of the tool
+      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+    else
+      # no man page available for this specific tool
+      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
     fi
+    echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
   done
 fi
 
 # For the non-JRE tools, we actually start from the man pages.
 for f in ${J_INSTALL_DIR}/man/man1/*; do
   name=`basename ${f} .1.gz`;
-  # @TODO: again this check. why?
-  if [[ ! -f "/usr/bin/$name" || -L "/usr/bin/$name" ]]; then
-    if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then #don't link already linked JRE files
-      if [[ ! -e ${J_INSTALL_DIR}/bin/${name} ]]; then
-        echo "** Missing executable ${J_INSTALL_DIR}/bin/${name} even though man page ${f} exists."
-        echo "** This is probably a bug in AdoptOpenJDK and should be reported upstream."
-      else
-        update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
-        echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
-      fi
+  #don't link already linked JRE files
+  if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then
+    if [[ ! -e ${J_INSTALL_DIR}/bin/${name} ]]; then
+      echo "** Missing executable ${J_INSTALL_DIR}/bin/${name} even though man page ${f} exists." 1>&2
+      echo "** This is probably a bug in AdoptOpenJDK and should be reported upstream." 1>&2
+    else
+      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+      echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
     fi
   fi
 done
