@@ -35,12 +35,6 @@ const linuxesAndDistros = new Set([
     {name: 'debian', distros: new Set(['wheezy', 'jessie'])}
 ]);
 
-// the date-based stuff. both the version and the changelog use it.
-const buildDate = moment();
-const buildDateTimestamp = buildDate.format('YYYYMMDDHHmm');
-const buildDateYear = buildDate.format('YYYY');
-const buildDateChangelog = buildDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ');
-
 // the person building and signing the packages.
 const signerName = "Ricardo Pardini (Pardini Yubi 2017)";
 const signerEmail = "ricardo@pardini.net";
@@ -78,8 +72,6 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
                     commentForVirtualPackage: javaX.isDefaultForVirtualPackage ? "" : "#",
                     sourcePackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer`,
                     setDefaultPackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-set-default`,
-                    buildDateChangelog: buildDateChangelog,
-                    buildDateYear: buildDateYear,
                     signerName: signerName,
                     signerEmail: signerEmail
                 };
@@ -130,6 +122,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
     let slugs = new Map();
     let allDebArches = [];
     let debChangeLogArches = [];
+    let highestBuildTS = 0;
 
     let jdkJreVersionJvmType = `${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`;
 
@@ -153,23 +146,29 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         }
         let debArch = archMapJdkToDebian[oneRelease.architecture];
 
-        // Hack, some builds have the openj9 version in them, some don't; normalize so none do
+        let buildTS = moment(oneRelease.timestamp, moment.ISO_8601);
+        let updatedTS = moment(oneRelease.updated_at, moment.ISO_8601);
+        let highTS = (buildTS > updatedTS) ? buildTS : updatedTS;
+        highestBuildTS = (highTS > highestBuildTS) ? highTS : highestBuildTS;
+
         let buildInfo = Object.assign(
             {
                 arch: oneRelease.architecture,
                 jdkArch: oneRelease.architecture,
                 debArch: debArch,
-                dirInsideTarGz: oneRelease.release_name,
-                dirInsideTarGzShort: oneRelease.release_name.split(/_openj9/)[0],
-                dirInsideTarGzWithJdkJre: `${oneRelease.release_name}-${jdkOrJre}`,
+                dirInsideTarGz: oneRelease.release_name, // release name from AOJ is most of the time correct
+                dirInsideTarGzShort: oneRelease.release_name.split(/_openj9/)[0], // release name without openj9 part...
+                dirInsideTarGzWithJdkJre: `${oneRelease.release_name}-${jdkOrJre}`, // release name with '-jre' sometimes.
                 slug: oneRelease.release_name,
                 filename: oneRelease.binary_name,
                 downloadUrl: oneRelease.binary_link,
                 sha256sum: await getShaSum(oneRelease.checksum_link)
             },
             commonProps);
+
         archData.set(buildInfo.arch, buildInfo);
 
+        // Hack, some builds have the openj9 version in them, some don't; normalize so none do
         let slugKey = oneRelease.release_name.split(/_openj9/)[0]
             .replace("-", "")
             .replace("jdk", "")
@@ -183,7 +182,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         debChangeLogArches.push(`  * Exact version for architecture ${debArch}: ${oneRelease.release_name}`);
     }
 
-    let calcVersion = calculateJoinedVersionForAllArches(slugs);
+    let calcVersion = calculateJoinedVersionForAllArches(slugs, highestBuildTS);
     let finalVersion = calcVersion.finalVersion;
     let commonArches = calcVersion.commonArches;
     console.log(`Composed version for ${jdkJreVersionJvmType} is ${finalVersion} - common arches are ${commonArches}`);
@@ -192,13 +191,15 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         {
             arches: archData,
             baseJoinedVersion: finalVersion,
+            buildDateYear: highestBuildTS.format('YYYY'),
+            buildDateChangelog: highestBuildTS.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
             allDebArches: allDebArches.join(' '),
             debChangeLogArches: debChangeLogArches.join("\n")
         },
         commonProps);
 }
 
-function calculateJoinedVersionForAllArches (slugs) {
+function calculateJoinedVersionForAllArches (slugs, highestBuildTS) {
     let slugArr = [];
     for (let oneSlugKey of slugs.keys()) {
         let arches = slugs.get(oneSlugKey);
@@ -219,7 +220,10 @@ function calculateJoinedVersionForAllArches (slugs) {
         counter++;
     }
 
-    return {finalVersion: `${buildDateTimestamp}~${versionsByArch.join("+")}`, commonArches: commonArches};
+    return {
+        finalVersion: `${highestBuildTS.format('YYYYMMDDHHmm')}~${versionsByArch.join("+")}`,
+        commonArches: commonArches
+    };
 }
 
 async function getShaSum (url) {
