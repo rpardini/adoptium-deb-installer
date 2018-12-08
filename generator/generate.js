@@ -163,6 +163,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
                 debArch: debArch,
                 dirInsideTarGz: oneRelease.release_name,
                 dirInsideTarGzShort: slugKey,
+                dirInsideTarGzWithJdkJre: `${oneRelease.release_name}-${jdkOrJre}`,
                 slug: oneRelease.release_name,
                 cleanedSlug: oneRelease.release_name.replace("-", "").replace("jdk", "").replace("jre", "").replace("+", "b"), // cant have dashes in there...
                 filename: oneRelease.binary_name,

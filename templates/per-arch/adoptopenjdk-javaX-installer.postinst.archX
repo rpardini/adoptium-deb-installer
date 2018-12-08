@@ -13,6 +13,7 @@ DPKG_ARCH=$(dpkg --print-architecture)
 
 J_DIR_INSIDE_TAR_GZ="{{{dirInsideTarGz}}}"
 J_DIR_INSIDE_TAR_GZ_SHORT="{{{dirInsideTarGzShort}}}"
+J_DIR_INSIDE_TAR_GZ_WITHJDKJRE="{{{dirInsideTarGzWithJdkJre}}}"
 FILENAME_TAR_GZ="{{{filename}}}"
 DOWNLOAD_TAR_GZ_URL="{{{downloadUrl}}}"
 SHA256SUM_TGZ="{{sha256sum}}"
@@ -97,10 +98,14 @@ if [[ ! -d ${J_DIR_INSIDE_TAR_GZ} ]]; then
   if [[ -d ${J_DIR_INSIDE_TAR_GZ_SHORT} ]]; then
     J_DIR_INSIDE_TAR_GZ=${J_DIR_INSIDE_TAR_GZ_SHORT}
   else
-    echo "Could not find '${J_DIR_INSIDE_TAR_GZ}' or '${J_DIR_INSIDE_TAR_GZ_SHORT}' after unpacking."
-    echo "This is an installer bug, please report: "
-    echo " -> expected './${J_DIR_INSIDE_TAR_GZ}' or './${J_DIR_INSIDE_TAR_GZ_SHORT}' but got '$(find . -type d -maxdepth 1 | grep -v "^.$" | xargs)'."
-    fp_exit_with_error ".tar.gz does not contain expected dir"
+    if [[ -d ${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE} ]]; then
+      J_DIR_INSIDE_TAR_GZ=${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}
+    else
+      echo "Could not find '${J_DIR_INSIDE_TAR_GZ}' or '${J_DIR_INSIDE_TAR_GZ_SHORT}' or '${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' after unpacking."
+      echo "This is an installer bug, please report: "
+      echo " -> expected './${J_DIR_INSIDE_TAR_GZ}' or './${J_DIR_INSIDE_TAR_GZ_SHORT}' or './${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' but got '$(find . -type d -maxdepth 1 | grep -v "^.$" | xargs)'."
+      fp_exit_with_error ".tar.gz does not contain expected dir"
+    fi
   fi
 fi
 
