@@ -154,24 +154,27 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         let debArch = archMapJdkToDebian[oneRelease.architecture];
 
         // Hack, some builds have the openj9 version in them, some don't; normalize so none do
-        let slugKey = oneRelease.release_name.split(/_openj9/)[0];
-
         let buildInfo = Object.assign(
             {
                 arch: oneRelease.architecture,
                 jdkArch: oneRelease.architecture,
                 debArch: debArch,
                 dirInsideTarGz: oneRelease.release_name,
-                dirInsideTarGzShort: slugKey,
+                dirInsideTarGzShort: oneRelease.release_name.split(/_openj9/)[0],
                 dirInsideTarGzWithJdkJre: `${oneRelease.release_name}-${jdkOrJre}`,
                 slug: oneRelease.release_name,
-                cleanedSlug: oneRelease.release_name.replace("-", "").replace("jdk", "").replace("jre", "").replace("+", "b"), // cant have dashes in there...
                 filename: oneRelease.binary_name,
                 downloadUrl: oneRelease.binary_link,
                 sha256sum: await getShaSum(oneRelease.checksum_link)
             },
             commonProps);
         archData.set(buildInfo.arch, buildInfo);
+
+        let slugKey = oneRelease.release_name.split(/_openj9/)[0]
+            .replace("-", "")
+            .replace("jdk", "")
+            .replace("jre", "")
+            .replace("+", "b");
 
         if (!slugs.has(slugKey)) slugs.set(slugKey, []);
         slugs.get(slugKey).push(buildInfo.jdkArch);
