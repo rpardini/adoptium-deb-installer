@@ -29,10 +29,10 @@ sudo apt-get install adoptopenjdk-8-installer
 # also available are separate packages for some <version>-<JDK/JRE>-<JVM> combinations,
 # for example, install the JRE 11 with OpenJ9 JVM:
 sudo apt-get install adoptopenjdk-11-jre-openj9-installer
-# set that as default
+# set that as default (JAVA_HOME env var, and update-java-alternatives)
 sudo apt-get install adoptopenjdk-11-jre-openj9-set-default
-# OR, use java-common's update-java-alternatives:
-update-java-alternatives -s adoptopenjdk-11-jre-openj9
+# OR, directly use java-common's update-java-alternatives:
+sudo update-java-alternatives -s adoptopenjdk-11-jre-openj9
 ```
 
 ## For Debian:
