@@ -7,7 +7,7 @@ their official releases, using the AdoptOpenJDK API.
 
 - for Ubuntu: check out [ppa:rpardini/adoptopenjdk](https://launchpad.net/~rpardini/+archive/ubuntu/adoptopenjdk) 
   or see instructions below
-- for Debian: _I'm looking for a package hoster (a la Launchpad) for Debian, let me know._
+- for Debian: upcoming.
 
 # Info for final users
 
@@ -20,13 +20,24 @@ Use these packages at your own risk.
 # only use this on test/throwaway machines as of December/2018, until we get more testing done
 sudo add-apt-repository --yes ppa:rpardini/adoptopenjdk
 sudo apt-get update
-sudo apt-get install adoptopenjdk-java8-installer adoptopenjdk-java8-set-default 
-# also avaiable in java9, java10, java11 flavors
+# install AdoptOpenJDK (full JDK) 8 with Hotspot and (via recommends) set it as the system default
+# you can replace 8 with 9, 10, 11.
+sudo apt-get install adoptopenjdk-8-installer 
+```
+
+```bash
+# also available are separate packages for some <version>-<JDK/JRE>-<JVM> combinations,
+# for example, install the JRE 11 with OpenJ9 JVM:
+sudo apt-get install adoptopenjdk-11-jre-openj9-installer
+# set that as default
+sudo apt-get install adoptopenjdk-11-jre-openj9-set-default
+# OR, use java-common's update-java-alternatives:
+update-java-alternatives -s adoptopenjdk-11-jre-openj9
 ```
 
 ## For Debian:
 
-@TODO, I don't really use Debian anymore.
+ _coming soon_
 
 # For developers/builders
 
@@ -112,15 +123,17 @@ for details.
 # Upcoming work
 
 * Investigate actual upgrade path on production machines which currently use `oracle-jdk8-installer`
-* Supporting both Hotspot and OpenJ9 builds would be awesome; but it would require splitting packages...
-* Actually test on `ppc64el` and `s390x`; I only have access to `amd64` and `aarch64` at home
-* Making sure all the update-alternatives stuff is actually working
+* [DONE] Supporting both Hotspot and OpenJ9 builds would be awesome; but it would require splitting packages...
+* Actually test on `ppc64el` [DONE] and `s390x`; I only have access to `amd64` and `aarch64` at home
+* [DONE] Making sure all the update-alternatives stuff is actually working
 * Make sure stuff is properly cleaned-up on package removal
 * Check how these packages interact with other JDK packages (eg, OpenJDK from stock Ubuntu, etc)
 * Find a way to host the Debian packages
 * Maybe support more architectures (eg, `arm`, I bet the RaspberryPi folks would enjoy that)
   If I understand correctly, AdoptOpenJDK only has ARM32 builds for Java 10, but why not?
+  * [DONE]: but Launchpad is messing up the `armel` builds. 
 * Find a better versioning scheme to use in place of the timestamp I'm using now
+  * [DONE]: I now use the build's timestamp, from the AOJ API (+ some minutes for each generator version)
 * Investigate and _maybe_ support the "large heap" builds
 * Investigate `/usr/lib/jvm/default-java` and its implications
 * If in download mode, emit instructions for the final user on how to use pre-downloaded file mode.
