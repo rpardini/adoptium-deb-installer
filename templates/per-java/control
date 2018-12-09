@@ -12,10 +12,10 @@ Architecture: {{allDebArches}}
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, ${misc:Depends}
 Conflicts: j2se-common
-Recommends: gsfonts-x11, {{setDefaultPackageName}}
+Recommends: gsfonts-x11
 Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic,
-          ttf-kochi-mincho | ttf-sazanami-mincho,
-          ttf-arphic-uming
+          ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming,
+          {{setDefaultPackageName}}
 Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless,
           java-runtime, java2-runtime, java5-runtime, java6-runtime, java7-runtime, java8-runtime,
           java-runtime-headless, java2-runtime-headless, java5-runtime-headless,
@@ -31,6 +31,8 @@ Section: java
 Architecture: {{allDebArches}}
 Pre-Depends: {{sourcePackageName}}
 Depends: ${misc:Depends}
+Provides: adoptopenjdk-default
+Conflicts: adoptopenjdk-default
 Description: Set {{fullHumanTitle}} as default
  Sets {{fullHumanTitle}} as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
@@ -39,6 +41,7 @@ Description: Set {{fullHumanTitle}} as default
 {{commentForVirtualPackage}}Section: java
 {{commentForVirtualPackage}}Architecture: {{allDebArches}}
 {{commentForVirtualPackage}}Depends: {{sourcePackageName}}, ${misc:Depends}
+{{commentForVirtualPackage}}Recommends: {{setDefaultPackageName}}
 {{commentForVirtualPackage}}Description: Virtual package for {{fullHumanTitle}}
 {{commentForVirtualPackage}} Virtual package depending {{fullHumanTitle}}
 {{commentForVirtualPackage}} This package depends on {{sourcePackageName}}
