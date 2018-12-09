@@ -1,5 +1,8 @@
 'use strict';
 
+// generator version; this is used to add to the generated package's version timestamp (in minutes)
+// avoid bumping this too high.
+const generatorVersionIncrement = 1;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
@@ -181,6 +184,10 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         allDebArches.push(debArch);
         debChangeLogArches.push(`  * Exact version for architecture ${debArch}: ${oneRelease.release_name}`);
     }
+
+    // Hack: to allow the generator to produce packages with higher version number
+    //       than the highest timestamp, eg, to fix bugs on the installer itself
+    highestBuildTS.add(generatorVersionIncrement, 'minutes');
 
     let calcVersion = calculateJoinedVersionForAllArches(slugs, highestBuildTS);
     let finalVersion = calcVersion.finalVersion;
