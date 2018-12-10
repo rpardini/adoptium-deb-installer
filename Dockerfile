@@ -9,8 +9,8 @@ WORKDIR /gen/generator
 RUN npm install
 
 # A first-stage minimal "cacher" so we can develop against cached versions.
-## noDevCache ## ADD generator/populate_cache.js /gen/generator/populate_cache.js
-## noDevCache ## RUN node populate_cache.js
+ADD generator/populate_cache.js /gen/generator/populate_cache.js
+RUN node populate_cache.js
 
 # Then the rest of the generator app and the templates...
 ADD generator/generate.js /gen/generator/generate.js
@@ -30,95 +30,36 @@ RUN apt-get update
 RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release figlet
 # install-time dependencies (those are listed in Depends or Pre-Depends in debian/control file)
 RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
-
-# Pre-download and (docker-layer-)cache this as a way to 1) test local file support and 2) alleviate the load of developing against github
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-8-jdk-hotspot-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-8-jdk-hotspot-installer/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-9-jdk-hotspot-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-9-jdk-hotspot-installer/OpenJDK9U-jdk_x64_linux_hotspot_9.0.4_11.tar.gz "https://github.com/AdoptOpenJDK/openjdk9-binaries/releases/download/jdk-9.0.4%2B11/OpenJDK9U-jdk_x64_linux_hotspot_9.0.4_11.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-10-jdk-hotspot-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-10-jdk-hotspot-installer/OpenJDK10_x64_Linux_jdk-10.0.2+13.tar.gz "https://github.com/AdoptOpenJDK/openjdk10-releases/releases/download/jdk-10.0.2%2B13/OpenJDK10_x64_Linux_jdk-10.0.2%2B13.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-11-jdk-hotspot-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-11-jdk-hotspot-installer/OpenJDK11U-jdk_x64_linux_hotspot_11.0.1_13.tar.gz "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.1%2B13/OpenJDK11U-jdk_x64_linux_hotspot_11.0.1_13.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-8-jdk-openj9-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-8-jdk-openj9-installer/OpenJDK8U-jdk_x64_linux_openj9_8u192b12_openj9-0.11.0.tar.gz "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12_openj9-0.11.0/OpenJDK8U-jdk_x64_linux_openj9_8u192b12_openj9-0.11.0.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-9-jdk-openj9-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-9-jdk-openj9-installer/OpenJDK9-OPENJ9_x64_Linux_jdk-9.0.4.12_openj9-0.9.0.tar.gz "https://github.com/AdoptOpenJDK/openjdk9-openj9-releases/releases/download/jdk-9.0.4%2B12_openj9-0.9.0/OpenJDK9-OPENJ9_x64_Linux_jdk-9.0.4.12_openj9-0.9.0.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-10-jdk-openj9-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-10-jdk-openj9-installer/OpenJDK10-OPENJ9_x64_Linux_jdk-10.0.2.13_openj9-0.9.0.tar.gz "https://github.com/AdoptOpenJDK/openjdk10-openj9-releases/releases/download/jdk-10.0.2%2B13_openj9-0.9.0/OpenJDK10-OPENJ9_x64_Linux_jdk-10.0.2.13_openj9-0.9.0.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-11-jdk-openj9-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-11-jdk-openj9-installer/OpenJDK11U-jdk_x64_linux_openj9_jdk-11.0.1_13_openj9-0.11.0_11.0.1_13.tar.gz "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.1%2B13/OpenJDK11U-jdk_x64_linux_openj9_jdk-11.0.1_13_openj9-0.11.0_11.0.1_13.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-8-jre-hotspot-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-8-jre-hotspot-installer/OpenJDK8U-jre_x64_linux_hotspot_8u192b12.tar.gz "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jre_x64_linux_hotspot_8u192b12.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-9-jre-hotspot-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-9-jre-hotspot-installer/OpenJDK9U-jre_x64_linux_hotspot_9.0.4_11.tar.gz "https://github.com/AdoptOpenJDK/openjdk9-binaries/releases/download/jdk-9.0.4%2B11/OpenJDK9U-jre_x64_linux_hotspot_9.0.4_11.tar.gz"
-## noDevCache ## # Unavailable (HTTP error: status code 404): adoptopenjdk-10-jre-hotspot
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-11-jre-hotspot-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-11-jre-hotspot-installer/OpenJDK11-jre_x64_linux_hotspot_11_28.tar.gz "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/OpenJDK11-jre_x64_linux_hotspot_11_28.tar.gz"
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-8-jre-openj9-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-8-jre-openj9-installer/OpenJDK8U-jre_x64_linux_openj9_8u192b12.tar.gz "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jre_x64_linux_openj9_8u192b12.tar.gz"
-## noDevCache ## # Unavailable (HTTP error: status code 404): adoptopenjdk-9-jre-openj9
-## noDevCache ## RUN mkdir -p /var/cache/adoptopenjdk-11-jre-openj9-installer
-## noDevCache ## RUN wget --continue -O /var/cache/adoptopenjdk-11-jre-openj9-installer/OpenJDK11-jre_x64_linux_openj9_11_28.tar.gz "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/OpenJDK11-jre_x64_linux_openj9_11_28.tar.gz"
-## noDevCache ## # Unavailable (HTTP error: status code 404): adoptopenjdk-10-jre-openj9
-
-
 WORKDIR /opt/adoptopenjdk/ubuntu
 COPY --from=generator /gen/generated/ubuntu /opt/adoptopenjdk/ubuntu
 ADD docker/build_packages_multi.sh /opt/adoptopenjdk/
 # those will be populated by the build script.
 RUN mkdir -p /binaries /sourcepkg
-RUN /opt/adoptopenjdk/build_packages_multi.sh
-
-
-## ubuntuOnlyForNow ## ########################################################################################################################
-## ubuntuOnlyForNow ## ## -- Now its the Debian package builder's turn.
-## ubuntuOnlyForNow ## ##    We use jessie here, but supposedly any could be used,
-## ubuntuOnlyForNow ## ##    since the packages are so simple.
-## ubuntuOnlyForNow ## FROM debian:jessie as debianBuilder
-## ubuntuOnlyForNow ## ENV DEBIAN_FRONTEND noninteractive
-## ubuntuOnlyForNow ## RUN apt-get update
-## ubuntuOnlyForNow ## # build-time dependencies
-## ubuntuOnlyForNow ## RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release figlet
-## ubuntuOnlyForNow ## # install-time dependencies (those are listed in Depends or Pre-Depends in debian/control file)
-## ubuntuOnlyForNow ## RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
-## ubuntuOnlyForNow ##
-## ubuntuOnlyForNow ## # Pre-download and (docker-layer-)cache this as a way to 1) test local file support and 2) alleviate the load of developing against github
-## ubuntuOnlyForNow ## #RUN mkdir -p /var/cache/adoptopenjdk-jdk8-installer
-## ubuntuOnlyForNow ## #RUN wget --continue -O /var/cache/adoptopenjdk-jdk8-installer/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u192-b12/OpenJDK8U-jdk_x64_linux_hotspot_8u192b12.tar.gz
-## ubuntuOnlyForNow ##
-## ubuntuOnlyForNow ## WORKDIR /opt/adoptopenjdk/debian
-## ubuntuOnlyForNow ## COPY --from=generator /gen/generated/debian /opt/adoptopenjdk/debian
-## ubuntuOnlyForNow ## ADD docker/build_packages_multi.sh /opt/adoptopenjdk/
-## ubuntuOnlyForNow ## # those will be populated by the build script.
-## ubuntuOnlyForNow ## RUN mkdir -p /binaries /sourcepkg
-## ubuntuOnlyForNow ## RUN /opt/adoptopenjdk/build_packages_multi.sh
-
+RUN /opt/adoptopenjdk/build_packages_multi.sh ubuntu
 
 
 ########################################################################################################################
-## -- the final image produced from this Dockerfile
-##    is actually a simple Ubuntu image with dput
-##    meant to be used to upload the signed stuff
-##    to launchpad or a debian repo somewhere.
-##    @TODO: maybe it could be `FROM SCRATCH`, and have a separate dput image later.
-FROM ubuntu:bionic
-RUN apt-get update && apt-get -y --no-install-recommends install dput tree && apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /binaries /sourcepkg /sourcepkg/ubuntu
-COPY --from=ubuntuBuilder /sourcepkg/* /sourcepkg/ubuntu/
-## sourceOnlyForNow ## COPY --from=ubuntuBuilder /binaries/* /binaries/ubuntu/
-## ubuntuOnlyForNow ## COPY --from=debianBuilder /sourcepkg/* /sourcepkg/debian/
-## ubuntuOnlyForNow ## COPY --from=debianBuilder /binaries/* /binaries/debian/
-RUN tree /binaries/
-RUN tree /sourcepkg/
+## -- Now its the Debian package builder's turn.
+##    We use jessie here, but supposedly any could be used,
+##    since the packages are so simple.
+FROM debian:jessie as debianBuilder
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update
+# build-time dependencies
+RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release figlet
+# install-time dependencies (those are listed in Depends or Pre-Depends in debian/control file)
+RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
+WORKDIR /opt/adoptopenjdk/debian
+COPY --from=generator /gen/generated/debian /opt/adoptopenjdk/debian
+ADD docker/build_packages_multi.sh /opt/adoptopenjdk/
+# those will be populated by the build script.
+RUN mkdir -p /binaries /sourcepkg
+RUN /opt/adoptopenjdk/build_packages_multi.sh debian
 
-# Hack: use volumes to "exfiltrate" the source files back to the host machine.
-RUN mkdir -p /presign/empty
 
-# Hack: use a volume to receive back the signed source files back from the host machine.
-RUN mkdir -p /postsign/empty
-
-# This is a very hackish script to copy from/to the presign/postsign.
-COPY docker/sign_upload.sh /opt/sign_upload.sh
-
-CMD /opt/sign_upload.sh
+########################################################################################################################
+## -- the final image produced from this Dockerfile is a FROM SCRATCH
+##    that just contains the produced source and binary packages.
+FROM scratch
+COPY --from=ubuntuBuilder /sourcepkg/* /sourcepkg/
+COPY --from=debianBuilder /binaries/* /binaries/

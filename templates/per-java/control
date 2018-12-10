@@ -24,7 +24,8 @@ Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless
 Description: {{fullHumanTitle}}
  Installer package for {{fullHumanTitle}}.
  This package does not contain binary files, but is only a downloader/installer.
- To set this a system-wide default, install the package {{setDefaultPackageName}}
+ To set this as system-wide default, install the package
+ {{setDefaultPackageName}}
 
 Package: {{setDefaultPackageName}}
 Section: java

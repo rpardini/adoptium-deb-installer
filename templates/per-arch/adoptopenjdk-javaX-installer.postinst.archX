@@ -9,8 +9,6 @@ fp_exit_with_error() {
 	exit 1
 }
 
-DPKG_ARCH=$(dpkg --print-architecture)
-
 J_DIR_INSIDE_TAR_GZ="{{{dirInsideTarGz}}}"
 J_DIR_INSIDE_TAR_GZ_SHORT="{{{dirInsideTarGzShort}}}"
 J_DIR_INSIDE_TAR_GZ_WITHJDKJRE="{{{dirInsideTarGzWithJdkJre}}}"
@@ -78,7 +76,7 @@ else
 
   # Now actually download the .tar.gz file.
   echo "Downloading {{fullHumanTitle}}..."
-  wget --config=$INSTALLER_DIR/wgetrc --continue -O ${FILENAME_TAR_GZ} ${DOWNLOAD_TAR_GZ_URL} || fp_exit_with_error "download failed"
+  wget --config=$INSTALLER_DIR/wgetrc --local-encoding=UTF-8 --continue -O ${FILENAME_TAR_GZ} ${DOWNLOAD_TAR_GZ_URL} || fp_exit_with_error "download failed"
   echo "Download done."
 fi
 

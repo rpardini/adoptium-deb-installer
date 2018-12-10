@@ -34,8 +34,20 @@ const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
 const wantedJavaVersions = new Set([8, 9, 10, 11]);
 const linuxesAndDistros = new Set([
-    {name: 'ubuntu', distros: new Set(['trusty', 'xenial', 'bionic'])},
-    {name: 'debian', distros: new Set(['wheezy', 'jessie'])}
+    {
+        name: 'ubuntu',
+        distros: new Set(['trusty', 'xenial', 'bionic']),
+        useDistroInVersion: true,
+        singleBinaryForAllArches: false,
+        postArchesHook: null
+    },
+    {
+        name: 'debian',
+        distros: new Set(['stable']),
+        useDistroInVersion: false,
+        singleBinaryForAllArches: true,
+        postArchesHook: joinDebianPostinstForAllArches
+    }
 ]);
 
 // the person building and signing the packages.
@@ -69,8 +81,11 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
                 let destPath = `${generatedDirBase}/${linux.name}/${javaX.jdkJreVersionJvmType}/${distroLinux}/debian`;
                 let fnView = {javaX: `${javaX.jdkJreVersionJvmType}`};
                 let javaXview_extra = {
+
+                    allDebArches: linux.singleBinaryForAllArches ? "all" : javaX.allDebArches,
                     distribution: `${distroLinux}`,
-                    version: `${javaX.baseJoinedVersion}~${distroLinux}`,
+                    version: linux.useDistroInVersion ? `${javaX.baseJoinedVersion}~${distroLinux}` : javaX.baseJoinedVersion,
+
                     virtualPackageName: `adoptopenjdk-${javaX.jdkVersion}-installer`,
                     commentForVirtualPackage: javaX.isDefaultForVirtualPackage ? "" : "#",
                     sourcePackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer`,
@@ -78,19 +93,47 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
                     signerName: signerName,
                     signerEmail: signerEmail
                 };
-                let javaXview = Object.assign(javaXview_extra, javaX); // yes, all of it.
+                let javaXview = Object.assign(javaX, javaXview_extra);
 
-                await processTemplates(templateFilesPerJava, destPath, fnView, javaXview);
+                await processTemplates(templateFilesPerJava, destPath, fnView, javaXview, true);
+
+                let archProcessedTemplates = [];
 
                 for (const arch of javaX.arches.values()) {
                     let archFnView = Object.assign({archX: arch.debArch}, fnView);
-                    let archXview = Object.assign(arch, javaXview); // yes, all of it.
-
-                    await processTemplates(templateFilesPerArch, destPath, archFnView, archXview);
+                    let archXview = Object.assign(arch, javaXview);
+                    archProcessedTemplates[arch.debArch] = await processTemplates(templateFilesPerArch, destPath, archFnView, archXview, !linux.singleBinaryForAllArches);
                 }
+
+                if (linux.postArchesHook) await linux.postArchesHook(archProcessedTemplates, destPath, javaX);
             }
         }
     }
+}
+
+async function joinDebianPostinstForAllArches (archProcessedTemplates, destPath, javaX) {
+    let postInstContents = [
+        "#! /bin/bash",
+        `# joined script for multi-arch postinst for ${javaX.jdkJreVersionJvmType}`,
+        "DPKG_ARCH=$(dpkg --print-architecture)",
+        "DID_FIND_ARCH=false"
+    ];
+    for (const debArch of Object.keys(archProcessedTemplates)) {
+        postInstContents.push(`if [[ "$DPKG_ARCH" == "${debArch}" ]]; then`);
+        postInstContents.push(`echo "Installing for arch '${debArch}'..."`);
+        postInstContents.push((archProcessedTemplates[debArch]['adoptopenjdk-javaX-installer.postinst.archX']));
+        postInstContents.push(`DID_FIND_ARCH=true`);
+        postInstContents.push(`fi`);
+    }
+    postInstContents.push('if [[ "$DID_FIND_ARCH" == "false" ]]; then');
+    postInstContents.push('  echo "Unsupported architecture ${DPKG_ARCH}"');
+    postInstContents.push(`  exit 2`);
+    postInstContents.push(`fi`);
+
+    await writeTemplateFile(destPath, {
+        dirs: "",
+        executable: true
+    }, `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer.postinst`, postInstContents.join("\n"));
 }
 
 
@@ -260,7 +303,20 @@ async function walk (dir, filelist = [], dirbase = "") {
     return filelist;
 }
 
-async function processTemplates (templateFiles, destPathBase, fnView, view) {
+async function writeTemplateFile (destPathBase, templateFile, destFileTemplated, modifiedContents) {
+    let destFileParentDir = destPathBase + "/" + templateFile.dirs;
+    let fullDestPath = destPathBase + "/" + (templateFile.dirs ? templateFile.dirs + "/" : "") + destFileTemplated;
+    //console.log(`--> ${templateFile.fullpath} to ${fullDestPath} (in path ${destFileParentDir}) [exec: ${templateFile.executable}]`);
+
+    await fs.mkdir(destFileParentDir, {recursive: true});
+    await fs.writeFile(fullDestPath, modifiedContents, {
+        encoding: 'utf8',
+        mode: templateFile.executable ? 0o777 : 0o666
+    });
+}
+
+async function processTemplates (templateFiles, destPathBase, fnView, view, writeFiles) {
+    let ret = {};
     for (let templateFile of templateFiles) {
 
         let destFileTemplated = templateFile.file;
@@ -268,20 +324,15 @@ async function processTemplates (templateFiles, destPathBase, fnView, view) {
             destFileTemplated = destFileTemplated.replace(fnKey, fnView[fnKey]);
         }
 
-        let destFileParentDir = destPathBase + "/" + templateFile.dirs;
-        let fullDestPath = destPathBase + "/" + (templateFile.dirs ? templateFile.dirs + "/" : "") + destFileTemplated;
-        //console.log(`--> ${templateFile.fullpath} to ${fullDestPath} (in path ${destFileParentDir}) [exec: ${templateFile.executable}]`);
-
         let originalContents = await fs.readFile(templateFile.fullpath, 'utf8');
         let modifiedContents = mustache.render(originalContents, view);
 
-        // ready to write to dest? lets go...
-        await fs.mkdir(destFileParentDir, {recursive: true});
-        await fs.writeFile(fullDestPath, modifiedContents, {
-            encoding: 'utf8',
-            mode: templateFile.executable ? 0o777 : 0o666
-        });
+        if (writeFiles) {
+            await writeTemplateFile(destPathBase, templateFile, destFileTemplated, modifiedContents);
+        }
+        ret[templateFile.file] = modifiedContents;
     }
+    return ret;
 }
 
 main().then(value => {

@@ -1,0 +1,16 @@
+# Get the source packages from the built Docker image.
+FROM adoptopenjdk/deb:latest as unsignedDebs
+
+# The utility image.
+FROM alpine:3.8
+
+COPY --from=unsignedDebs /sourcepkg/* /sourcepkg/
+COPY --from=unsignedDebs /binaries/* /binaries/
+
+# Hack: use volumes to "exfiltrate" the source files back to the host machine.
+# This is just a marker directory to avoid mistakes when mounting volumes.
+RUN mkdir -p /exfiltrate_to/empty
+
+# Simple script to exfiltrate on run.
+COPY docker/exfiltrate.sh /opt/exfiltrate.sh
+CMD /opt/exfiltrate.sh
