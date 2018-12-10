@@ -1,9 +1,0 @@
-.idea
-presign
-to_sign
-postsign
-generated
-generator/node_modules
-generator/jdk_*.json
-exfiltrated
-repo
