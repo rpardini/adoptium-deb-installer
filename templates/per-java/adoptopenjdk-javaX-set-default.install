@@ -1,2 +1,0 @@
-debian/jdk.sh /etc/profile.d/
-debian/jdk.csh /etc/profile.d/
