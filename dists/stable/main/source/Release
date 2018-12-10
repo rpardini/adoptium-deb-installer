@@ -1,0 +1,5 @@
+Component: main
+Origin: deb.adoptopenjdk.net
+Label: deb.adoptopenjdk.net
+Architecture: source
+Description: AdoptOpenJDK Debian Installer Packages
