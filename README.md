@@ -7,7 +7,7 @@ their official releases, using the AdoptOpenJDK API.
 
 - for Ubuntu: check out [ppa:rpardini/adoptopenjdk](https://launchpad.net/~rpardini/+archive/ubuntu/adoptopenjdk) 
   or see instructions below
-- for Debian: upcoming.
+- for Debian: there's an APT repo hosted here at Github Pages, see below for instructions.
 
 # Info for final users
 
@@ -27,6 +27,8 @@ sudo apt-get install adoptopenjdk-8-installer
 
 ```bash
 # also available are separate packages for some <version>-<JDK/JRE>-<JVM> combinations,
+# to get a complete listing use:  
+sudo apt-cache search adoptopenjdk
 # for example, install the JRE 11 with OpenJ9 JVM:
 sudo apt-get install adoptopenjdk-11-jre-openj9-installer
 # set that as default (JAVA_HOME env var, and update-java-alternatives)
@@ -37,7 +39,18 @@ sudo update-java-alternatives -s adoptopenjdk-11-jre-openj9
 
 ## For Debian:
 
- _coming soon_
+```bash
+# update and install support for https:// sources if not already installed
+[[ ! -f /usr/lib/apt/methods/https ]] && sudo apt-get update && sudo apt-get install apt-transport-https
+# add my key to trusted APT keys 
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A66C5D02
+# add the package repo to sources 
+echo 'deb https://rpardini.github.io/adoptopenjdk-deb-installer stable main' > /etc/apt/sources.list.d/rpardini-aoj.list 
+# update from sources
+sudo apt-get update 
+# install a JDK, see above instructions for Ubuntu for other variants as well
+sudo apt-get install adoptopenjdk-8-installer
+```
 
 # For developers/builders
 

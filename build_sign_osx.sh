@@ -2,8 +2,8 @@
 
 set -e
 
-declare -i SIGN_OSX=0
-declare -i LAUNCHPAD=0
+declare -i SIGN_OSX=1
+declare -i LAUNCHPAD=1
 declare -i APT_REPO=1
 
 # Make sure we can GPG sign stuff (eg, ask for yubikey PIN first)
@@ -23,7 +23,7 @@ docker build -t adoptopenjdk/exfiltrator:latest -f Dockerfile.exfiltrator .
 [[ ${APT_REPO} -gt 0 ]] && docker build -t adoptopenjdk/reprepro:latest -f Dockerfile.reprepro .
 
 # Clear the local dir.
-rm -rf ${PWD}/exfiltrated
+rm -rf ${PWD}/exfiltrated ${PWD}/generated
 
 # Run the utility image to copy over the packages to local system, using the "to_sign" directory as volume
 docker run -it -v ${PWD}/exfiltrated/:/exfiltrate_to adoptopenjdk/exfiltrator:latest
@@ -41,10 +41,13 @@ if [[ ${LAUNCHPAD} -gt 0 ]]; then
   # This is the final stop for Launchpad. Watch it build the source packages there!
 fi
 
-# Run the Reprepro utility image, it will create a debian repo from the packages.
+# Run the reprepro utility image, it will create a debian repo from the packages.
 if [[ ${APT_REPO} -gt 0 ]]; then
+  # clean it
   rm -rf ${PWD}/repo
-  mkdir ${PWD}/repo
+
+  # clone the gh-pages branch of this repo in there
+  git clone --branch gh-pages --single-branch git@github.com:rpardini/adoptopenjdk-deb-installer.git ${PWD}/repo
 
   # Run a script in the background that watches for signing requests from the container.
   osx/watch_and_sign.sh ${PWD}/repo/please_sign &
@@ -56,4 +59,10 @@ if [[ ${APT_REPO} -gt 0 ]]; then
 
   # Remove the temp dir
   rm -rf ${PWD}/repo/please_sign
+
+  # go in there, add everything to git, commit and push it to github (effectively publishing the repo)
+  cd ${PWD}/repo
+  git add .
+  git commit -m "Updating APT repo"
+  git push origin gh-pages
 fi
