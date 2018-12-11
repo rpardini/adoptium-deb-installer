@@ -1,6 +1,6 @@
 {
   "name": "adoptopenjdk-deb-generator",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "",
   "main": "generate.js",
   "scripts": {},

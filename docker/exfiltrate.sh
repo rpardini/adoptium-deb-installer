@@ -4,7 +4,7 @@ set -e
 
 if [[ ! -d /exfiltrate_to/empty ]]; then
   echo "Destination volume is mounted. Copying packages there..."
-  mkdir -p /exfiltrate_to/sourcepkg -p /exfiltrate_to/binaries
+  mkdir -p /exfiltrate_to/sourcepkg /exfiltrate_to/binaries
   cp -vr /sourcepkg/* /exfiltrate_to/sourcepkg/
   cp -vr /binaries/* /exfiltrate_to/binaries/
   echo "Packages copied."

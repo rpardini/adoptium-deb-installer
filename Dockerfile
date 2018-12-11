@@ -58,8 +58,17 @@ RUN /opt/adoptopenjdk/build_packages_multi.sh debian
 
 
 ########################################################################################################################
-## -- the final image produced from this Dockerfile is a FROM SCRATCH
-##    that just contains the produced source and binary packages.
-FROM scratch
+## -- the final image produced from this Dockerfile just contains the produced source and binary packages.
+##    it uses alpine:3.8 because that's light enough, and already downloaded for node:10-alpine
+FROM alpine:3.8
+
 COPY --from=ubuntuBuilder /sourcepkg/* /sourcepkg/
 COPY --from=debianBuilder /binaries/* /binaries/
+
+# Hack: use volumes to "exfiltrate" the source files back to the host machine.
+# This is just a marker directory to avoid mistakes when mounting volumes.
+RUN mkdir -p /exfiltrate_to/empty
+
+# Simple script to exfiltrate on run.
+COPY docker/exfiltrate.sh /opt/exfiltrate.sh
+CMD /opt/exfiltrate.sh
