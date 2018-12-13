@@ -1,42 +1,41 @@
 Package: adoptopenjdk-10-installer
 Source: adoptopenjdk-10-jdk-hotspot-installer
-Version: 201811291441~10.0.2b13
+Version: 201811291442~10.0.2b13
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 25
-Depends: adoptopenjdk-10-jdk-hotspot-installer
-Recommends: adoptopenjdk-10-jdk-hotspot-set-default
+Depends: adoptopenjdk-10-jdk-hotspot-installer (= 201811291442~10.0.2b13)
+Recommends: adoptopenjdk-10-jdk-hotspot-set-default (= 201811291442~10.0.2b13)
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-10-jdk-hotspot-installer/adoptopenjdk-10-installer_201811291441~10.0.2b13_all.deb
-Size: 1544
-SHA256: f468e8d3472ff84c3e14013f371b2a064675b7d70d66ecd5b0a343a930083f33
-SHA1: a70938fa9c1aee937c8d1176cbec64fc0d502e23
-MD5sum: 185cb6d8f41fd22d5eceae3507360ebb
+Filename: pool/main/a/adoptopenjdk-10-jdk-hotspot-installer/adoptopenjdk-10-installer_201811291442~10.0.2b13_all.deb
+Size: 1546
+SHA256: b20cecdddd42a0434d6e0c9ba286db1d830482e29630f41db5f8eb4666dc3758
+SHA1: 642fc3e6ae59bd6462005d853f3ee73940997d3f
+MD5sum: e7f46c51f3ca5f61f05d32135b45aff3
 Description: Virtual package for AdoptOpenJDK JDK 10 with Hotspot
  Virtual package depending AdoptOpenJDK JDK 10 with Hotspot
  This package depends on adoptopenjdk-10-jdk-hotspot-installer
 
 Package: adoptopenjdk-10-jdk-hotspot-installer
-Version: 201811291441~10.0.2b13
+Version: 201811291442~10.0.2b13
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 66
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-10-jdk-hotspot-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-10-jdk-hotspot-set-default (= 201811291442~10.0.2b13)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java10-runtime, java10-runtime-headless, java10-sdk, java10-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-10-jdk-hotspot-installer/adoptopenjdk-10-jdk-hotspot-installer_201811291441~10.0.2b13_all.deb
-Size: 5506
-SHA256: 36f06410e1a1fa0b27b65a1e7879e9533c3752eb07c7b346fecc28795988d017
-SHA1: 76d4661c3a86e21e56f557201d3da93c155eca8e
-MD5sum: 0885a5a4f505952b46d51f60257f99b4
+Filename: pool/main/a/adoptopenjdk-10-jdk-hotspot-installer/adoptopenjdk-10-jdk-hotspot-installer_201811291442~10.0.2b13_all.deb
+Size: 5534
+SHA256: 205dfd5a99a4f19cdbc1c3af0d3892a759c4019382e36b307edafcb184b01838
+SHA1: 6a01934a24be5ad41c0e06aa1c32657789f622b4
+MD5sum: bf92f5eeb5f45d706049b5c657619690
 Description: AdoptOpenJDK JDK 10 with Hotspot
  Installer package for AdoptOpenJDK JDK 10 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -45,44 +44,43 @@ Description: AdoptOpenJDK JDK 10 with Hotspot
 
 Package: adoptopenjdk-10-jdk-hotspot-set-default
 Source: adoptopenjdk-10-jdk-hotspot-installer
-Version: 201811291441~10.0.2b13
+Version: 201811291442~10.0.2b13
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-10-jdk-hotspot-installer
+Pre-Depends: adoptopenjdk-10-jdk-hotspot-installer (= 201811291442~10.0.2b13)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-10-jdk-hotspot-installer/adoptopenjdk-10-jdk-hotspot-set-default_201811291441~10.0.2b13_all.deb
-Size: 1812
-SHA256: 16eef9adf13ec172cc6350aace8050c6df3bb7c2c72c4fb5d06467d422d253b0
-SHA1: 8fc0f5248e1e0dd29d84f9e5797267b9313ff735
-MD5sum: 3697d6d2a994c979ec9d8c36e285dae6
+Filename: pool/main/a/adoptopenjdk-10-jdk-hotspot-installer/adoptopenjdk-10-jdk-hotspot-set-default_201811291442~10.0.2b13_all.deb
+Size: 1816
+SHA256: f64d30e35c7e9756a6743913d3e105c2e41b06298ffe84247e97972714146255
+SHA1: c19653a43fdeaea2915a816568b88344ec537093
+MD5sum: aa186d2ad70fe3130705a6f1fd492ca6
 Description: Set AdoptOpenJDK JDK 10 with Hotspot as default
  Sets AdoptOpenJDK JDK 10 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-10-jdk-openj9-installer
-Version: 201808151031~10.0.2b13
+Version: 201808151032~10.0.2b13
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-10-jdk-openj9-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-10-jdk-openj9-set-default (= 201808151032~10.0.2b13)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java10-runtime, java10-runtime-headless, java10-sdk, java10-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-10-jdk-openj9-installer/adoptopenjdk-10-jdk-openj9-installer_201808151031~10.0.2b13_all.deb
-Size: 6116
-SHA256: 51cf52b4cd8a3fecb8feff36ee3cad0a5834b3534cf9cf03c00981071a935e29
-SHA1: ea03dc2eb6bb92f585cbfcca5796b6445d70de85
-MD5sum: 4c984c9732cd96ee7324bf271f85a530
+Filename: pool/main/a/adoptopenjdk-10-jdk-openj9-installer/adoptopenjdk-10-jdk-openj9-installer_201808151032~10.0.2b13_all.deb
+Size: 6176
+SHA256: 1f4f95ba3cc9e458522310e8f952abccf9502d692ec6650fc3a424fcebb3ff52
+SHA1: d9c4f345dacf477a7ba2ca6362b179c7ab0397d6
+MD5sum: e7bc7acf5f7d8fa143a8fc92a879e49c
 Description: AdoptOpenJDK JDK 10 with OpenJ9
  Installer package for AdoptOpenJDK JDK 10 with OpenJ9.
  This package does not contain binary files, but is only a downloader/installer.
@@ -91,64 +89,63 @@ Description: AdoptOpenJDK JDK 10 with OpenJ9
 
 Package: adoptopenjdk-10-jdk-openj9-set-default
 Source: adoptopenjdk-10-jdk-openj9-installer
-Version: 201808151031~10.0.2b13
+Version: 201808151032~10.0.2b13
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-10-jdk-openj9-installer
+Pre-Depends: adoptopenjdk-10-jdk-openj9-installer (= 201808151032~10.0.2b13)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-10-jdk-openj9-installer/adoptopenjdk-10-jdk-openj9-set-default_201808151031~10.0.2b13_all.deb
-Size: 1828
-SHA256: b6ffdce607a91b8fa4ee65c467bc50d3d6c6617c96a25529febddc728123c895
-SHA1: 83b3a9a53003cfbe3974a5ada7e14cdef9729c73
-MD5sum: 445d06f02d88d6a12791561d4e40e5ef
+Filename: pool/main/a/adoptopenjdk-10-jdk-openj9-installer/adoptopenjdk-10-jdk-openj9-set-default_201808151032~10.0.2b13_all.deb
+Size: 1840
+SHA256: ac19ec85613d0d9f236f6e673488ea89bf7fbac831475d0243b47c47cfdd69d4
+SHA1: 9d6810c9a99dacae1807d0944da55fbea73b48a6
+MD5sum: 98ca52398fef31824b4c5b3012cc5bf5
 Description: Set AdoptOpenJDK JDK 10 with OpenJ9 as default
  Sets AdoptOpenJDK JDK 10 with OpenJ9 as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-11-installer
 Source: adoptopenjdk-11-jdk-hotspot-installer
-Version: 201811151929~11.0.1b13+arm+s390x~11b28
+Version: 201811151930~11.0.1b13+arm+s390x~11b28
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 25
-Depends: adoptopenjdk-11-jdk-hotspot-installer
-Recommends: adoptopenjdk-11-jdk-hotspot-set-default
+Depends: adoptopenjdk-11-jdk-hotspot-installer (= 201811151930~11.0.1b13+arm+s390x~11b28)
+Recommends: adoptopenjdk-11-jdk-hotspot-set-default (= 201811151930~11.0.1b13+arm+s390x~11b28)
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jdk-hotspot-installer/adoptopenjdk-11-installer_201811151929~11.0.1b13+arm+s390x~11b28_all.deb
-Size: 1590
-SHA256: fd349603a57801dffd84bef0593e917c165ee5054820186016f43caeca20c275
-SHA1: e08b314da0c9135137e60f4776b19c7fabe0eafb
-MD5sum: d4a2fb69fd2a032a938827e23d6a758c
+Filename: pool/main/a/adoptopenjdk-11-jdk-hotspot-installer/adoptopenjdk-11-installer_201811151930~11.0.1b13+arm+s390x~11b28_all.deb
+Size: 1598
+SHA256: afa774f9a68897fee52369cec8b3c74f364d949ae04842d8ee582c935a9c91e6
+SHA1: 421848ead4dc8ada1b339267bfea8567e4816ebc
+MD5sum: 304f44693bc520a6d2abf437b42f22cf
 Description: Virtual package for AdoptOpenJDK JDK 11 with Hotspot
  Virtual package depending AdoptOpenJDK JDK 11 with Hotspot
  This package depends on adoptopenjdk-11-jdk-hotspot-installer
 
 Package: adoptopenjdk-11-jdk-hotspot-installer
-Version: 201811151929~11.0.1b13+arm+s390x~11b28
+Version: 201811151930~11.0.1b13+arm+s390x~11b28
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 96
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-11-jdk-hotspot-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-11-jdk-hotspot-set-default (= 201811151930~11.0.1b13+arm+s390x~11b28)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java10-runtime, java10-runtime-headless, java10-sdk, java10-sdk-headless, java11-runtime, java11-runtime-headless, java11-sdk, java11-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jdk-hotspot-installer/adoptopenjdk-11-jdk-hotspot-installer_201811151929~11.0.1b13+arm+s390x~11b28_all.deb
-Size: 6676
-SHA256: 6e5919f0728a03dc0bffcdb9eaeab2f118feecee4c7239759613a9e73a43dda9
-SHA1: 860bb1f1c1a477706e43ff716103bc72a6649806
-MD5sum: ff49c06596d5a3de3342a65b12201baa
+Filename: pool/main/a/adoptopenjdk-11-jdk-hotspot-installer/adoptopenjdk-11-jdk-hotspot-installer_201811151930~11.0.1b13+arm+s390x~11b28_all.deb
+Size: 6742
+SHA256: e40a12535692c082f49012498987cf084c118095e557eb74b7b6f2b27f22ad23
+SHA1: 789179aacf869bc44fbacadd3590fa8bbb346c04
+MD5sum: 6e996e90e9ff45cfda353943a2dbc949
 Description: AdoptOpenJDK JDK 11 with Hotspot
  Installer package for AdoptOpenJDK JDK 11 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -157,44 +154,43 @@ Description: AdoptOpenJDK JDK 11 with Hotspot
 
 Package: adoptopenjdk-11-jdk-hotspot-set-default
 Source: adoptopenjdk-11-jdk-hotspot-installer
-Version: 201811151929~11.0.1b13+arm+s390x~11b28
+Version: 201811151930~11.0.1b13+arm+s390x~11b28
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-11-jdk-hotspot-installer
+Pre-Depends: adoptopenjdk-11-jdk-hotspot-installer (= 201811151930~11.0.1b13+arm+s390x~11b28)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jdk-hotspot-installer/adoptopenjdk-11-jdk-hotspot-set-default_201811151929~11.0.1b13+arm+s390x~11b28_all.deb
-Size: 1860
-SHA256: b6b3af1babeb7f7c487b768a3c2b4cbfc44f24c1313889bd86a4ecdcca213a58
-SHA1: 91068b01d4f2e397b26b127a3b9be0a486344487
-MD5sum: 8ff6c138e5faa8476e5febd496b8cb3d
+Filename: pool/main/a/adoptopenjdk-11-jdk-hotspot-installer/adoptopenjdk-11-jdk-hotspot-set-default_201811151930~11.0.1b13+arm+s390x~11b28_all.deb
+Size: 1876
+SHA256: 8adf3c8524384cfdef8b4ad3e99858dc4be5fbce862a29fb3979948d4ddf8614
+SHA1: b8a3abe4f07de2b9f1ca9c9fab89291e6db6977a
+MD5sum: a6b0a823cd807db3c16828841972918d
 Description: Set AdoptOpenJDK JDK 11 with Hotspot as default
  Sets AdoptOpenJDK JDK 11 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-11-jdk-openj9-installer
-Version: 201811161356~11.0.1b13
+Version: 201811161357~11.0.1b13
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-11-jdk-openj9-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-11-jdk-openj9-set-default (= 201811161357~11.0.1b13)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java10-runtime, java10-runtime-headless, java10-sdk, java10-sdk-headless, java11-runtime, java11-runtime-headless, java11-sdk, java11-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jdk-openj9-installer/adoptopenjdk-11-jdk-openj9-installer_201811161356~11.0.1b13_all.deb
-Size: 6106
-SHA256: 8c7f72f58497cd7a56d49f83f0966c0f4bd55891ff113c1413c7f8964f5d361f
-SHA1: ee92aad4989300b28dc6399b745629857856a533
-MD5sum: fed4597dffc98ff220f354de2e66d1f8
+Filename: pool/main/a/adoptopenjdk-11-jdk-openj9-installer/adoptopenjdk-11-jdk-openj9-installer_201811161357~11.0.1b13_all.deb
+Size: 6186
+SHA256: e896ed4e0c007961e4996e82a3fc41b802a0934e6c414e3956c7f1361059f558
+SHA1: 268efb349350d7206defe3abc1c25e7e708a1c72
+MD5sum: 8024fa98264e27aba4dbbd683d1d01cc
 Description: AdoptOpenJDK JDK 11 with OpenJ9
  Installer package for AdoptOpenJDK JDK 11 with OpenJ9.
  This package does not contain binary files, but is only a downloader/installer.
@@ -203,44 +199,43 @@ Description: AdoptOpenJDK JDK 11 with OpenJ9
 
 Package: adoptopenjdk-11-jdk-openj9-set-default
 Source: adoptopenjdk-11-jdk-openj9-installer
-Version: 201811161356~11.0.1b13
+Version: 201811161357~11.0.1b13
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-11-jdk-openj9-installer
+Pre-Depends: adoptopenjdk-11-jdk-openj9-installer (= 201811161357~11.0.1b13)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jdk-openj9-installer/adoptopenjdk-11-jdk-openj9-set-default_201811161356~11.0.1b13_all.deb
-Size: 1812
-SHA256: d125ddc607a1ac3c5afbfcab75d6a477593802791df89995555447cb20cf908d
-SHA1: 6291bc177c91befb2ee7d7e9788cd343f8b504cb
-MD5sum: 6ffd62970e61bd9b2fd52e25b546fc79
+Filename: pool/main/a/adoptopenjdk-11-jdk-openj9-installer/adoptopenjdk-11-jdk-openj9-set-default_201811161357~11.0.1b13_all.deb
+Size: 1830
+SHA256: 6a8740ce51edecd3a8b0f176723fb602e4808535c4e576ba8a7718e9a9671abc
+SHA1: d7ec96a78e967095da84d0ff21f1d078401fb508
+MD5sum: a9b2efbc500b567316a89bdc056926e5
 Description: Set AdoptOpenJDK JDK 11 with OpenJ9 as default
  Sets AdoptOpenJDK JDK 11 with OpenJ9 as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-11-jre-hotspot-installer
-Version: 201810031233~11b28
+Version: 201810031234~11b28
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-11-jre-hotspot-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-11-jre-hotspot-set-default (= 201810031234~11b28)
+Provides: default-jre, default-jre-headless, java-runtime, java-runtime-headless, java10-runtime, java10-runtime-headless, java11-runtime, java11-runtime-headless, java2-runtime, java2-runtime-headless, java5-runtime, java5-runtime-headless, java6-runtime, java6-runtime-headless, java7-runtime, java7-runtime-headless, java8-runtime, java8-runtime-headless, java9-runtime, java9-runtime-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jre-hotspot-installer/adoptopenjdk-11-jre-hotspot-installer_201810031233~11b28_all.deb
-Size: 6122
-SHA256: 666e5e17a704799ac83459a5e7820985de87e8974801129cf555e2c39beac4df
-SHA1: c1a91842237ea7fc21a5119da149ebc47dfe6047
-MD5sum: 8cfc631629f77a5fc100206b6327353d
+Filename: pool/main/a/adoptopenjdk-11-jre-hotspot-installer/adoptopenjdk-11-jre-hotspot-installer_201810031234~11b28_all.deb
+Size: 6108
+SHA256: b6a1d25b511e8379647b9e5a565e260c270ddc450bca70f111455f856b5451a1
+SHA1: 62d7d788396d1439d151f8a226e681aa45900dbd
+MD5sum: 6971916dbe531d98126be02380e2e903
 Description: AdoptOpenJDK JRE 11 with Hotspot
  Installer package for AdoptOpenJDK JRE 11 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -249,44 +244,43 @@ Description: AdoptOpenJDK JRE 11 with Hotspot
 
 Package: adoptopenjdk-11-jre-hotspot-set-default
 Source: adoptopenjdk-11-jre-hotspot-installer
-Version: 201810031233~11b28
+Version: 201810031234~11b28
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-11-jre-hotspot-installer
+Pre-Depends: adoptopenjdk-11-jre-hotspot-installer (= 201810031234~11b28)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jre-hotspot-installer/adoptopenjdk-11-jre-hotspot-set-default_201810031233~11b28_all.deb
-Size: 1820
-SHA256: 250bb04c1b512895fa658d06d17160e4451009ba24695b320fe1a8aac4dc3464
-SHA1: 3be05c872c4ca5b248884ce55ddae2c065785982
-MD5sum: 17221389bb82fd7034d2ea2c70df13ed
+Filename: pool/main/a/adoptopenjdk-11-jre-hotspot-installer/adoptopenjdk-11-jre-hotspot-set-default_201810031234~11b28_all.deb
+Size: 1832
+SHA256: 2571c5db467530ed8484642d4405568712bd0730e29ed96cb07ac8bb66671580
+SHA1: 01c45b39c0d66f876ea1aff7fb2e64e7f43f8a5a
+MD5sum: ffe06e8a4c29e595c5037c31c6ee86ce
 Description: Set AdoptOpenJDK JRE 11 with Hotspot as default
  Sets AdoptOpenJDK JRE 11 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-11-jre-openj9-installer
-Version: 201810032042~11b28
+Version: 201810032043~11b28
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 73
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-11-jre-openj9-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-11-jre-openj9-set-default (= 201810032043~11b28)
+Provides: default-jre, default-jre-headless, java-runtime, java-runtime-headless, java10-runtime, java10-runtime-headless, java11-runtime, java11-runtime-headless, java2-runtime, java2-runtime-headless, java5-runtime, java5-runtime-headless, java6-runtime, java6-runtime-headless, java7-runtime, java7-runtime-headless, java8-runtime, java8-runtime-headless, java9-runtime, java9-runtime-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jre-openj9-installer/adoptopenjdk-11-jre-openj9-installer_201810032042~11b28_all.deb
-Size: 5800
-SHA256: 337d533666b51d396ea3e485e2ceaee2ef568b7ee15ca7db5ac0b2cffa82c3c6
-SHA1: 21717ffb046ccd8c34ad3a43d85d2044932338a4
-MD5sum: 64666ea2decfe39129ac941ad5dd8db3
+Filename: pool/main/a/adoptopenjdk-11-jre-openj9-installer/adoptopenjdk-11-jre-openj9-installer_201810032043~11b28_all.deb
+Size: 5790
+SHA256: 26dd3caef9271568f231fc8e0628f160c1166254d7a4a0120b5a148350ca90cd
+SHA1: 5d04aa21abedbb84baacda4770973cd5b45842d6
+MD5sum: a8ac0ee61032f050e5c1eb6a58e8b89c
 Description: AdoptOpenJDK JRE 11 with OpenJ9
  Installer package for AdoptOpenJDK JRE 11 with OpenJ9.
  This package does not contain binary files, but is only a downloader/installer.
@@ -295,64 +289,63 @@ Description: AdoptOpenJDK JRE 11 with OpenJ9
 
 Package: adoptopenjdk-11-jre-openj9-set-default
 Source: adoptopenjdk-11-jre-openj9-installer
-Version: 201810032042~11b28
+Version: 201810032043~11b28
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-11-jre-openj9-installer
+Pre-Depends: adoptopenjdk-11-jre-openj9-installer (= 201810032043~11b28)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-11-jre-openj9-installer/adoptopenjdk-11-jre-openj9-set-default_201810032042~11b28_all.deb
-Size: 1806
-SHA256: da14e47540a294ad2a081353fddf554c3f2fb1eb3745e5e1e7621aa0b38ae02b
-SHA1: cacbb0b2bb24caf8bf219d078425cbbcc199c777
-MD5sum: 73e81f67f11812e65518a74d27679f1e
+Filename: pool/main/a/adoptopenjdk-11-jre-openj9-installer/adoptopenjdk-11-jre-openj9-set-default_201810032043~11b28_all.deb
+Size: 1816
+SHA256: 4c40d14206dbf2dae84b048b810d3265c2d080d0f82aad6042d3347c98f1c2ef
+SHA1: 5fa75a682fcd2e1232bdbf3627706ddf3e23f20f
+MD5sum: 768d99f64372677cb7f313f71dc0e504
 Description: Set AdoptOpenJDK JRE 11 with OpenJ9 as default
  Sets AdoptOpenJDK JRE 11 with OpenJ9 as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-8-installer
 Source: adoptopenjdk-8-jdk-hotspot-installer
-Version: 201811081513~8u192b12+aarch64~8u191b12
+Version: 201811081514~8u192b12+aarch64~8u191b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 25
-Depends: adoptopenjdk-8-jdk-hotspot-installer
-Recommends: adoptopenjdk-8-jdk-hotspot-set-default
+Depends: adoptopenjdk-8-jdk-hotspot-installer (= 201811081514~8u192b12+aarch64~8u191b12)
+Recommends: adoptopenjdk-8-jdk-hotspot-set-default (= 201811081514~8u192b12+aarch64~8u191b12)
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jdk-hotspot-installer/adoptopenjdk-8-installer_201811081513~8u192b12+aarch64~8u191b12_all.deb
-Size: 1576
-SHA256: c80eb04af01403171123370b5f2d4539d6fac4b3fcfa50cc6872b77e06c33f19
-SHA1: ce55d5cb3aede75c69c53861a247f1374c91a73b
-MD5sum: 175ea2401f0290013087ab6e5ffdb410
+Filename: pool/main/a/adoptopenjdk-8-jdk-hotspot-installer/adoptopenjdk-8-installer_201811081514~8u192b12+aarch64~8u191b12_all.deb
+Size: 1590
+SHA256: c9103bed3b65d44fd5b74b742b5f0199280b1db3447100c7d4cb86dbd3b2ab50
+SHA1: 45a111b8efb9743c61a47836d352eff1b2dc05df
+MD5sum: cc3c2bfef34d1972e4311ac10b27948f
 Description: Virtual package for AdoptOpenJDK JDK 8 with Hotspot
  Virtual package depending AdoptOpenJDK JDK 8 with Hotspot
  This package depends on adoptopenjdk-8-jdk-hotspot-installer
 
 Package: adoptopenjdk-8-jdk-hotspot-installer
-Version: 201811081513~8u192b12+aarch64~8u191b12
+Version: 201811081514~8u192b12+aarch64~8u191b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 89
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-8-jdk-hotspot-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-8-jdk-hotspot-set-default (= 201811081514~8u192b12+aarch64~8u191b12)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jdk-hotspot-installer/adoptopenjdk-8-jdk-hotspot-installer_201811081513~8u192b12+aarch64~8u191b12_all.deb
-Size: 6360
-SHA256: 0de39d1d5e7687cefb9d340e30dee143bc999326de44aa5bcdd7a23f8dfa73b7
-SHA1: f7882ff61e79b41b6d08ebc504a3fe65e4a6f2d6
-MD5sum: 4c6d3fac7589bd43c20d9fe05f5f592b
+Filename: pool/main/a/adoptopenjdk-8-jdk-hotspot-installer/adoptopenjdk-8-jdk-hotspot-installer_201811081514~8u192b12+aarch64~8u191b12_all.deb
+Size: 6374
+SHA256: 1d494b55c078ed6be54787181598919dda7dcb0a9584003a3d08d2215ffc039e
+SHA1: c77b6573c50c7233bf62e96b3fb4d3e76af8987b
+MD5sum: 962e45e212b10165cd02e1ba0db0dd10
 Description: AdoptOpenJDK JDK 8 with Hotspot
  Installer package for AdoptOpenJDK JDK 8 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -361,44 +354,43 @@ Description: AdoptOpenJDK JDK 8 with Hotspot
 
 Package: adoptopenjdk-8-jdk-hotspot-set-default
 Source: adoptopenjdk-8-jdk-hotspot-installer
-Version: 201811081513~8u192b12+aarch64~8u191b12
+Version: 201811081514~8u192b12+aarch64~8u191b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-8-jdk-hotspot-installer
+Pre-Depends: adoptopenjdk-8-jdk-hotspot-installer (= 201811081514~8u192b12+aarch64~8u191b12)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jdk-hotspot-installer/adoptopenjdk-8-jdk-hotspot-set-default_201811081513~8u192b12+aarch64~8u191b12_all.deb
-Size: 1856
-SHA256: d3abbd5d806618c0fabf240f7d456688e46809930e6df712a4fbdb6773939f35
-SHA1: 885b6a4e54c8e174c1aa02a23d803a4f032497d3
-MD5sum: 473ca7f7ee5dea050229338204f5873b
+Filename: pool/main/a/adoptopenjdk-8-jdk-hotspot-installer/adoptopenjdk-8-jdk-hotspot-set-default_201811081514~8u192b12+aarch64~8u191b12_all.deb
+Size: 1860
+SHA256: 86eab372b2efab375276cfa6cdb9e46e49980d145041252f70d6dcdeae849cf6
+SHA1: f37fb82a24a5314b6a853088d1ddacb810191e05
+MD5sum: f368c4c3438c449d572fa22ea5de4891
 Description: Set AdoptOpenJDK JDK 8 with Hotspot as default
  Sets AdoptOpenJDK JDK 8 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-8-jdk-openj9-installer
-Version: 201811072356~8u192b12
+Version: 201811072357~8u192b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-8-jdk-openj9-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-8-jdk-openj9-set-default (= 201811072357~8u192b12)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jdk-openj9-installer/adoptopenjdk-8-jdk-openj9-installer_201811072356~8u192b12_all.deb
-Size: 6120
-SHA256: a8541d48d9f9c9b39f1d4d97ec908d92dba71e34ec71682c5d22b01a48946343
-SHA1: a80b7af1b296c49135ad3bc68361c747a7d66b02
-MD5sum: 07fd0bdcdac236f4327947f8cbff32ca
+Filename: pool/main/a/adoptopenjdk-8-jdk-openj9-installer/adoptopenjdk-8-jdk-openj9-installer_201811072357~8u192b12_all.deb
+Size: 6138
+SHA256: 6ca605a323d5a6357ceae7562e599336782ccfdb07429d80896d6755c9f8a9ec
+SHA1: 1282b460209b7212b4d2225c86a94aa142534ce5
+MD5sum: 130fcab9614a0e76dee97ad2b883cfe1
 Description: AdoptOpenJDK JDK 8 with OpenJ9
  Installer package for AdoptOpenJDK JDK 8 with OpenJ9.
  This package does not contain binary files, but is only a downloader/installer.
@@ -407,44 +399,43 @@ Description: AdoptOpenJDK JDK 8 with OpenJ9
 
 Package: adoptopenjdk-8-jdk-openj9-set-default
 Source: adoptopenjdk-8-jdk-openj9-installer
-Version: 201811072356~8u192b12
+Version: 201811072357~8u192b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-8-jdk-openj9-installer
+Pre-Depends: adoptopenjdk-8-jdk-openj9-installer (= 201811072357~8u192b12)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jdk-openj9-installer/adoptopenjdk-8-jdk-openj9-set-default_201811072356~8u192b12_all.deb
-Size: 1822
-SHA256: 0e243029191825e384b74ed5501f8a9833a4838a29d65c055193e151a52c4881
-SHA1: 898815d783cffeef0b2fe124f6a6cdd9f90ea512
-MD5sum: 0f8a5f29951e04aa57e2ea23075a7302
+Filename: pool/main/a/adoptopenjdk-8-jdk-openj9-installer/adoptopenjdk-8-jdk-openj9-set-default_201811072357~8u192b12_all.deb
+Size: 1842
+SHA256: 9870bfa092933b697cb9014376b6becbc07eddc90923f914177405e8ca93d468
+SHA1: 7df24b0cf9d90f25bd668d3a0f97bfb6ecaf08f1
+MD5sum: df8b27805ccfc96093271f9edef70813
 Description: Set AdoptOpenJDK JDK 8 with OpenJ9 as default
  Sets AdoptOpenJDK JDK 8 with OpenJ9 as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-8-jre-hotspot-installer
-Version: 201811081513~8u192b12+aarch64~8u191b12
+Version: 201811081514~8u192b12+aarch64~8u191b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 89
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-8-jre-hotspot-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-8-jre-hotspot-set-default (= 201811081514~8u192b12+aarch64~8u191b12)
+Provides: default-jre, default-jre-headless, java-runtime, java-runtime-headless, java2-runtime, java2-runtime-headless, java5-runtime, java5-runtime-headless, java6-runtime, java6-runtime-headless, java7-runtime, java7-runtime-headless, java8-runtime, java8-runtime-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jre-hotspot-installer/adoptopenjdk-8-jre-hotspot-installer_201811081513~8u192b12+aarch64~8u191b12_all.deb
-Size: 6364
-SHA256: 43746798b3009646626f5c7c3ef5170829c07b5dc721ae254668600327052571
-SHA1: 0b8365daade3957a94ae88b6359fc049fa4f73b2
-MD5sum: bfd5602c752bdf54acc880e0da14d377
+Filename: pool/main/a/adoptopenjdk-8-jre-hotspot-installer/adoptopenjdk-8-jre-hotspot-installer_201811081514~8u192b12+aarch64~8u191b12_all.deb
+Size: 6324
+SHA256: 07321eec005686bd15e405ba27af21dd746a637634577127767e34e8b2841308
+SHA1: f804007aac3ce6fc13dc6a46b81bfe3e46670279
+MD5sum: 89e47aa2712d033a2860f5efe7325027
 Description: AdoptOpenJDK JRE 8 with Hotspot
  Installer package for AdoptOpenJDK JRE 8 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -453,44 +444,43 @@ Description: AdoptOpenJDK JRE 8 with Hotspot
 
 Package: adoptopenjdk-8-jre-hotspot-set-default
 Source: adoptopenjdk-8-jre-hotspot-installer
-Version: 201811081513~8u192b12+aarch64~8u191b12
+Version: 201811081514~8u192b12+aarch64~8u191b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-8-jre-hotspot-installer
+Pre-Depends: adoptopenjdk-8-jre-hotspot-installer (= 201811081514~8u192b12+aarch64~8u191b12)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jre-hotspot-installer/adoptopenjdk-8-jre-hotspot-set-default_201811081513~8u192b12+aarch64~8u191b12_all.deb
-Size: 1866
-SHA256: b56f184a8c2daeb2b9d2aef81de2ddbba3211dde2037820461d7667e483cbe2e
-SHA1: 40acd207aa95bd1ddea7fd00a1df4e8cd5d59710
-MD5sum: aa9aff08f5d7bc65ab7868f7079672de
+Filename: pool/main/a/adoptopenjdk-8-jre-hotspot-installer/adoptopenjdk-8-jre-hotspot-set-default_201811081514~8u192b12+aarch64~8u191b12_all.deb
+Size: 1864
+SHA256: 1cf410b5a93f30905b7835ab75d9eea44ea91472f56fa76f8f38b1b5229462cc
+SHA1: 4454ab40c2ac64428697b25376ef5a73feab7893
+MD5sum: 6e7e0e17e3f62aa8a7d000014b60a400
 Description: Set AdoptOpenJDK JRE 8 with Hotspot as default
  Sets AdoptOpenJDK JRE 8 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-8-jre-openj9-installer
-Version: 201811071640~8u192b12
+Version: 201811071641~8u192b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-8-jre-openj9-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-8-jre-openj9-set-default (= 201811071641~8u192b12)
+Provides: default-jre, default-jre-headless, java-runtime, java-runtime-headless, java2-runtime, java2-runtime-headless, java5-runtime, java5-runtime-headless, java6-runtime, java6-runtime-headless, java7-runtime, java7-runtime-headless, java8-runtime, java8-runtime-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jre-openj9-installer/adoptopenjdk-8-jre-openj9-installer_201811071640~8u192b12_all.deb
-Size: 6144
-SHA256: 4af70efd2449e02e83360d5c57aaa6877eac2ce002c102aeb2a91bab3ef95028
-SHA1: e78bd78a9b2998edd86773c356c8b53f0a50de27
-MD5sum: e2b1b51dafc98b7c88e948520afe3513
+Filename: pool/main/a/adoptopenjdk-8-jre-openj9-installer/adoptopenjdk-8-jre-openj9-installer_201811071641~8u192b12_all.deb
+Size: 6104
+SHA256: 23eab3538ac9430f0388bfc1a3ceca604cfd3ab28f201cb1becf48838de4cb66
+SHA1: 39d708a74e6fda4c62f14ce4d9cf6a7c0db50cf3
+MD5sum: 525c00a38f387715deaf0a389cba9167
 Description: AdoptOpenJDK JRE 8 with OpenJ9
  Installer package for AdoptOpenJDK JRE 8 with OpenJ9.
  This package does not contain binary files, but is only a downloader/installer.
@@ -499,64 +489,63 @@ Description: AdoptOpenJDK JRE 8 with OpenJ9
 
 Package: adoptopenjdk-8-jre-openj9-set-default
 Source: adoptopenjdk-8-jre-openj9-installer
-Version: 201811071640~8u192b12
+Version: 201811071641~8u192b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-8-jre-openj9-installer
+Pre-Depends: adoptopenjdk-8-jre-openj9-installer (= 201811071641~8u192b12)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-8-jre-openj9-installer/adoptopenjdk-8-jre-openj9-set-default_201811071640~8u192b12_all.deb
-Size: 1838
-SHA256: c5dc2fdc68e841656f0b0a393edcc407743a186e1416e3e35ff064b502d41f62
-SHA1: 880d971760533d973a24a447f8b0286b340d1fd2
-MD5sum: 5ebb58368bdea5c8f47e711b820c78db
+Filename: pool/main/a/adoptopenjdk-8-jre-openj9-installer/adoptopenjdk-8-jre-openj9-set-default_201811071641~8u192b12_all.deb
+Size: 1836
+SHA256: 33fbd8485bc9bc59c82c14ce6ffefa366cd34f37d0f0b6990b2006b700b8cbe1
+SHA1: 9195252154298044409d475c1a20ebda9b002095
+MD5sum: b81c0efa6347b1178028df440fadf3e5
 Description: Set AdoptOpenJDK JRE 8 with OpenJ9 as default
  Sets AdoptOpenJDK JRE 8 with OpenJ9 as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-9-installer
 Source: adoptopenjdk-9-jdk-hotspot-installer
-Version: 201810081428~9.0.4b11
+Version: 201810081429~9.0.4b11
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 25
-Depends: adoptopenjdk-9-jdk-hotspot-installer
-Recommends: adoptopenjdk-9-jdk-hotspot-set-default
+Depends: adoptopenjdk-9-jdk-hotspot-installer (= 201810081429~9.0.4b11)
+Recommends: adoptopenjdk-9-jdk-hotspot-set-default (= 201810081429~9.0.4b11)
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-9-jdk-hotspot-installer/adoptopenjdk-9-installer_201810081428~9.0.4b11_all.deb
-Size: 1552
-SHA256: 28ab537e7335cb2e188741d1aafc0cdea3ef05703c92e7c9d2ac045a1e1b9f0e
-SHA1: 3f9a1e509f598f0c7786724f2b7391dbe4345a2b
-MD5sum: 31491071b33ea62efbcb1ee975470c55
+Filename: pool/main/a/adoptopenjdk-9-jdk-hotspot-installer/adoptopenjdk-9-installer_201810081429~9.0.4b11_all.deb
+Size: 1560
+SHA256: 3a9f9fc08e66a5c71b69e977ca48f518bf447a2b8408d57d0666951c4d59b6e9
+SHA1: 901b9cf0a84b9798fff7a37f569d253ddec2d0e2
+MD5sum: ce4f626f310e18b3de964f7c70334117
 Description: Virtual package for AdoptOpenJDK JDK 9 with Hotspot
  Virtual package depending AdoptOpenJDK JDK 9 with Hotspot
  This package depends on adoptopenjdk-9-jdk-hotspot-installer
 
 Package: adoptopenjdk-9-jdk-hotspot-installer
-Version: 201810081428~9.0.4b11
+Version: 201810081429~9.0.4b11
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-9-jdk-hotspot-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-9-jdk-hotspot-set-default (= 201810081429~9.0.4b11)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-9-jdk-hotspot-installer/adoptopenjdk-9-jdk-hotspot-installer_201810081428~9.0.4b11_all.deb
-Size: 6122
-SHA256: f24cef6674622179aba54e2a70ee81080ecbd223eca83f9a6ee68019891e1f76
-SHA1: 5937f7aa1785d4d2377a770647bdda2cc3abeeeb
-MD5sum: 060dd22e0da8eba292bb44694adafab3
+Filename: pool/main/a/adoptopenjdk-9-jdk-hotspot-installer/adoptopenjdk-9-jdk-hotspot-installer_201810081429~9.0.4b11_all.deb
+Size: 6146
+SHA256: a6a31b5e23a6cfb363e5cadd99c941e5b3d8d49f19d5f58bfa063398cbaab1b0
+SHA1: 4897408594ef987649b9c0cd64755b6c175f02c5
+MD5sum: e4bad9049165cac2b620627b9002c700
 Description: AdoptOpenJDK JDK 9 with Hotspot
  Installer package for AdoptOpenJDK JDK 9 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -565,44 +554,43 @@ Description: AdoptOpenJDK JDK 9 with Hotspot
 
 Package: adoptopenjdk-9-jdk-hotspot-set-default
 Source: adoptopenjdk-9-jdk-hotspot-installer
-Version: 201810081428~9.0.4b11
+Version: 201810081429~9.0.4b11
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-9-jdk-hotspot-installer
+Pre-Depends: adoptopenjdk-9-jdk-hotspot-installer (= 201810081429~9.0.4b11)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-9-jdk-hotspot-installer/adoptopenjdk-9-jdk-hotspot-set-default_201810081428~9.0.4b11_all.deb
-Size: 1824
-SHA256: 68e961c64b3568bc53db35ca0aa3d4628036191873627939b80b17df39900c83
-SHA1: 395d3b3ef66db8c4fac247fa5ae59028dd73c918
-MD5sum: 55e520f39d2870b12e922dd688bf66c8
+Filename: pool/main/a/adoptopenjdk-9-jdk-hotspot-installer/adoptopenjdk-9-jdk-hotspot-set-default_201810081429~9.0.4b11_all.deb
+Size: 1828
+SHA256: 88ccf030f5fb857baadcf49c1a9f1c60efffac9fd1e33006e0195d0481e115ce
+SHA1: 14fca486f988aa768e56c447745579cde12ee27c
+MD5sum: 7250c6ef654605dfdab7b655b2a0bf72
 Description: Set AdoptOpenJDK JDK 9 with Hotspot as default
  Sets AdoptOpenJDK JDK 9 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-9-jdk-openj9-installer
-Version: 201808151022~9.0.4b12
+Version: 201808151023~9.0.4b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-9-jdk-openj9-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-9-jdk-openj9-set-default (= 201808151023~9.0.4b12)
+Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-9-jdk-openj9-installer/adoptopenjdk-9-jdk-openj9-installer_201808151022~9.0.4b12_all.deb
-Size: 6108
-SHA256: 5169acfb61b01c5a9aff6a612e039eb8ce794ed6643d676621df2a51a32c37c5
-SHA1: 9227a9a3f770c1b120f685a6fca9fd51e17d220f
-MD5sum: 232a6fb1a0072691b475c3fac1fcd4d9
+Filename: pool/main/a/adoptopenjdk-9-jdk-openj9-installer/adoptopenjdk-9-jdk-openj9-installer_201808151023~9.0.4b12_all.deb
+Size: 6144
+SHA256: c596edfba60189b21170f7d52ffd2c1cad26c6660604624e48da28dc5d4bc345
+SHA1: 5217b7f04233c00066eb8b58b64d7e1cc00a5b1f
+MD5sum: 210e0a3baf53060a2e28e9b66e4767c1
 Description: AdoptOpenJDK JDK 9 with OpenJ9
  Installer package for AdoptOpenJDK JDK 9 with OpenJ9.
  This package does not contain binary files, but is only a downloader/installer.
@@ -611,44 +599,43 @@ Description: AdoptOpenJDK JDK 9 with OpenJ9
 
 Package: adoptopenjdk-9-jdk-openj9-set-default
 Source: adoptopenjdk-9-jdk-openj9-installer
-Version: 201808151022~9.0.4b12
+Version: 201808151023~9.0.4b12
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-9-jdk-openj9-installer
+Pre-Depends: adoptopenjdk-9-jdk-openj9-installer (= 201808151023~9.0.4b12)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-9-jdk-openj9-installer/adoptopenjdk-9-jdk-openj9-set-default_201808151022~9.0.4b12_all.deb
-Size: 1826
-SHA256: d944a2b3fcc45419328fa78c6cf28fc01a361bff1e98f93593389be5b1d2a447
-SHA1: 21247854bb9e18f0479b807aa039a483d3b1d543
-MD5sum: 95cbd3110b9795e509c0727729ed10a5
+Filename: pool/main/a/adoptopenjdk-9-jdk-openj9-installer/adoptopenjdk-9-jdk-openj9-set-default_201808151023~9.0.4b12_all.deb
+Size: 1830
+SHA256: 942740060bd1e185f0e687f988b4d29467f33d071eeabbbbad6458e3729e8f5e
+SHA1: 3aff84fe3e1b17bb5daf73afedc41e3f4ff162e8
+MD5sum: 25efca21bf49743ed90acc7c43e74e00
 Description: Set AdoptOpenJDK JDK 9 with OpenJ9 as default
  Sets AdoptOpenJDK JDK 9 with OpenJ9 as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptopenjdk-9-jre-hotspot-installer
-Version: 201810090921~9.0.4b11
+Version: 201810090922~9.0.4b11
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 81
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic, ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming, adoptopenjdk-9-jre-hotspot-set-default
-Conflicts: j2se-common
-Provides: default-jre, default-jre-headless, java-compiler, java-jdk, java-runtime, java-runtime-headless, java-virtual-machine, java2-jdk, java2-runtime, java2-runtime-headless, java5-jdk, java5-runtime, java5-runtime-headless, java6-jdk, java6-runtime, java6-runtime-headless, java7-jdk, java7-runtime, java7-runtime-headless, java8-jdk, java8-runtime, java8-runtime-headless
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptopenjdk-9-jre-hotspot-set-default (= 201810090922~9.0.4b11)
+Provides: default-jre, default-jre-headless, java-runtime, java-runtime-headless, java2-runtime, java2-runtime-headless, java5-runtime, java5-runtime-headless, java6-runtime, java6-runtime-headless, java7-runtime, java7-runtime-headless, java8-runtime, java8-runtime-headless, java9-runtime, java9-runtime-headless
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-9-jre-hotspot-installer/adoptopenjdk-9-jre-hotspot-installer_201810090921~9.0.4b11_all.deb
-Size: 6112
-SHA256: 412f011e5c8d7243606dbc8811e4c2d698bcabd86500ed332826caa61f2dad76
-SHA1: f13d63eb4c0e884897d77b5964f0f0424e2729b3
-MD5sum: 5ba0e2692ad5de159c05a67a6b2ca2db
+Filename: pool/main/a/adoptopenjdk-9-jre-hotspot-installer/adoptopenjdk-9-jre-hotspot-installer_201810090922~9.0.4b11_all.deb
+Size: 6092
+SHA256: f699ad2e4ec315b515539c0fad46ef266a861ab06f5c31b7d2ba77141eeee3c3
+SHA1: a9f6bf705ddce5ee04aedd6608655c5efb5e91a0
+MD5sum: 699261aa2b4eb3141c62ec48f554c15f
 Description: AdoptOpenJDK JRE 9 with Hotspot
  Installer package for AdoptOpenJDK JRE 9 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -657,21 +644,21 @@ Description: AdoptOpenJDK JRE 9 with Hotspot
 
 Package: adoptopenjdk-9-jre-hotspot-set-default
 Source: adoptopenjdk-9-jre-hotspot-installer
-Version: 201810090921~9.0.4b11
+Version: 201810090922~9.0.4b11
 Architecture: all
 Maintainer: Ricardo Pardini (Pardini Yubi 2017) <ricardo@pardini.net>
 Installed-Size: 33
-Pre-Depends: adoptopenjdk-9-jre-hotspot-installer
+Pre-Depends: adoptopenjdk-9-jre-hotspot-installer (= 201810090922~9.0.4b11)
 Conflicts: adoptopenjdk-default
 Provides: adoptopenjdk-default
 Homepage: https://adoptopenjdk.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptopenjdk-9-jre-hotspot-installer/adoptopenjdk-9-jre-hotspot-set-default_201810090921~9.0.4b11_all.deb
-Size: 1822
-SHA256: 7666f3266e6bc334fd7f3e00e2f85d8cef80d86706c94c7bcdc5f39e98b40a1c
-SHA1: b019424e43e78309e6f64c0db2466d8c88bfc27d
-MD5sum: 99b502ba409bbc18f0cd458db3b0ddc8
+Filename: pool/main/a/adoptopenjdk-9-jre-hotspot-installer/adoptopenjdk-9-jre-hotspot-set-default_201810090922~9.0.4b11_all.deb
+Size: 1836
+SHA256: ae9a159a71a40ca7488f2602ed8c7c017f95572187b75d5e29af012b70998048
+SHA1: 18cb915711d226f30ceb4608727fbdad80802c53
+MD5sum: 5d9f74fbf98d6a1a252ad3e10445dfc1
 Description: Set AdoptOpenJDK JRE 9 with Hotspot as default
  Sets AdoptOpenJDK JRE 9 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
