@@ -2,7 +2,7 @@
 
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
 // avoid bumping this too high.
-const generatorVersionIncrement = 4;
+const generatorVersionIncrement = 5;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
@@ -37,6 +37,7 @@ const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
         distros: new Set(['trusty', 'xenial', 'bionic']),
+        standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,
         postArchesHook: null
@@ -44,6 +45,7 @@ const linuxesAndDistros = new Set([
     {
         name: 'debian',
         distros: new Set(['stable']),
+        standardsVersion: "3.9.6",
         useDistroInVersion: false,
         singleBinaryForAllArches: true,
         postArchesHook: joinDebianPostinstForAllArches
@@ -81,11 +83,11 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
                 let destPath = `${generatedDirBase}/${linux.name}/${javaX.jdkJreVersionJvmType}/${distroLinux}/debian`;
                 let fnView = {javaX: `${javaX.jdkJreVersionJvmType}`};
                 let javaXview_extra = {
-
+                    provides: createProducesLine(javaX),
+                    standardsVersion: linux.standardsVersion,
                     allDebArches: linux.singleBinaryForAllArches ? "all" : javaX.allDebArches,
                     distribution: `${distroLinux}`,
                     version: linux.useDistroInVersion ? `${javaX.baseJoinedVersion}~${distroLinux}` : javaX.baseJoinedVersion,
-
                     virtualPackageName: `adoptopenjdk-${javaX.jdkVersion}-installer`,
                     commentForVirtualPackage: javaX.isDefaultForVirtualPackage ? "" : "#",
                     sourcePackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer`,
@@ -136,6 +138,28 @@ async function joinDebianPostinstForAllArches (archProcessedTemplates, destPath,
     }, `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer.postinst`, postInstContents.join("\n"));
 }
 
+function createProducesLine (javaX) {
+    let prodArr = ['java-runtime', 'default-jre', 'default-jre-headless'];
+    prodArr = prodArr.concat(createJavaProducesPrefixForVersion(javaX.jdkVersion, '-runtime'));
+    prodArr = prodArr.concat(createJavaProducesPrefixForVersion(javaX.jdkVersion, '-runtime-headless'));
+    // jre: java-runtime, default-jre, default-jre-headless, javaX-runtime, javaX-runtime-headless
+
+    if (javaX.jdkJre === 'jdk') {
+        // for jdk: java-compiler, default-jdk, default-jdk-headless, javaX-sdk, javaX-sdk-headless
+        prodArr = prodArr.concat(['java-compiler', 'default-jdk', 'default-jdk-headless']);
+        prodArr = prodArr.concat(createJavaProducesPrefixForVersion(javaX.jdkVersion, '-sdk'));
+        prodArr = prodArr.concat(createJavaProducesPrefixForVersion(javaX.jdkVersion, '-sdk-headless'));
+    }
+    return prodArr.join(", ");
+}
+
+function createJavaProducesPrefixForVersion (javaVersion, suffix) {
+    let javas = [`java${suffix}`, `java2${suffix}`];
+    for (let i = 5; i < javaVersion + 1; i++) {
+        javas.push(`java${i}${suffix}`)
+    }
+    return javas;
+}
 
 async function getJDKInfosFromAdoptOpenJDKAPI (jdkOrJre, hotspotOrOpenJ9) {
     let javaBuildArchsPerVersion = new Map();

@@ -3,24 +3,18 @@ Section: java
 Priority: optional
 Maintainer: {{signerName}} <{{signerEmail}}>
 Build-Depends: debhelper, lsb-release, bash (>= 4.0)
-Standards-Version: 3.9.7
+Standards-Version: {{standardsVersion}}
 Homepage: https://adoptopenjdk.net/
 
 Package: {{sourcePackageName}}
 Section: java
 Architecture: {{allDebArches}}
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
-Depends: java-common (>= 0.24), locales, ${misc:Depends}
-Conflicts: j2se-common
-Recommends: gsfonts-x11
-Suggests: ttf-baekmuk | ttf-unfonts | ttf-unfonts-core, ttf-kochi-gothic | ttf-sazanami-gothic,
-          ttf-kochi-mincho | ttf-sazanami-mincho, ttf-arphic-uming,
-          {{setDefaultPackageName}}
-Provides: java-virtual-machine, java-compiler, default-jre, default-jre-headless,
-          java-runtime, java2-runtime, java5-runtime, java6-runtime, java7-runtime, java8-runtime,
-          java-runtime-headless, java2-runtime-headless, java5-runtime-headless,
-          java6-runtime-headless, java7-runtime-headless, java8-runtime-headless,
-          java-jdk, java2-jdk, java5-jdk, java6-jdk, java7-jdk, java8-jdk
+Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2, ${misc:Depends}
+Recommends: fonts-dejavu-extra
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei,
+          fonts-indic, {{setDefaultPackageName}}(= ${binary:Version})
+Provides: {{provides}}
 Description: {{fullHumanTitle}}
  Installer package for {{fullHumanTitle}}.
  This package does not contain binary files, but is only a downloader/installer.
@@ -30,7 +24,7 @@ Description: {{fullHumanTitle}}
 Package: {{setDefaultPackageName}}
 Section: java
 Architecture: {{allDebArches}}
-Pre-Depends: {{sourcePackageName}}
+Pre-Depends: {{sourcePackageName}}(= ${binary:Version})
 Depends: ${misc:Depends}
 Provides: adoptopenjdk-default
 Conflicts: adoptopenjdk-default
@@ -41,8 +35,8 @@ Description: Set {{fullHumanTitle}} as default
 {{commentForVirtualPackage}}Package: {{virtualPackageName}}
 {{commentForVirtualPackage}}Section: java
 {{commentForVirtualPackage}}Architecture: {{allDebArches}}
-{{commentForVirtualPackage}}Depends: {{sourcePackageName}}, ${misc:Depends}
-{{commentForVirtualPackage}}Recommends: {{setDefaultPackageName}}
+{{commentForVirtualPackage}}Depends: {{sourcePackageName}}(= ${binary:Version}), ${misc:Depends}
+{{commentForVirtualPackage}}Recommends: {{setDefaultPackageName}}(= ${binary:Version})
 {{commentForVirtualPackage}}Description: Virtual package for {{fullHumanTitle}}
 {{commentForVirtualPackage}} Virtual package depending {{fullHumanTitle}}
 {{commentForVirtualPackage}} This package depends on {{sourcePackageName}}
