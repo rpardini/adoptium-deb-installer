@@ -2,12 +2,13 @@
 
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
 // avoid bumping this too high.
-const generatorVersionIncrement = 5;
+const generatorVersionIncrement = 6;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
 const fs = regular_fs.promises;
 const path = require('path');
+const glob = require('glob-all');
 
 // moment for date formatting
 const moment = require('moment');
@@ -108,6 +109,10 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
                 }
 
                 if (linux.postArchesHook) await linux.postArchesHook(archProcessedTemplates, destPath, javaX);
+
+                // Here we should make sure destPath and everything inside it have the version's timestamp.
+                await recursiveChangeFileDate(destPath, javaX.buildDateTS.toDate());
+
             }
         }
     }
@@ -267,6 +272,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
             baseJoinedVersion: finalVersion,
             buildDateYear: highestBuildTS.format('YYYY'),
             buildDateChangelog: highestBuildTS.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+            buildDateTS: highestBuildTS,
             allDebArches: allDebArches.join(' '),
             debChangeLogArches: debChangeLogArches.join("\n")
         },
@@ -338,6 +344,25 @@ async function writeTemplateFile (destPathBase, templateFile, destFileTemplated,
         mode: templateFile.executable ? 0o777 : 0o666
     });
 }
+
+async function recursiveChangeFileDate (destPath, newDate) {
+    let matchedFiles = await getFiles(destPath);
+    for (let file of matchedFiles) {
+        regular_fs.utimesSync(file, newDate, newDate);
+    }
+}
+
+function getFiles (matcherPath) {
+    return new Promise((resolve, reject) => {
+        glob([`${matcherPath}/**`], {realpath: true}, (err, files) => {
+            if (err) reject(err);
+            else {
+                resolve(files)
+            }
+        })
+    })
+}
+
 
 async function processTemplates (templateFiles, destPathBase, fnView, view, writeFiles) {
     let ret = {};

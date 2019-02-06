@@ -5,7 +5,9 @@ set -e
 declare -i SIGN_OSX=1
 declare -i LAUNCHPAD=1
 declare -i APT_REPO=1
-declare NO_CACHE=""
+declare -i PUSH_APT_REPO=1
+declare NO_CACHE="--no-cache"
+#declare NO_CACHE=""
 
 # Make sure we can GPG sign stuff (eg, ask for yubikey PIN first)
 # @TODO: maybe obtain the default key name and email here, and pass it down via ARGS to the Dockerfile.
@@ -69,8 +71,10 @@ if [[ ${APT_REPO} -gt 0 ]]; then
   rm -rf ${PWD}/repo/please_sign
 
   # go in there, add everything to git, commit and push it to github (effectively publishing the repo)
-  cd ${PWD}/repo
-  git add .
-  git commit -m "Updating APT repo"
-  git push origin gh-pages
+  if [[ ${PUSH_APT_REPO} -gt 0 ]]; then
+    cd ${PWD}/repo
+    git add .
+    git commit -m "Updating APT repo"
+    git push origin gh-pages
+  fi
 fi

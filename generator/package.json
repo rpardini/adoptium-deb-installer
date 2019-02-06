@@ -1,12 +1,13 @@
 {
   "name": "adoptopenjdk-deb-generator",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "main": "generate.js",
   "scripts": {},
   "author": "Ricardo Pardini <ricardo@pardini.net>",
   "license": "Apache2.0",
   "dependencies": {
+    "glob-all": "^3.1.0",
     "good-guy-disk-cache": "^2.1.0",
     "good-guy-http": "^1.12.0",
     "moment": "^2.22.2",

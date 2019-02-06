@@ -17,6 +17,7 @@ ADD generator/generate.js /gen/generator/generate.js
 ADD templates /gen/templates
 # ... and then run the generator.
 RUN node generate.js
+RUN ls -laR /gen/generated/debian
 
 
 ########################################################################################################################
@@ -32,6 +33,7 @@ RUN apt-get -y --no-install-recommends install devscripts build-essential lintia
 RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
 WORKDIR /opt/adoptopenjdk/ubuntu
 COPY --from=generator /gen/generated/ubuntu /opt/adoptopenjdk/ubuntu
+RUN ls -laR /opt/adoptopenjdk/ubuntu
 ADD docker/build_packages_multi.sh /opt/adoptopenjdk/
 # those will be populated by the build script.
 RUN mkdir -p /binaries /sourcepkg

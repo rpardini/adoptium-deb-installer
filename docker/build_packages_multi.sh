@@ -37,6 +37,8 @@ for oneJavaVersion in *; do
       debuild -us -uc # binary build, no signing.
       cd ${BUILD_BASE_DIR}
 
+      ls -laR
+
       if [[ "a$TEST_INSTALL_BINARY" == "atrue" ]]; then
         # check if we can install these binaries. this serves as a basic sanity check.
         # in practice this only "tests" amd64 packages, and for the distro in the FROM ubuntu:xxx
@@ -55,6 +57,7 @@ for oneJavaVersion in *; do
       echo "SOURCE $oneJavaVersion $oneDistribution" | figlet  1>&2
       cd ${BUILD_BASE_DIR}/${oneDistribution}
       debuild -S -us -uc # source-only build, no signing.
+      ls -laR
       cd ${BUILD_BASE_DIR}
       mv -v adoptopenjdk* /sourcepkg/
     fi
