@@ -5,6 +5,7 @@ set -e
 declare -i SIGN_OSX=1
 declare -i LAUNCHPAD=1
 declare -i APT_REPO=1
+declare NO_CACHE=""
 
 # Make sure we can GPG sign stuff (eg, ask for yubikey PIN first)
 # @TODO: maybe obtain the default key name and email here, and pass it down via ARGS to the Dockerfile.
@@ -25,13 +26,13 @@ fi
 rm -rf ${PWD}/exfiltrated ${PWD}/generated
 
 # Build the packages themselves.
-docker build -t adoptopenjdk/deb:latest -f Dockerfile .
+docker build ${NO_CACHE} -t adoptopenjdk/deb:latest -f Dockerfile .
 
 # Build the launchpad utility image.
-[[ ${LAUNCHPAD} -gt 0 ]] && docker build -t adoptopenjdk/launchpad:latest -f Dockerfile.launchpad .
+[[ ${LAUNCHPAD} -gt 0 ]] && docker build ${NO_CACHE} -t adoptopenjdk/launchpad:latest -f Dockerfile.launchpad .
 
 # Build the reprepro utility image.
-[[ ${APT_REPO} -gt 0 ]] && docker build -t adoptopenjdk/reprepro:latest -f Dockerfile.reprepro .
+[[ ${APT_REPO} -gt 0 ]] && docker build ${NO_CACHE} -t adoptopenjdk/reprepro:latest -f Dockerfile.reprepro .
 
 # Run the packages image to copy over the packages to local system, using the "to_sign" directory as volume
 docker run -it -v ${PWD}/exfiltrated/:/exfiltrate_to adoptopenjdk/deb:latest
