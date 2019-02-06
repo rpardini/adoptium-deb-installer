@@ -121,9 +121,9 @@ rm -rf ${J_ID}
 
 echo "done."
 
-# @TODO: -print will become remove very soon
-echo "Listing outdated downloads..."
+echo "Cleaning outdated downloads..."
 find ${INSTALLER_DIR} -maxdepth 1 -name '*.tar.gz' ! -name ${FILENAME_TAR_GZ} -type f -print
+find ${INSTALLER_DIR} -maxdepth 1 -name '*.tar.gz' ! -name ${FILENAME_TAR_GZ} -type f -delete
 
 # Gzips the man pages.
 gzip -9 ${J_INSTALL_DIR}/man/man1/*.1
