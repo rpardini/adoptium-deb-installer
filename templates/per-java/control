@@ -27,7 +27,8 @@ Architecture: {{allDebArches}}
 Pre-Depends: {{sourcePackageName}}(= ${binary:Version})
 Depends: ${misc:Depends}
 Provides: adoptopenjdk-default
-Conflicts: adoptopenjdk-default
+Conflicts: amazoncorretto-default, adoptopenjdk-default, oracle-java6-set-default, oracle-java7-set-default,
+           oracle-java8-set-default, oracle-java9-set-default
 Description: Set {{fullHumanTitle}} as default
  Sets {{fullHumanTitle}} as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.

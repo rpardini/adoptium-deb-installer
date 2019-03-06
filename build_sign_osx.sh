@@ -12,7 +12,7 @@ declare NO_CACHE="--no-cache"
 # Make sure we can GPG sign stuff (eg, ask for yubikey PIN first)
 # @TODO: maybe obtain the default key name and email here, and pass it down via ARGS to the Dockerfile.
 echo "not important" | gpg --sign --armor
-
+BASEDIR=${PWD}
 
 if [[ ${APT_REPO} -gt 0 ]]; then
   # clean it
@@ -40,20 +40,6 @@ docker build ${NO_CACHE} -t adoptopenjdk/deb:latest -f Dockerfile .
 docker run -it -v ${PWD}/exfiltrated/:/exfiltrate_to adoptopenjdk/deb:latest
 # Now the local ${PWD}/exfiltrated dir contains all the packages. Unsigned!
 
-# sign the source packages for launchpad
-if [[ ${SIGN_OSX} -gt 0 ]]; then
-  echo "Signing Launchpad source packages locally..."
-  osx/debsign_osx.sh --no-conf -S exfiltrated/sourcepkg/*_source.changes
-  # Now the local ${PWD}/exfiltrated/sourcepkg contains signed source packages for Launchpad.
-fi
-
-# Run the Launchpad utility image, it will upload to Launchpad via dput.
-if [[ ${LAUNCHPAD} -gt 0 ]]; then
-  echo "Uploading to Launchpad..."
-  docker run -it -v ${PWD}/exfiltrated/sourcepkg/:/to_upload adoptopenjdk/launchpad:latest
-  # This is the final stop for Launchpad. Watch it build the source packages there!
-fi
-
 # Run the reprepro utility image, it will create a debian repo from the packages.
 # This is a huge, huge hack necessary because I sign the repo with a hardware token
 # on the host machine.
@@ -77,4 +63,19 @@ if [[ ${APT_REPO} -gt 0 ]]; then
     git commit -m "Updating APT repo"
     git push origin gh-pages
   fi
+fi
+
+cd ${BASEDIR}
+# sign the source packages for launchpad
+if [[ ${SIGN_OSX} -gt 0 ]]; then
+  echo "Signing Launchpad source packages locally..."
+  osx/debsign_osx.sh --no-conf -S exfiltrated/sourcepkg/*_source.changes
+  # Now the local ${PWD}/exfiltrated/sourcepkg contains signed source packages for Launchpad.
+fi
+
+# Run the Launchpad utility image, it will upload to Launchpad via dput.
+if [[ ${LAUNCHPAD} -gt 0 ]]; then
+  echo "Uploading to Launchpad..."
+  docker run -it -v ${PWD}/exfiltrated/sourcepkg/:/to_upload adoptopenjdk/launchpad:latest
+  # This is the final stop for Launchpad. Watch it build the source packages there!
 fi

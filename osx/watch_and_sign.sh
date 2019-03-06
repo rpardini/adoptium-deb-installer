@@ -9,6 +9,7 @@ while [[ ! -d ${WATCHED_DIR} ]]; do
 done
 
 echo "Great, dir ${WATCHED_DIR} found, lets do the signing."
+sleep 2
 PARAMS_FILE=${WATCHED_DIR}/params.sh
 
 # Source it...
@@ -33,5 +34,6 @@ mv ${RELEASE_NEW}.asc ${RELEASE_GPG}
 echo "Done signing ${RELEASE_GPG}."
 
 echo "Signing is done!"
+sleep 2
 # Signal that we're done.
 mkdir -p ${WATCHED_DIR}/done

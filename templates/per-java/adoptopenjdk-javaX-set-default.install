@@ -1,2 +1,2 @@
-debian/jdk.sh /etc/profile.d/
-debian/jdk.csh /etc/profile.d/
+debian/adoptopenjdk_jdk.sh /etc/profile.d/
+debian/adoptopenjdk_jdk.csh /etc/profile.d/
