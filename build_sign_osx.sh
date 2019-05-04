@@ -6,8 +6,8 @@ declare -i SIGN_OSX=1
 declare -i LAUNCHPAD=1
 declare -i APT_REPO=1
 declare -i PUSH_APT_REPO=1
-#declare NO_CACHE="--no-cache"
-declare NO_CACHE=""
+declare NO_CACHE="--no-cache"
+#declare NO_CACHE=""
 
 # Make sure we can GPG sign stuff (eg, ask for yubikey PIN first)
 # @TODO: maybe obtain the default key name and email here, and pass it down via ARGS to the Dockerfile.

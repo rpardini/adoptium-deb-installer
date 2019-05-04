@@ -2,7 +2,7 @@
 
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
 // avoid bumping this too high.
-const generatorVersionIncrement = 11;
+const generatorVersionIncrement = 12;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
