@@ -2,7 +2,7 @@
 
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
 // avoid bumping this too high.
-const generatorVersionIncrement = 9;
+const generatorVersionIncrement = 11;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
@@ -37,7 +37,7 @@ const wantedJavaVersions = new Set([8, 9, 10, 11]);
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
-        distros: new Set(['trusty', 'xenial', 'bionic']),
+        distros: new Set(['trusty', 'xenial', 'bionic', 'cosmic', 'disco']),
         standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,
@@ -233,6 +233,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
                 debArch: debArch,
                 dirInsideTarGz: oneRelease.release_name, // release name from AOJ is most of the time correct
                 dirInsideTarGzShort: oneRelease.release_name.split(/_openj9/)[0], // release name without openj9 part...
+                dirInsideTarGzShortWithJdkJre: oneRelease.release_name.split(/_openj9/)[0]+`-${jdkOrJre}`, // release name without openj9 part, with -jre suffix...
                 dirInsideTarGzWithJdkJre: `${oneRelease.release_name}-${jdkOrJre}`, // release name with '-jre' sometimes.
                 slug: oneRelease.release_name,
                 filename: oneRelease.binary_name,

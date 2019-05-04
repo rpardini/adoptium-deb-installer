@@ -37,7 +37,7 @@ for oneJavaVersion in *; do
       debuild -us -uc # binary build, no signing.
       cd ${BUILD_BASE_DIR}
 
-      ls -laR
+      #ls -laR
 
       if [[ "a$TEST_INSTALL_BINARY" == "atrue" ]]; then
         # check if we can install these binaries. this serves as a basic sanity check.
@@ -45,7 +45,7 @@ for oneJavaVersion in *; do
         # line in the dockerfile, but is better than nothing.
         # @TODO: make this a separate step.
         if [[ "$TEST_INSTALL_DISTRO" == "$oneDistribution" ]]; then
-          ls -la adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb || true
+          #ls -la adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb || true
           dpkg -i adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb
         fi
       fi
@@ -57,7 +57,7 @@ for oneJavaVersion in *; do
       echo "SOURCE $oneJavaVersion $oneDistribution" | figlet  1>&2
       cd ${BUILD_BASE_DIR}/${oneDistribution}
       debuild -S -us -uc # source-only build, no signing.
-      ls -laR
+      #ls -laR
       cd ${BUILD_BASE_DIR}
       mv -v adoptopenjdk* /sourcepkg/
     fi

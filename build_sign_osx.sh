@@ -6,13 +6,18 @@ declare -i SIGN_OSX=1
 declare -i LAUNCHPAD=1
 declare -i APT_REPO=1
 declare -i PUSH_APT_REPO=1
-declare NO_CACHE="--no-cache"
-#declare NO_CACHE=""
+#declare NO_CACHE="--no-cache"
+declare NO_CACHE=""
 
 # Make sure we can GPG sign stuff (eg, ask for yubikey PIN first)
 # @TODO: maybe obtain the default key name and email here, and pass it down via ARGS to the Dockerfile.
 echo "not important" | gpg --sign --armor
 BASEDIR=${PWD}
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    debsign --version || { apt-get -y update; apt-get -y install devscripts; }
+fi
+
 
 if [[ ${APT_REPO} -gt 0 ]]; then
   # clean it
@@ -69,7 +74,11 @@ cd ${BASEDIR}
 # sign the source packages for launchpad
 if [[ ${SIGN_OSX} -gt 0 ]]; then
   echo "Signing Launchpad source packages locally..."
-  osx/debsign_osx.sh --no-conf -S exfiltrated/sourcepkg/*_source.changes
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    debsign --no-conf -S exfiltrated/sourcepkg/*_source.changes
+  else
+    osx/debsign_osx.sh --no-conf -S exfiltrated/sourcepkg/*_source.changes
+  fi
   # Now the local ${PWD}/exfiltrated/sourcepkg contains signed source packages for Launchpad.
 fi
 
