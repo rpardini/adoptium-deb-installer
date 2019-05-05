@@ -33,7 +33,7 @@ const goodGuy = require('good-guy-http')({
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 // @TODO: is 'arm' really 'armel'?
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
-const wantedJavaVersions = new Set([8, 9, 10, 11]);
+const wantedJavaVersions = new Set([8, 9, 10, 11, 12]);
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
@@ -214,11 +214,21 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
     commonProps.fullHumanTitle = `AdoptOpenJDK ${commonProps.JDKorJREupper} ${commonProps.jdkVersion} with ${commonProps.jvmTypeDesc}`;
     commonProps.isDefaultForVirtualPackage = (jdkOrJre === "jdk" && hotspotOrOpenJ9 === "hotspot");
 
+    let relCounter = 0;
     for (let oneRelease of jsonContents) {
+        let sha256sum;
+        try {
+            sha256sum = await getShaSum(oneRelease.checksum_link);
+        } catch (e) {
+            console.error(`Failed sha256 download: ${oneRelease.checksum_link}`);
+            continue;
+        }
+
         if (!wantedArchs.has(oneRelease.architecture)) {
             console.warn(`Unhandled architecture: ${oneRelease.architecture} for ${jdkJreVersionJvmType} `);
             continue;
         }
+
         let debArch = archMapJdkToDebian[oneRelease.architecture];
 
         let buildTS = moment(oneRelease.timestamp, moment.ISO_8601);
@@ -238,7 +248,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
                 slug: oneRelease.release_name,
                 filename: oneRelease.binary_name,
                 downloadUrl: oneRelease.binary_link,
-                sha256sum: await getShaSum(oneRelease.checksum_link)
+                sha256sum: sha256sum
             },
             commonProps);
 
@@ -256,6 +266,11 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
 
         allDebArches.push(debArch);
         debChangeLogArches.push(`  * Exact version for architecture ${debArch}: ${oneRelease.release_name}`);
+        relCounter++;
+    }
+
+    if (relCounter === 0) {
+        throw new Error(`No valid releases found for ${jdkJreVersionJvmType}`);
     }
 
     // Hack: to allow the generator to produce packages with higher version number
