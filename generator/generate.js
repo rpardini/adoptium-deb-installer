@@ -29,6 +29,9 @@ const goodGuy = require('good-guy-http')({
     },
 });
 
+// Some specific combinations are "banned", because they are somehow misbuilt
+// 12-jre versions are missing manpages (which are used as a guide for available binaries)
+const bannedJdkVersionJvmType = new Set(["12-jre-hotspot","12-jre-openj9"]);
 
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 // @TODO: is 'arm' really 'armel'?
@@ -200,6 +203,10 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
     let highestBuildTS = 0;
 
     let jdkJreVersionJvmType = `${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`;
+
+    if (bannedJdkVersionJvmType.has(jdkJreVersionJvmType)) {
+        throw new Error(`Banned: ${jdkJreVersionJvmType}`);
+    }
 
     let commonProps = {
         jdkVersion: jdkVersion,

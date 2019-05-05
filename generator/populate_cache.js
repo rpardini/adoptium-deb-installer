@@ -15,11 +15,16 @@ const goodGuy = require('good-guy-http')({
 
 const wantedJavaVersions = new Set([8, 9, 10, 11, 12]);
 
+let mkdirs = [];
+let wgets = [];
+
 async function main () {
     await cacheForGivenKitAndJVM("jdk", "hotspot");
     await cacheForGivenKitAndJVM("jdk", "openj9");
     await cacheForGivenKitAndJVM("jre", "hotspot");
     await cacheForGivenKitAndJVM("jre", "openj9");
+    console.log("RUN mkdir -p " + mkdirs.join(" "));
+    console.log(`RUN (${wgets.join(";")}) | parallel -j ${wgets.length} --progress --eta --line-buffer`);
 }
 
 async function cacheForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
@@ -37,8 +42,11 @@ async function cacheForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
                     if (oneRelease.architecture === 'x64') { // @TODO: actually should be arch we're running on.
                         let filename = oneRelease.binary_name;
                         let downloadUrl = oneRelease.binary_link;
-                        console.log(`RUN mkdir -p /var/cache/${destDir}-installer`);
-                        console.log(`RUN wget --continue -O /var/cache/${destDir}-installer/${filename} "${downloadUrl}"`);
+
+                        let mkdir = `/var/cache/${destDir}-installer`;
+                        let wget = `echo wget --continue --local-encoding=UTF-8 -O /var/cache/${destDir}-installer/${filename} "${downloadUrl}"`;
+                        mkdirs.push(mkdir);
+                        wgets.push(wget);
                     }
                 } catch (e) {
                     console.error(`# SHA256SUM: ${destDir}: Unavailable (${e.message}): ${e.request.url}`);
