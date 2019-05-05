@@ -10,7 +10,7 @@ BUILD_SOURCE_PACKAGES=true
 if [[ "$1" == "debian" ]]; then
   BUILD_SOURCE_PACKAGES=false
   TEST_INSTALL_BINARY=false
-  TEST_INSTALL_DISTRO=noonecares
+  TEST_INSTALL_DISTRO=stable
   TEST_INSTALL_ARCH="all"
 fi
 
@@ -46,7 +46,7 @@ for oneJavaVersion in *; do
         # @TODO: make this a separate step.
         if [[ "$TEST_INSTALL_DISTRO" == "$oneDistribution" ]]; then
           #ls -la adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb || true
-          dpkg -i adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb
+          dpkg -i adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb || { echo "FAILED $oneJavaVersion" | figlet 1>&2; exit 1; } 
         fi
       fi
 
