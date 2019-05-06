@@ -3,31 +3,27 @@
 # TL;DR
 
 This repo produces Ubuntu (and Debian) packages which download and install AdoptOpenJDK from 
-their official releases, using the AdoptOpenJDK API.
+their official releases, using the AdoptOpenJDK API. 
 
 - for Ubuntu: check out [ppa:rpardini/adoptopenjdk](https://launchpad.net/~rpardini/+archive/ubuntu/adoptopenjdk) 
-  or see instructions below
+  or see instructions below. The Debian instructions also work for Ubuntu, if you're so inclined.
 - for Debian: there's an APT repo hosted here at Github Pages, see below for instructions.
 
 # Info for final users
 
-This is far from production ready!
-Use these packages at your own risk.
+As of May/2019, those packages have received some testing, and have been used in production for a few months.
+In any case, use these packages at your own risk. 
 
 ## For Ubuntu:
 
 ```bash
-# only use this on test/throwaway machines as of December/2018, until we get more testing done
 sudo add-apt-repository --yes ppa:rpardini/adoptopenjdk
 sudo apt-get update
 # install AdoptOpenJDK (full JDK) 8 with Hotspot and (via recommends) set it as the system default
-# you can replace 8 with 9, 10, 11.
-sudo apt-get install adoptopenjdk-8-installer 
-```
+# you can replace 8 with 9, 10, 11, or 12.
+sudo apt-get install adoptopenjdk-8-installer # and you're done!
 
-```bash
-# also available are separate packages for some <version>-<JDK/JRE>-<JVM> combinations,
-# to get a complete listing use:  
+# also available are separate packages for some <version>-<JDK/JRE>-<JVM> combinations, # to get a complete listing use:  
 sudo apt-cache search adoptopenjdk
 # for example, install the JRE 11 with OpenJ9 JVM:
 sudo apt-get install adoptopenjdk-11-jre-openj9-installer
@@ -71,7 +67,7 @@ and/or `s390x` archs have different AdoptOpenJDK builds than other architectures
 for Java 8 and Java 11. 
 
 For this reason (and also cause I'm a bit of a codegen freak) I implemented a Node.js
-script that consume [AdoptOpenJDK's releases API](https://api.adoptopenjdk.net/) and process sets 
+script that consumes [AdoptOpenJDK's releases API](https://api.adoptopenjdk.net/) and process sets 
 of templates to produce final source packages.
 
 Also due to Launchpad's requirements, I build a lot of (otherwise identical) packages for
