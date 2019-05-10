@@ -38,6 +38,12 @@ sudo update-java-alternatives -s adoptopenjdk-11-jre-openj9
 ```bash
 # update and install support for https:// sources if not already installed
 [[ ! -f /usr/lib/apt/methods/https ]] && sudo apt-get update && sudo apt-get install apt-transport-https
+
+# install requirements for apt update and apt-key when missing
+[[ ! -f /etc/ssl/certs/ca-certificates.crt ]] && sudo apt-get install ca-certificates
+[[ ! -f /usr/bin/dirmngr ]] && sudo apt-get install dirmngr
+[[ ! -f /usr/bin/gnupg ]] && sudo apt-get install gnupg
+
 # add my key to trusted APT keys 
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A66C5D02
 # add the package repo to sources 
