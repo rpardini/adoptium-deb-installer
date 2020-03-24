@@ -31,16 +31,16 @@ const goodGuy = require('good-guy-http')({
 
 // Some specific combinations are "banned", because they are somehow misbuilt
 // 12-jre versions are missing manpages (which are used as a guide for available binaries)
-const bannedJdkVersionJvmType = new Set(["12-jre-hotspot","12-jre-openj9"]);
+const bannedJdkVersionJvmType = new Set(["12-jre-hotspot", "12-jre-openj9"]);
 
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 // @TODO: is 'arm' really 'armel'?
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
-const wantedJavaVersions = new Set([8, 9, 10, 11, 12]);
+const wantedJavaVersions = new Set([8, 9, 10, 11, 12, 13, 14]);
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
-        distros: new Set(['trusty', 'xenial', 'bionic', 'cosmic', 'disco']),
+        distros: new Set(['trusty', 'xenial', 'bionic', 'cosmic', 'disco', 'eoan', 'focal']),
         standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,
@@ -60,6 +60,10 @@ const linuxesAndDistros = new Set([
 const signerName = "Ricardo Pardini (Pardini Yubi 2017)";
 const signerEmail = "ricardo@pardini.net";
 
+let mkdirs = [];
+let wgets = [];
+let wgetReals = [];
+
 async function main () {
     let allPromises = [];
     allPromises.push(generateForGivenKitAndJVM("jdk", "hotspot"));
@@ -67,6 +71,10 @@ async function main () {
     allPromises.push(generateForGivenKitAndJVM("jre", "hotspot"));
     allPromises.push(generateForGivenKitAndJVM("jre", "openj9"));
     await Promise.all(allPromises);
+
+    console.log(`CACHE: (${wgets.join(";")}) | parallel -j 8 --progress --eta --line-buffer`);
+    console.log("RUN mkdir -p " + mkdirs.join(" "));
+    console.log(`RUN (${wgetReals.join(";")}) | parallel -j 8 --progress --eta --line-buffer`);
 }
 
 async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
@@ -183,6 +191,7 @@ async function getJDKInfosFromAdoptOpenJDKAPI (jdkOrJre, hotspotOrOpenJ9) {
 }
 
 async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ9) {
+    let destDir = `adoptopenjdk-${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`;
 
     let jsonStringAPIResponse;
     let apiURL = `https://api.adoptopenjdk.net/v2/latestAssets/releases/openjdk${jdkVersion}?os=linux&heap_size=normal&openjdk_impl=${hotspotOrOpenJ9}&type=${jdkOrJre}`;
@@ -248,16 +257,25 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
                 arch: oneRelease.architecture,
                 jdkArch: oneRelease.architecture,
                 debArch: debArch,
-                dirInsideTarGz: oneRelease.release_name, // release name from AOJ is most of the time correct
-                dirInsideTarGzShort: oneRelease.release_name.split(/_openj9/)[0], // release name without openj9 part...
-                dirInsideTarGzShortWithJdkJre: oneRelease.release_name.split(/_openj9/)[0]+`-${jdkOrJre}`, // release name without openj9 part, with -jre suffix...
-                dirInsideTarGzWithJdkJre: `${oneRelease.release_name}-${jdkOrJre}`, // release name with '-jre' sometimes.
                 slug: oneRelease.release_name,
                 filename: oneRelease.binary_name,
                 downloadUrl: oneRelease.binary_link,
                 sha256sum: sha256sum
             },
             commonProps);
+
+        if (oneRelease.architecture === "x64") {
+            let filename = oneRelease.binary_name;
+            let downloadUrl = oneRelease.binary_link;
+            let downloadUrlCache = `http://192.168.66.100/down/aoj/${filename}`;
+
+            let mkdir = `/var/cache/${destDir}-installer`;
+            let wget = `echo wget --continue --local-encoding=UTF-8 -O /var/www/down/aoj/${filename} "${downloadUrl}"`;
+            let wgetReal = `echo wget --continue --local-encoding=UTF-8 --progress=dot:giga -O /var/cache/${destDir}-installer/${filename} "${downloadUrlCache}"`;
+            mkdirs.push(mkdir);
+            wgets.push(wget);
+            wgetReals.push(wgetReal);
+        }
 
         archData.set(buildInfo.arch, buildInfo);
 

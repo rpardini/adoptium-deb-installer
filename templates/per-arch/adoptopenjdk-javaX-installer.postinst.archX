@@ -9,10 +9,6 @@ fp_exit_with_error() {
 	exit 1
 }
 
-J_DIR_INSIDE_TAR_GZ="{{{dirInsideTarGz}}}"
-J_DIR_INSIDE_TAR_GZ_SHORT="{{{dirInsideTarGzShort}}}"
-J_DIR_INSIDE_TAR_GZ_SHORT_WITHJDKJRE="{{{dirInsideTarGzShortWithJdkJre}}}"
-J_DIR_INSIDE_TAR_GZ_WITHJDKJRE="{{{dirInsideTarGzWithJdkJre}}}"
 FILENAME_TAR_GZ="{{{filename}}}"
 DOWNLOAD_TAR_GZ_URL="{{{downloadUrl}}}"
 SHA256SUM_TGZ="{{sha256sum}}"
@@ -91,28 +87,9 @@ echo -n "Unpacking: "
 tar xzf ${FILENAME_TAR_GZ} || fp_exit_with_error "cannot unpack"
 echo "done."
 
-if [[ ! -d ${J_DIR_INSIDE_TAR_GZ} ]]; then
+J_DIR_INSIDE_TAR_GZ=$(find . -type d -maxdepth 1 | grep -v "^.$" | xargs)
 
-  # Check if we can find the short version.
-  if [[ -d ${J_DIR_INSIDE_TAR_GZ_SHORT} ]]; then
-    J_DIR_INSIDE_TAR_GZ=${J_DIR_INSIDE_TAR_GZ_SHORT}
-  else
-    if [[ -d ${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE} ]]; then
-      J_DIR_INSIDE_TAR_GZ=${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}
-    else
-      if [[ -d ${J_DIR_INSIDE_TAR_GZ_SHORT_WITHJDKJRE} ]]; then
-        J_DIR_INSIDE_TAR_GZ=${J_DIR_INSIDE_TAR_GZ_SHORT_WITHJDKJRE}
-      else
-        echo "Could not find '${J_DIR_INSIDE_TAR_GZ}' or '${J_DIR_INSIDE_TAR_GZ_SHORT}' or '${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' after unpacking." 1>&2
-        echo "This is an installer bug, please report: " 1>&2
-        echo " -> expected './${J_DIR_INSIDE_TAR_GZ}' or './${J_DIR_INSIDE_TAR_GZ_SHORT}' or './${J_DIR_INSIDE_TAR_GZ_WITHJDKJRE}' but got '$(find . -type d -maxdepth 1 | grep -v "^.$" | xargs)'." 1>&2
-        fp_exit_with_error ".tar.gz does not contain expected dir"
-      fi
-    fi
-  fi
-fi
-
-echo -n "Putting '{{fullHumanTitle}}' in place: "
+echo -n "Putting '{{fullHumanTitle}}' in place, from dir '${J_DIR_INSIDE_TAR_GZ}': "
 # make it owned by root, OpenJDK sends it with uid 500 or something.
 chown -R root:root ${J_DIR_INSIDE_TAR_GZ}
 
@@ -130,8 +107,10 @@ echo "Cleaning outdated downloads..."
 find ${INSTALLER_DIR} -maxdepth 1 -name '*.tar.gz' ! -name ${FILENAME_TAR_GZ} -type f -print
 find ${INSTALLER_DIR} -maxdepth 1 -name '*.tar.gz' ! -name ${FILENAME_TAR_GZ} -type f -delete
 
-# Gzips the man pages.
-gzip -9 ${J_INSTALL_DIR}/man/man1/*.1
+# Gzips the man pages, if the directory exists.
+if [[ -d ${J_INSTALL_DIR}/man/man1 ]]; then
+  gzip -9 ${J_INSTALL_DIR}/man/man1/*.1 || { echo "Could not find man pages even though dir exists!" 1>&2 ; }
+fi
 
 # create .jinfo file header, for update-java-alternatives.
 cat << EOD > ${JINFO_MANIFEST_FILE}
@@ -141,6 +120,7 @@ priority=${PRIORITY}
 section=java
 EOD
 
+HAS_JAVA_BIN=false
 # Here we start from the binaries, and look for the man pages.
 # create alternatives for the jre binaries.
 # also add them to the .jinfo manifest for easy switching.
@@ -155,23 +135,49 @@ if [ -d ${J_INSTALL_DIR}/jre/bin ]; then # only jdk8 has this, so skip if not
       update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/jre/bin/${name} ${PRIORITY}
     fi
     echo "jre $name $J_INSTALL_DIR/jre/bin/$name" >> ${JINFO_MANIFEST_FILE}
+    [[ "a$name" == "ajava" ]] && HAS_JAVA_BIN=true
   done
 fi
 
-# For the non-JRE tools, we actually start from the man pages.
-for f in ${J_INSTALL_DIR}/man/man1/*; do
-  name=`basename ${f} .1.gz`;
-  #don't link already linked JRE files
-  if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then
-    if [[ ! -e ${J_INSTALL_DIR}/bin/${name} ]]; then
-      echo "** Missing executable ${J_INSTALL_DIR}/bin/${name} even though man page ${f} exists." 1>&2
-      echo "** This is probably a bug in AdoptOpenJDK and should be reported upstream." 1>&2
-    else
+if [ -d ${J_INSTALL_DIR}/bin ]; then # only jdk8 has this, so skip if not
+  for f in ${J_INSTALL_DIR}/bin/*; do
+    name=`basename ${f}`;
+    if [[ -f "$J_INSTALL_DIR/man/man1/$name.1.gz" ]]; then
+      # man page available, install as a slave of the tool
       update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
-      echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
+    else
+      # no man page available for this specific tool
+      update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY}
     fi
-  fi
-done
+    echo "jre $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
+    [[ "a$name" == "ajava" ]] && HAS_JAVA_BIN=true
+  done
+fi
+
+
+# For the non-JRE tools, we actually start from the man pages.
+if [[ -d ${J_INSTALL_DIR}/man/man1 ]]; then
+  for f in ${J_INSTALL_DIR}/man/man1/*; do
+    name=`basename ${f} .1.gz`;
+    #don't link already linked JRE files
+    if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then
+      if [[ ! -e ${J_INSTALL_DIR}/bin/${name} ]]; then
+        echo "** Missing executable ${J_INSTALL_DIR}/bin/${name} even though man page ${f} exists." 1>&2
+        echo "** This is probably a bug in AdoptOpenJDK and should be reported upstream." 1>&2
+      else
+        update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
+        echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}
+        [[ "a$name" == "ajava" ]] && HAS_JAVA_BIN=true
+      fi
+    fi
+  done
+fi
+
+if [[ "$HAS_JAVA_BIN" != "true" ]]; then
+  echo "Package failed to install a 'java' alternative. This is probably a bug in the installer, or upstream."  1>&2
+  ls -laR ${J_INSTALL_DIR} 1>&2
+  exit 3
+fi
 
 # Place security config files in /etc so they are not overwritten on upgrade.
 # @TODO: pardini: I am not sure this is a good idea; new JDK versions can bring updated files?
