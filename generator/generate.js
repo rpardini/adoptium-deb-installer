@@ -2,7 +2,7 @@
 
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
 // avoid bumping this too high.
-const generatorVersionIncrement = 12;
+const generatorVersionIncrement = 14;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
@@ -31,7 +31,7 @@ const goodGuy = require('good-guy-http')({
 
 // Some specific combinations are "banned", because they are somehow misbuilt
 // 12-jre versions are missing manpages (which are used as a guide for available binaries)
-const bannedJdkVersionJvmType = new Set(["12-jre-hotspot", "12-jre-openj9"]);
+const bannedJdkVersionJvmType = new Set();
 
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 // @TODO: is 'arm' really 'armel'?
@@ -40,7 +40,7 @@ const wantedJavaVersions = new Set([8, 9, 10, 11, 12, 13, 14]);
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
-        distros: new Set(['trusty', 'xenial', 'bionic', 'cosmic', 'disco', 'eoan', 'focal']),
+        distros: new Set(['trusty', 'xenial', 'bionic', 'disco', 'eoan', 'focal']),
         standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,
