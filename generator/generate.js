@@ -21,6 +21,8 @@ const mustache = require('mustache');
 // the interactions with docker-layer-cache are a bit confusing though
 let goodGuyDiskCache = require("good-guy-disk-cache");
 const goodGuy = require('good-guy-http')({
+    maxRetries: 5,
+    timeout: 5000,
     cache: new goodGuyDiskCache("adoptopenjdk-deb-generator"),
     forceCaching: {
         cached: true,
@@ -72,9 +74,9 @@ async function main () {
     allPromises.push(generateForGivenKitAndJVM("jre", "openj9"));
     await Promise.all(allPromises);
 
-    console.log(`CACHE: (${wgets.join(";")}) | parallel -j 8 --progress --eta --line-buffer`);
-    console.log("RUN mkdir -p " + mkdirs.join(" "));
-    console.log(`RUN (${wgetReals.join(";")}) | parallel -j 8 --progress --eta --line-buffer`);
+    console.log(`CACHE: (${wgets.join(";")}) | parallel -j 8 --progress --eta --line-buffer \n\n`);
+    console.log("RUN mkdir -p " + mkdirs.join(" ") + "\n\n");
+    console.log(`RUN (${wgetReals.join(";")}) | parallel -j 8 --progress --eta --line-buffer \n\n`);
 }
 
 async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
