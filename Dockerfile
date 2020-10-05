@@ -25,7 +25,7 @@ FROM ubuntu:bionic as ubuntuBuilder
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 # build-time dependencies
-RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release figlet
+RUN apt-get -y --no-install-recommends install eatmydata devscripts build-essential lintian debhelper fakeroot lsb-release figlet
 # install-time dependencies (those are listed in Depends or Pre-Depends in debian/control file)
 RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates
 WORKDIR /opt/adoptopenjdk/ubuntu
@@ -45,7 +45,7 @@ FROM debian:jessie as debianBuilder
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 # build-time dependencies
-RUN apt-get -y --no-install-recommends install devscripts build-essential lintian debhelper fakeroot lsb-release figlet parallel
+RUN apt-get -y --no-install-recommends install eatmydata devscripts build-essential lintian debhelper fakeroot lsb-release figlet parallel
 # install-time dependencies (those are listed in Depends or Pre-Depends in debian/control file)
 RUN apt-get -y --no-install-recommends install java-common wget locales ca-certificates libxrender1 libxtst6 libxi6 libfontconfig1 libasound2
 WORKDIR /opt/adoptopenjdk/debian

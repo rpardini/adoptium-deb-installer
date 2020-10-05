@@ -34,7 +34,7 @@ for oneJavaVersion in *; do
     if [[ "a$BUILD_BINARY_PACKAGES" == "atrue" ]]; then
       echo "BINARY $oneJavaVersion $oneDistribution" | figlet 1>&2
       cd ${BUILD_BASE_DIR}/${oneDistribution}
-      debuild -us -uc # binary build, no signing.
+      eatmydata debuild -us -uc # binary build, no signing.
       cd ${BUILD_BASE_DIR}
 
       #ls -laR
@@ -47,7 +47,7 @@ for oneJavaVersion in *; do
         if [[ "$TEST_INSTALL_DISTRO" == "$oneDistribution" ]]; then
           echo "INSTALL BINARY $oneJavaVersion $oneDistribution" | figlet 1>&2
           #ls -la adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb || true
-          dpkg -i adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb || { echo "FAILED $oneJavaVersion" | figlet 1>&2; exit 1; } 
+          dpkg -i adoptopenjdk-*-installer_*_${TEST_INSTALL_ARCH}.deb || { echo "FAILED $oneJavaVersion" | figlet 1>&2; exit 1; }
         fi
       fi
 
@@ -57,7 +57,7 @@ for oneJavaVersion in *; do
     if [[ "a$BUILD_SOURCE_PACKAGES" == "atrue" ]]; then
       echo "SOURCE $oneJavaVersion $oneDistribution" | figlet  1>&2
       cd ${BUILD_BASE_DIR}/${oneDistribution}
-      debuild -S -us -uc # source-only build, no signing.
+      eatmydata debuild -S -us -uc # source-only build, no signing.
       #ls -laR
       cd ${BUILD_BASE_DIR}
       mv -v adoptopenjdk* /sourcepkg/
