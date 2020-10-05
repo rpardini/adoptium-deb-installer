@@ -38,11 +38,11 @@ const bannedJdkVersionJvmType = new Set();
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 // @TODO: is 'arm' really 'armel'?
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
-const wantedJavaVersions = new Set([8, 9, 10, 11, 12, 13, 14]);
+const wantedJavaVersions = new Set([8, 9, 10, 11, 12, 13, 14, 15]);
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
-        distros: new Set(['trusty', 'xenial', 'bionic', 'disco', 'eoan', 'focal']),
+        distros: new Set(['trusty', 'xenial', 'bionic', 'disco', 'eoan', 'focal', 'groovy']),
         standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,
@@ -196,7 +196,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
     let destDir = `adoptopenjdk-${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`;
 
     let jsonStringAPIResponse;
-    let apiURL = `https://api.adoptopenjdk.net/v2/latestAssets/releases/openjdk${jdkVersion}?os=linux&heap_size=normal&openjdk_impl=${hotspotOrOpenJ9}&type=${jdkOrJre}`;
+    let apiURL = `https://api.adoptopenjdk.net/v3/assets/feature_releases/${jdkVersion}/ga?jvm_impl=${hotspotOrOpenJ9}&vendor=adoptopenjdk&os=linux&image_type=${jdkOrJre}&heap_size=normal`;
 
     try {
         let httpResponse = await goodGuy(apiURL);
@@ -205,7 +205,29 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         throw new Error(`${e.message} from URL ${apiURL}`)
     }
 
-    let jsonContents = JSON.parse(jsonStringAPIResponse);
+    let jsonContentsFull = JSON.parse(jsonStringAPIResponse);
+
+    // Massage the data. v3 assets/feature_releases is different from v2 assets, it groups by release.
+    // So I gotta flatten, and keep only the latest per-architecture.
+    // Understand: "aarch64" might only have a binary in a release that is NOT the latest.
+    let binaryPerArch = {};
+    let releaseCounter = 0;
+    for (let jsonRelease of jsonContentsFull) {
+        releaseCounter++;
+        for (let jsonBinary of jsonRelease.binaries) {
+            let arch = jsonBinary.architecture;
+            if (binaryPerArch[arch]) {
+                //console.warn(`Already got release for arch ${arch} !`);
+                continue;
+            } else {
+                if (releaseCounter > 1) {
+                    console.warn(`Got a release arch ${arch} of release counter ${releaseCounter} for release ${jdkVersion} jvm ${hotspotOrOpenJ9} type ${jdkOrJre}`);
+                }
+                binaryPerArch[arch] = {release: jsonRelease, binary: jsonBinary};
+            }
+
+        }
+    }
 
     let archData = new Map(); // builds per-architecture
     let slugs = new Map();
@@ -232,44 +254,40 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
     commonProps.fullHumanTitle = `AdoptOpenJDK ${commonProps.JDKorJREupper} ${commonProps.jdkVersion} with ${commonProps.jvmTypeDesc}`;
     commonProps.isDefaultForVirtualPackage = (jdkOrJre === "jdk" && hotspotOrOpenJ9 === "hotspot");
 
+
     let relCounter = 0;
-    for (let oneRelease of jsonContents) {
-        let sha256sum;
-        try {
-            sha256sum = await getShaSum(oneRelease.checksum_link);
-        } catch (e) {
-            console.error(`Failed sha256 download: ${oneRelease.checksum_link}`);
+    //console.warn("Got arch releases for ", commonProps.fullHumanTitle, Object.keys(binaryPerArch));
+    for (let oneRelease of Object.values(binaryPerArch)) {
+        let sha256sum = oneRelease.binary.package.checksum;
+
+        if (!wantedArchs.has(oneRelease.binary.architecture)) {
+            console.warn(`Unhandled architecture: ${oneRelease.binary.architecture} for ${jdkJreVersionJvmType} `);
             continue;
         }
 
-        if (!wantedArchs.has(oneRelease.architecture)) {
-            console.warn(`Unhandled architecture: ${oneRelease.architecture} for ${jdkJreVersionJvmType} `);
-            continue;
-        }
+        let debArch = archMapJdkToDebian[oneRelease.binary.architecture];
 
-        let debArch = archMapJdkToDebian[oneRelease.architecture];
-
-        let buildTS = moment(oneRelease.timestamp, moment.ISO_8601);
-        let updatedTS = moment(oneRelease.updated_at, moment.ISO_8601);
+        let buildTS = moment(oneRelease.release.timestamp, moment.ISO_8601);
+        let updatedTS = moment(oneRelease.binary.updated_at, moment.ISO_8601);
         let highTS = (buildTS > updatedTS) ? buildTS : updatedTS;
         highestBuildTS = (highTS > highestBuildTS) ? highTS : highestBuildTS;
 
         let buildInfo = Object.assign(
             {
-                arch: oneRelease.architecture,
-                jdkArch: oneRelease.architecture,
+                arch: oneRelease.binary.architecture,
+                jdkArch: oneRelease.binary.architecture,
                 debArch: debArch,
-                slug: oneRelease.release_name,
-                filename: oneRelease.binary_name,
-                downloadUrl: oneRelease.binary_link,
+                slug: oneRelease.release.release_name,
+                filename: oneRelease.binary.package.name,
+                downloadUrl: oneRelease.binary.package.link,
                 sha256sum: sha256sum
             },
             commonProps);
 
-        if (oneRelease.architecture === "x64") {
-            let filename = oneRelease.binary_name;
-            let downloadUrl = oneRelease.binary_link;
-            let downloadUrlCache = `http://192.168.66.100/down/aoj/${filename}`;
+        if (oneRelease.binary.architecture === "x64") {
+            let filename = oneRelease.binary.package.name;
+            let downloadUrl = oneRelease.binary.package.link;
+            let downloadUrlCache = `https://casa.pardini.net/down/aoj/${filename}`;
 
             let mkdir = `/var/cache/${destDir}-installer`;
             let wget = `echo wget --continue --local-encoding=UTF-8 -O /var/www/down/aoj/${filename} "${downloadUrl}"`;
@@ -282,7 +300,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         archData.set(buildInfo.arch, buildInfo);
 
         // Hack, some builds have the openj9 version in them, some don't; normalize so none do
-        let slugKey = oneRelease.release_name.split(/_openj9/)[0]
+        let slugKey = oneRelease.release.release_name.split(/_openj9/)[0]
             .replace("-", "")
             .replace("jdk", "")
             .replace("jre", "")
@@ -292,7 +310,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         slugs.get(slugKey).push(buildInfo.jdkArch);
 
         allDebArches.push(debArch);
-        debChangeLogArches.push(`  * Exact version for architecture ${debArch}: ${oneRelease.release_name}`);
+        debChangeLogArches.push(`  * Exact version for architecture ${debArch}: ${oneRelease.release.release_name}`);
         relCounter++;
     }
 
