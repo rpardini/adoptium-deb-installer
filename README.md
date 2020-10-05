@@ -1,5 +1,10 @@
 # Debian/Ubuntu installer packages for AdoptOpenJDK
 
+# Important: Official packages available from AdoptOpenJDK
+
+- There are official, supported DEB/RPM packages at https://adoptopenjdk.net/installation.html#linux-pkg - those are full, binary-containing packages made by AOJ themselves.
+- Only continue here if you have a special need for downloader packages.
+
 # TL;DR
 
 This repo produces Ubuntu (and Debian) packages which download and install AdoptOpenJDK from 
@@ -143,7 +148,7 @@ for details.
 * [DONE] Making sure all the update-alternatives stuff is actually working
 * Make sure stuff is properly cleaned-up on package removal
 * Check how these packages interact with other JDK packages (eg, OpenJDK from stock Ubuntu, etc)
-* Find a way to host the Debian packages
+* Find a way to host the Debian packages [DONE]
 * Maybe support more architectures (eg, `arm`, I bet the RaspberryPi folks would enjoy that)
   If I understand correctly, AdoptOpenJDK only has ARM32 builds for Java 10, but why not?
   * [DONE]: but Launchpad is messing up the `armel` builds. 
