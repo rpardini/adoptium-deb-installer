@@ -9,7 +9,7 @@ jobs:
     steps:
 
       - name: Install dependencies
-        run: apt-get -y install devscripts debhelper dput reprepro eatmydata
+        run: sudo apt-get -y install devscripts debhelper dput reprepro eatmydata
         env:
           DEBIAN_FRONTEND: noninteractive
 
