@@ -32,10 +32,10 @@ Homepage: https://adoptium.net/
 Priority: optional
 Section: java
 Filename: pool/main/a/adoptium-11-jdk-hotspot-installer/adoptium-11-jdk-hotspot-installer_202109151155~11.0.12b7_all.deb
-Size: 5400
-SHA256: 9c7a482787f17f9ea4a074028bbccd2e6a92cb9033eb1850822fa303ef76b3d5
-SHA1: ebfabf9e21245370257a09aa4c92767534be8f75
-MD5sum: 38c0f204d8513410d65aff578e854bfe
+Size: 5396
+SHA256: 3b7deb09d26bd9d2d53a95205857424e4d2149a656e3c22563b8c710f47a73e4
+SHA1: 06537e259b3cd7a6ab72af0c739c36f48de4f135
+MD5sum: 93db480af54f63f20254cd9009fe3123
 Description: Adoptium Temurin JDK 11 with Hotspot
  Installer package for Adoptium Temurin JDK 11 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -78,9 +78,9 @@ Priority: optional
 Section: java
 Filename: pool/main/a/adoptium-11-jre-hotspot-installer/adoptium-11-jre-hotspot-installer_202109171845~11.0.12b7_all.deb
 Size: 5360
-SHA256: 087070298147c0f54374f25f1e157a9fc367064af90d143a23f95a24751035df
-SHA1: 1eb87b5b690441b58b9e91e81b1bc8c57636fd1b
-MD5sum: d16dfe18fbfbc37331778299cd50091e
+SHA256: bac1b32e7f5f41a51cb6922847c02bb394f27e565505b016809e254244a62a99
+SHA1: 308a2137fa525ae06ea2c37d5853bfb8c2cc155b
+MD5sum: 18ce4e03c724c02327e06cb8ab9980dc
 Description: Adoptium Temurin JRE 11 with Hotspot
  Installer package for Adoptium Temurin JRE 11 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -143,9 +143,9 @@ Priority: optional
 Section: java
 Filename: pool/main/a/adoptium-16-jdk-hotspot-installer/adoptium-16-jdk-hotspot-installer_202108231541~16.0.2b7_all.deb
 Size: 5380
-SHA256: d85cab1b6d2721e9f6739d24f09c14a1101dc0b6299f89b065baaff035cdba73
-SHA1: 910c830596701fb39271540ea2aee98805da108e
-MD5sum: 93d852b655b39af33e46fc1e718faa73
+SHA256: 58115a02728108af56621080c63a9e4e904b8b959f0fc5615d3bf2512dcbd7c3
+SHA1: cc5b94e7eb3815ee6dc6ed5480bd04fe4aa6e199
+MD5sum: 1bf598e0f5bd574c574466ac63cdfc7a
 Description: Adoptium Temurin JDK 16 with Hotspot
  Installer package for Adoptium Temurin JDK 16 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -207,10 +207,10 @@ Homepage: https://adoptium.net/
 Priority: optional
 Section: java
 Filename: pool/main/a/adoptium-17-jdk-hotspot-installer/adoptium-17-jdk-hotspot-installer_202109241250~17b35_all.deb
-Size: 5448
-SHA256: 06f6da737ec1ee74173633d3a340f90790ca4b10c7a24a90825a86207a3eece8
-SHA1: fea8f2ba1e08ad3ee93fbcaf31747545256bc5b8
-MD5sum: 6554f2a770c18572d084d36c80e50666
+Size: 5456
+SHA256: 405a1d5dfebc95af7b7f9a149205915ae288a3ec4d1928501fad94bba1aa2e8d
+SHA1: 679cefcaec25778ff5c5503a2610376ac205718d
+MD5sum: 71e22cc759f8d1f261ba72e6e5a5fd98
 Description: Adoptium Temurin JDK 17 with Hotspot
  Installer package for Adoptium Temurin JDK 17 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -272,10 +272,10 @@ Homepage: https://adoptium.net/
 Priority: optional
 Section: java
 Filename: pool/main/a/adoptium-8-jdk-hotspot-installer/adoptium-8-jdk-hotspot-installer_202109151216~8u302b08_all.deb
-Size: 5308
-SHA256: ec1ae337665058f640da62442f4a51d078ef966379ac2761e53ecde06356feef
-SHA1: d1331c27bf6b70ddc68ea1731be16656e9f9b146
-MD5sum: 3d9a4662a20e8652793ad66ae5bf05be
+Size: 5296
+SHA256: 53fc6b2067d5f327653b97578ddc9f94f04523144156eef2f4e8e000ac8e609f
+SHA1: 8103e6668d532706eba4e33e9e7f3ecae810ee8e
+MD5sum: aac890629b276f33f6f8ebc84bca8365
 Description: Adoptium Temurin JDK 8 with Hotspot
  Installer package for Adoptium Temurin JDK 8 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -318,9 +318,9 @@ Priority: optional
 Section: java
 Filename: pool/main/a/adoptium-8-jre-hotspot-installer/adoptium-8-jre-hotspot-installer_202108261012~8u302b08_all.deb
 Size: 5192
-SHA256: c22f040bd65b07657efad1839369fa790ac075a69742e628e83cf8fc4ee6a02a
-SHA1: a4fe8df3639aadf675a1337595837ad9c8b04126
-MD5sum: a99786f66b7684ff108acd430d92d029
+SHA256: fe06df6e2bf7d16467bc370a1194dbea4e961be5b6e5c658fcab7aea0e35a692
+SHA1: a5ea96416e270ac0b6d745357b4e1b9acee2a426
+MD5sum: 7fdd1973f0fe6f28d60aec38d5410280
 Description: Adoptium Temurin JRE 8 with Hotspot
  Installer package for Adoptium Temurin JRE 8 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
