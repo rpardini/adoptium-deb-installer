@@ -8,6 +8,11 @@ jobs:
     runs-on: ubuntu-latest # github runners.
     steps:
 
+      - name: Install dependencies
+        run: apt-get -y install devscripts debhelper dput reprepro eatmydata
+        env:
+          DEBIAN_FRONTEND: noninteractive
+
       - name: Checkout this repo/branch
         uses: actions/checkout@v2
         with:
