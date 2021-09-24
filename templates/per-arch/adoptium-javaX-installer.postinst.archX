@@ -163,7 +163,7 @@ if [[ -d ${J_INSTALL_DIR}/man/man1 ]]; then
     if [[ ! -e ${J_INSTALL_DIR}/jre/bin/${name} ]]; then
       if [[ ! -e ${J_INSTALL_DIR}/bin/${name} ]]; then
         echo "** Missing executable ${J_INSTALL_DIR}/bin/${name} even though man page ${f} exists." 1>&2
-        echo "** This is probably a bug in AdoptOpenJDK and should be reported upstream." 1>&2
+        echo "** This is probably a bug in Adoptium and should be reported upstream." 1>&2
       else
         update-alternatives --install /usr/bin/${name} ${name} ${J_INSTALL_DIR}/bin/${name} ${PRIORITY} --slave /usr/share/man/man1/${name}.1.gz ${name}.1.gz ${J_INSTALL_DIR}/man/man1/${name}.1.gz
         echo "jdk $name $J_INSTALL_DIR/bin/$name" >> ${JINFO_MANIFEST_FILE}

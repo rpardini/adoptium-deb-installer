@@ -33,7 +33,7 @@ fi
 rm -rf ${PWD}/exfiltrated ${PWD}/generated
 
 # Build the packages themselves.
-docker build ${NO_CACHE} -t adoptopenjdk/deb:latest -f Dockerfile .
+docker build ${NO_CACHE} -t adoptium/deb:latest -f Dockerfile .
 
 # Build the launchpad utility image.
 [[ ${LAUNCHPAD} -gt 0 ]] && docker build ${NO_CACHE} -t adoptopenjdk/launchpad:latest -f Dockerfile.launchpad .

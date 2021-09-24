@@ -2,7 +2,7 @@
 
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
 // avoid bumping this too high.
-const generatorVersionIncrement = 14;
+const generatorVersionIncrement = 0;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
@@ -17,13 +17,12 @@ const moment = require('moment');
 const mustache = require('mustache');
 
 // I use 'good-guy-http', lol, this does quick and easy disk caching of the URLs
-// so that I don't hammer adoptopenjdk during development
-// the interactions with docker-layer-cache are a bit confusing though
+// so that I don't hammer adoptium API during development
 let goodGuyDiskCache = require("good-guy-disk-cache");
 const goodGuy = require('good-guy-http')({
     maxRetries: 5,
     timeout: 5000,
-    cache: new goodGuyDiskCache("adoptopenjdk-deb-generator"),
+    cache: new goodGuyDiskCache("adoptium-deb-generator"),
     forceCaching: {
         cached: true,
         timeToLive: 60 * 60 * 1000, // in milliseconds
@@ -38,11 +37,11 @@ const bannedJdkVersionJvmType = new Set();
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 // @TODO: is 'arm' really 'armel'?
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
-const wantedJavaVersions = new Set([8, 9, 10, 11, 12, 13, 14, 15]);
+const wantedJavaVersions = new Set([8, 11, 16, 17]); // official GA releases from adoptium
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
-        distros: new Set(['trusty', 'xenial', 'bionic', 'disco', 'eoan', 'focal', 'groovy']),
+        distros: new Set([/*'trusty', 'xenial', 'bionic', 'disco', 'eoan', */'focal'/*, 'groovy', 'hirsute'*/]), // @TODO: bring'em back later
         standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,
@@ -59,27 +58,21 @@ const linuxesAndDistros = new Set([
 ]);
 
 // the person building and signing the packages.
+// @TODO: change to use file-based GPG directly?
 const signerName = "Ricardo Pardini (Pardini Yubi 2017)";
 const signerEmail = "ricardo@pardini.net";
 
-let mkdirs = [];
-let wgets = [];
-let wgetReals = [];
-
-async function main () {
+async function main() {
     let allPromises = [];
     allPromises.push(generateForGivenKitAndJVM("jdk", "hotspot"));
-    allPromises.push(generateForGivenKitAndJVM("jdk", "openj9"));
     allPromises.push(generateForGivenKitAndJVM("jre", "hotspot"));
-    allPromises.push(generateForGivenKitAndJVM("jre", "openj9"));
+    // adoptium does not carry openj9 anymore, that's a separate project now.
+    //allPromises.push(generateForGivenKitAndJVM("jdk", "openj9"));
+    //allPromises.push(generateForGivenKitAndJVM("jre", "openj9"));
     await Promise.all(allPromises);
-
-    console.log(`CACHE: (${wgets.join(";")}) | parallel -j 8 --progress --eta --line-buffer \n\n`);
-    console.log("RUN mkdir -p " + mkdirs.join(" ") + "\n\n");
-    console.log(`RUN (${wgetReals.join(";")}) | parallel -j 8 --progress --eta --line-buffer \n\n`);
 }
 
-async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
+async function generateForGivenKitAndJVM(jdkOrJre, hotspotOrOpenJ9) {
     console.log(`Generating for ${jdkOrJre}+${hotspotOrOpenJ9}...`);
 
     const basePath = path.dirname(__dirname);
@@ -87,7 +80,7 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
     const templateFilesPerArch = await walk(`${basePath}/templates/per-arch/`);
     const generatedDirBase = `${basePath}/generated`;
 
-    const jdkBuildsPerArch = await getJDKInfosFromAdoptOpenJDKAPI(jdkOrJre, hotspotOrOpenJ9);
+    const jdkBuildsPerArch = await getJDKInfosFromAdoptiumAPI(jdkOrJre, hotspotOrOpenJ9);
 
     // who DOESN'T love 4 nested for-loops?
     for (const linux of linuxesAndDistros) {
@@ -102,10 +95,10 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
                     allDebArches: linux.singleBinaryForAllArches ? "all" : javaX.allDebArches,
                     distribution: `${distroLinux}`,
                     version: linux.useDistroInVersion ? `${javaX.baseJoinedVersion}~${distroLinux}` : javaX.baseJoinedVersion,
-                    virtualPackageName: `adoptopenjdk-${javaX.jdkVersion}-installer`,
+                    virtualPackageName: `adoptium-${javaX.jdkVersion}-installer`,
                     commentForVirtualPackage: javaX.isDefaultForVirtualPackage ? "" : "#",
-                    sourcePackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer`,
-                    setDefaultPackageName: `adoptopenjdk-${javaX.jdkJreVersionJvmType}-set-default`,
+                    sourcePackageName: `adoptium-${javaX.jdkJreVersionJvmType}-installer`,
+                    setDefaultPackageName: `adoptium-${javaX.jdkJreVersionJvmType}-set-default`,
                     signerName: signerName,
                     signerEmail: signerEmail
                 };
@@ -131,7 +124,7 @@ async function generateForGivenKitAndJVM (jdkOrJre, hotspotOrOpenJ9) {
     }
 }
 
-async function joinDebianPostinstForAllArches (archProcessedTemplates, destPath, javaX) {
+async function joinDebianPostinstForAllArches(archProcessedTemplates, destPath, javaX) {
     let postInstContents = [
         "#! /bin/bash",
         `# joined script for multi-arch postinst for ${javaX.jdkJreVersionJvmType}`,
@@ -141,7 +134,7 @@ async function joinDebianPostinstForAllArches (archProcessedTemplates, destPath,
     for (const debArch of Object.keys(archProcessedTemplates)) {
         postInstContents.push(`if [[ "$DPKG_ARCH" == "${debArch}" ]]; then`);
         postInstContents.push(`echo "Installing for arch '${debArch}'..."`);
-        postInstContents.push((archProcessedTemplates[debArch]['adoptopenjdk-javaX-installer.postinst.archX']));
+        postInstContents.push((archProcessedTemplates[debArch]['adoptium-javaX-installer.postinst.archX']));
         postInstContents.push(`DID_FIND_ARCH=true`);
         postInstContents.push(`fi`);
     }
@@ -153,10 +146,10 @@ async function joinDebianPostinstForAllArches (archProcessedTemplates, destPath,
     await writeTemplateFile(destPath, {
         dirs: "",
         executable: true
-    }, `adoptopenjdk-${javaX.jdkJreVersionJvmType}-installer.postinst`, postInstContents.join("\n"));
+    }, `adoptium-${javaX.jdkJreVersionJvmType}-installer.postinst`, postInstContents.join("\n"));
 }
 
-function createProducesLine (javaX) {
+function createProducesLine(javaX) {
     let prodArr = ['java-runtime', 'default-jre', 'default-jre-headless'];
     prodArr = prodArr.concat(createJavaProducesPrefixForVersion(javaX.jdkVersion, '-runtime'));
     prodArr = prodArr.concat(createJavaProducesPrefixForVersion(javaX.jdkVersion, '-runtime-headless'));
@@ -171,7 +164,7 @@ function createProducesLine (javaX) {
     return prodArr.join(", ");
 }
 
-function createJavaProducesPrefixForVersion (javaVersion, suffix) {
+function createJavaProducesPrefixForVersion(javaVersion, suffix) {
     let javas = [`java${suffix}`, `java2${suffix}`];
     for (let i = 5; i < javaVersion + 1; i++) {
         javas.push(`java${i}${suffix}`)
@@ -179,9 +172,12 @@ function createJavaProducesPrefixForVersion (javaVersion, suffix) {
     return javas;
 }
 
-async function getJDKInfosFromAdoptOpenJDKAPI (jdkOrJre, hotspotOrOpenJ9) {
+async function getJDKInfosFromAdoptiumAPI(jdkOrJre, hotspotOrOpenJ9) {
     let javaBuildArchsPerVersion = new Map();
+
     for (let wantedJavaVersion of wantedJavaVersions) {
+        // Hack, 16+ does not have JRE anymore, don't even try.
+        if ((wantedJavaVersion >= 16) && (jdkOrJre === "jre")) continue;
         try {
             let apiData = await processAPIData(wantedJavaVersion, architectures, jdkOrJre, hotspotOrOpenJ9);
             javaBuildArchsPerVersion.set(wantedJavaVersion, apiData);
@@ -192,12 +188,10 @@ async function getJDKInfosFromAdoptOpenJDKAPI (jdkOrJre, hotspotOrOpenJ9) {
     return javaBuildArchsPerVersion;
 }
 
-async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ9) {
-    let destDir = `adoptopenjdk-${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`;
-
+async function processAPIData(jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ9) {
     let jsonStringAPIResponse;
-    let apiURL = `https://api.adoptopenjdk.net/v3/assets/feature_releases/${jdkVersion}/ga?jvm_impl=${hotspotOrOpenJ9}&vendor=adoptopenjdk&os=linux&image_type=${jdkOrJre}&heap_size=normal`;
 
+    let apiURL = `https://api.adoptium.net/v3/assets/feature_releases/${jdkVersion}/ga?release=latest&jvm_impl=hotspot&vendor=adoptium&image_type=${jdkOrJre}&os=linux`;
     try {
         let httpResponse = await goodGuy(apiURL);
         jsonStringAPIResponse = httpResponse.body;
@@ -243,7 +237,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
 
     let commonProps = {
         jdkVersion: jdkVersion,
-        destDir: `adoptopenjdk-${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`,
+        destDir: `adoptium-${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`,
         jdkJre: jdkOrJre,
         JDKorJREupper: jdkOrJre.toUpperCase(),
         jvmType: hotspotOrOpenJ9,
@@ -251,12 +245,10 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         jdkJreVersionJvmType: jdkJreVersionJvmType,
     };
 
-    commonProps.fullHumanTitle = `AdoptOpenJDK ${commonProps.JDKorJREupper} ${commonProps.jdkVersion} with ${commonProps.jvmTypeDesc}`;
+    commonProps.fullHumanTitle = `Adoptium Temurin ${commonProps.JDKorJREupper} ${commonProps.jdkVersion} with ${commonProps.jvmTypeDesc}`;
     commonProps.isDefaultForVirtualPackage = (jdkOrJre === "jdk" && hotspotOrOpenJ9 === "hotspot");
 
-
     let relCounter = 0;
-    //console.warn("Got arch releases for ", commonProps.fullHumanTitle, Object.keys(binaryPerArch));
     for (let oneRelease of Object.values(binaryPerArch)) {
         let sha256sum = oneRelease.binary.package.checksum;
 
@@ -283,19 +275,6 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
                 sha256sum: sha256sum
             },
             commonProps);
-
-        if (oneRelease.binary.architecture === "x64") {
-            let filename = oneRelease.binary.package.name;
-            let downloadUrl = oneRelease.binary.package.link;
-            let downloadUrlCache = `https://casa.pardini.net/down/aoj/${filename}`;
-
-            let mkdir = `/var/cache/${destDir}-installer`;
-            let wget = `echo wget --continue --local-encoding=UTF-8 -O /var/www/down/aoj/${filename} "${downloadUrl}"`;
-            let wgetReal = `echo wget --continue --local-encoding=UTF-8 --progress=dot:giga -O /var/cache/${destDir}-installer/${filename} "${downloadUrlCache}"`;
-            mkdirs.push(mkdir);
-            wgets.push(wget);
-            wgetReals.push(wgetReal);
-        }
 
         archData.set(buildInfo.arch, buildInfo);
 
@@ -340,7 +319,7 @@ async function processAPIData (jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ
         commonProps);
 }
 
-function calculateJoinedVersionForAllArches (slugs, highestBuildTS) {
+function calculateJoinedVersionForAllArches(slugs, highestBuildTS) {
     let slugArr = [];
     for (let oneSlugKey of slugs.keys()) {
         let arches = slugs.get(oneSlugKey);
@@ -367,12 +346,7 @@ function calculateJoinedVersionForAllArches (slugs, highestBuildTS) {
     };
 }
 
-async function getShaSum (url) {
-    let httpResponse = await goodGuy(url);
-    return httpResponse.body.trim().split(" ")[0];
-}
-
-async function walk (dir, filelist = [], dirbase = "") {
+async function walk(dir, filelist = [], dirbase = "") {
     const files = await fs.readdir(dir);
     for (let file of files) {
         const filepath = path.join(dir, file);
@@ -394,7 +368,7 @@ async function walk (dir, filelist = [], dirbase = "") {
     return filelist;
 }
 
-async function writeTemplateFile (destPathBase, templateFile, destFileTemplated, modifiedContents) {
+async function writeTemplateFile(destPathBase, templateFile, destFileTemplated, modifiedContents) {
     let destFileParentDir = destPathBase + "/" + templateFile.dirs;
     let fullDestPath = destPathBase + "/" + (templateFile.dirs ? templateFile.dirs + "/" : "") + destFileTemplated;
     //console.log(`--> ${templateFile.fullpath} to ${fullDestPath} (in path ${destFileParentDir}) [exec: ${templateFile.executable}]`);
@@ -406,14 +380,14 @@ async function writeTemplateFile (destPathBase, templateFile, destFileTemplated,
     });
 }
 
-async function recursiveChangeFileDate (destPath, newDate) {
+async function recursiveChangeFileDate(destPath, newDate) {
     let matchedFiles = await getFiles(destPath);
     for (let file of matchedFiles) {
         regular_fs.utimesSync(file, newDate, newDate);
     }
 }
 
-function getFiles (matcherPath) {
+function getFiles(matcherPath) {
     return new Promise((resolve, reject) => {
         glob([`${matcherPath}/**`], {realpath: true}, (err, files) => {
             if (err) reject(err);
@@ -425,7 +399,7 @@ function getFiles (matcherPath) {
 }
 
 
-async function processTemplates (templateFiles, destPathBase, fnView, view, writeFiles) {
+async function processTemplates(templateFiles, destPathBase, fnView, view, writeFiles) {
     let ret = {};
     for (let templateFile of templateFiles) {
 

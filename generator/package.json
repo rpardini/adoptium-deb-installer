@@ -1,5 +1,5 @@
 {
-  "name": "adoptopenjdk-deb-generator",
+  "name": "adoptium-deb-generator",
   "version": "0.0.6",
   "description": "",
   "main": "generate.js",

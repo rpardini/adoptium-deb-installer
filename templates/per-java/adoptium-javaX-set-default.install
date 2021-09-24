@@ -1,0 +1,2 @@
+debian/adoptium_jdk.sh /etc/profile.d/
+debian/adoptium_jdk.csh /etc/profile.d/
