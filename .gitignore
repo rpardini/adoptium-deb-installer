@@ -1,10 +1,5 @@
-.DS_Store
 .idea
-presign
-to_sign
-postsign
 generated
 generator/node_modules
-generator/jdk_*.json
-exfiltrated
+packages
 repo

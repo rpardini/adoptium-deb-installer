@@ -1,7 +1,34 @@
 'use strict';
 
+// config
+const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
+const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
+const wantedJavaVersions = new Set([8, 11, 16, 17]); // official GA releases from adoptium
+const linuxesAndDistros = new Set([
+    {
+        name: 'ubuntu',
+        distros: new Set(['hirsute'] || ['trusty', 'xenial', 'bionic', 'focal', 'hirsute', 'impish']), // LTS ESM releases + last release + next
+        standardsVersion: "3.9.7",
+        useDistroInVersion: true,
+        singleBinaryForAllArches: false,
+        postArchesHook: null
+    },
+    {
+        name: 'debian',
+        distros: new Set(['stable']), // Single distro for Debian
+        standardsVersion: "3.9.6",
+        useDistroInVersion: false,
+        singleBinaryForAllArches: true,
+        postArchesHook: joinDebianPostinstForAllArches
+    }
+]);
+
+// the person building and signing the packages.
+const signerName = process.env.PACKAGE_SIGNER_NAME || "Adoptium .deb Installer Key (Used for package signing)";
+const signerEmail = process.env.PACKAGE_SIGNER_EMAIL || "adoptium.deb@pardini.net";
+
+
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
-// avoid bumping this too high.
 const generatorVersionIncrement = 0;
 
 // we use promisified filesystem functions from node.js
@@ -30,37 +57,6 @@ const goodGuy = require('good-guy-http')({
     },
 });
 
-// Some specific combinations are "banned", because they are somehow misbuilt
-// 12-jre versions are missing manpages (which are used as a guide for available binaries)
-const bannedJdkVersionJvmType = new Set();
-
-const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
-// @TODO: is 'arm' really 'armel'?
-const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
-const wantedJavaVersions = new Set([8, 11, 16, 17]); // official GA releases from adoptium
-const linuxesAndDistros = new Set([
-    {
-        name: 'ubuntu',
-        distros: new Set([/*'trusty', 'xenial', 'bionic', 'disco', 'eoan', */'focal'/*, 'groovy', 'hirsute'*/]), // @TODO: bring'em back later
-        standardsVersion: "3.9.7",
-        useDistroInVersion: true,
-        singleBinaryForAllArches: false,
-        postArchesHook: null
-    },
-    {
-        name: 'debian',
-        distros: new Set(['stable']),
-        standardsVersion: "3.9.6",
-        useDistroInVersion: false,
-        singleBinaryForAllArches: true,
-        postArchesHook: joinDebianPostinstForAllArches
-    }
-]);
-
-// the person building and signing the packages.
-// @TODO: change to use file-based GPG directly?
-const signerName = "Ricardo Pardini (Pardini Yubi 2017)";
-const signerEmail = "ricardo@pardini.net";
 
 async function main() {
     let allPromises = [];
@@ -230,10 +226,6 @@ async function processAPIData(jdkVersion, wantedArchs, jdkOrJre, hotspotOrOpenJ9
     let highestBuildTS = 0;
 
     let jdkJreVersionJvmType = `${jdkVersion}-${jdkOrJre}-${hotspotOrOpenJ9}`;
-
-    if (bannedJdkVersionJvmType.has(jdkJreVersionJvmType)) {
-        throw new Error(`Banned: ${jdkJreVersionJvmType}`);
-    }
 
     let commonProps = {
         jdkVersion: jdkVersion,
