@@ -56,7 +56,7 @@ jobs:
         working-directory: src
         run: ./publish.sh
         env:
-          CLEAN_APT_REPO: 1
+          CLEAN_APT_REPO: 0 # 1 will remove all packages, and only re-add those newly built
           PUSH_APT_REPO: 1
           DPUT_LAUNCHPAD: 1
           PACKAGE_SIGNER_NAME: "${{ steps.import_gpg.outputs.name }} (Used for package signing)" # key comment, if any, seems required

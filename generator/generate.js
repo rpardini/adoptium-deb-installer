@@ -27,9 +27,8 @@ const linuxesAndDistros = new Set([
 const signerName = process.env.PACKAGE_SIGNER_NAME || "Adoptium .deb Installer Key (Used for package signing)";
 const signerEmail = process.env.PACKAGE_SIGNER_EMAIL || "adoptium.deb@pardini.net";
 
-
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
-const generatorVersionIncrement = 1;
+const generatorVersionIncrement = 2;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');

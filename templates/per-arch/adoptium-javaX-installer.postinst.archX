@@ -75,7 +75,7 @@ else
 
   # Now actually download the .tar.gz file.
   echo "Downloading {{fullHumanTitle}}..."
-  wget --config=$INSTALLER_DIR/wgetrc --local-encoding=UTF-8 --continue -O ${FILENAME_TAR_GZ} ${DOWNLOAD_TAR_GZ_URL} || fp_exit_with_error "download failed"
+  wget --config=$INSTALLER_DIR/wgetrc --no-verbose --local-encoding=UTF-8 --continue -O ${FILENAME_TAR_GZ} ${DOWNLOAD_TAR_GZ_URL} || fp_exit_with_error "download failed"
   echo "Download done."
 fi
 
