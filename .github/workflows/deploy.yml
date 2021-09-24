@@ -54,6 +54,7 @@ jobs:
           CLEAN_APT_REPO: 1
           PUSH_APT_REPO: 1
           DPUT_LAUNCHPAD: 1
-          PACKAGE_SIGNER_NAME: ${{ steps.import_gpg.outputs.name }}
+          # key comment, if any, seems required
+          PACKAGE_SIGNER_NAME: "${{ steps.import_gpg.outputs.name }} (Used for package signing)"
           PACKAGE_SIGNER_EMAIL: ${{ steps.import_gpg.outputs.email }}
 
