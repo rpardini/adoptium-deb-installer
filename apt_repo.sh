@@ -7,7 +7,7 @@ REPO_DIR="$(pwd)"/repo
 [[ ! -d "${PACKAGES_DIR}" ]] && echo "Packages dir ${PACKAGES_DIR} is not there." && exit 2
 mkdir -p "${REPO_DIR}" "${REPO_DIR}"/pool
 
-echo "Creating repository with packages from ${PACKAGES_DIR}"
+echo "Creating repository with packages from ${PACKAGES_DIR} using key ${PACKAGE_SIGNER_KEYID}"
 cd "${PACKAGES_DIR}"
 ls -la *.deb
 
@@ -20,6 +20,7 @@ Codename: stable
 Architectures: amd64 ppc64el arm64 armel s390x source
 Components: main
 Description: Adoptium Debian Installer Packages
+SignWith: ${PACKAGE_SIGNER_KEYID}
 EOD
 
 # Determine a list of binary debs to include in the repo

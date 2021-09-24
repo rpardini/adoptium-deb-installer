@@ -12,9 +12,11 @@ declare -i DPUT_LAUNCHPAD=${DPUT_LAUNCHPAD:-0}
 
 GH_PAGES_BRANCH="${GH_PAGES_BRANCH:-repo-adoptium}"
 GH_PAGES_REPO_URL="${GH_PAGES_BRANCH:-git@github.com:rpardini/adoptium-deb-installer.git}"
+export PACKAGE_SIGNER_KEYID=${PACKAGE_SIGNER_KEYID:-63FF2EEC3156A973}
 
-echo "Testing signing..."
+echo "::group::Testing signing..."
 echo "Testing signing" | gpg --sign --armor || true
+echo "::endgroup::"
 
 if [[ ${RUN_GENERATOR} -gt 0 ]]; then
   if [[ ! -d generator/node_modules ]]; then
@@ -32,13 +34,7 @@ if [[ ${RUN_GENERATOR} -gt 0 ]]; then
 fi
 
 if [[ ${BUILD_PACKAGES} -gt 0 ]]; then
-  echo "::group::Building Debian (binary) packages..."
-  ./build_packages.sh debian
-  echo "::endgroup::"
-
-  echo "::group::Building Ubuntu (source) packages..."
   ./build_packages.sh ubuntu
-  echo "::endgroup::"
 fi
 
 if [[ ${DPUT_LAUNCHPAD} -gt 0 ]]; then
@@ -47,6 +43,10 @@ if [[ ${DPUT_LAUNCHPAD} -gt 0 ]]; then
   dput --unchecked ppa:rpardini/adoptium-installers ./*_source.changes
   cd "${BASE_DIR}"
   echo "::endgroup::"
+fi
+
+if [[ ${BUILD_PACKAGES} -gt 0 ]]; then
+  ./build_packages.sh debian
 fi
 
 if [[ ! -d repo ]]; then

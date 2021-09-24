@@ -9,7 +9,9 @@ jobs:
     steps:
 
       - name: Install dependencies
-        run: sudo apt-get -y install devscripts debhelper dput reprepro eatmydata
+        run: |
+          echo 'man-db man-db/auto-update boolean false' | sudo debconf-set-selections
+          sudo apt-get -y install devscripts debhelper dput reprepro eatmydata
         env:
           DEBIAN_FRONTEND: noninteractive
 
@@ -36,9 +38,6 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
-          workdir: src/repo # also, sign the commits for the apt repo
 
       - name: Show GPG user IDs
         run: |
@@ -54,7 +53,7 @@ jobs:
           CLEAN_APT_REPO: 1
           PUSH_APT_REPO: 1
           DPUT_LAUNCHPAD: 1
-          # key comment, if any, seems required
-          PACKAGE_SIGNER_NAME: "${{ steps.import_gpg.outputs.name }} (Used for package signing)"
+          PACKAGE_SIGNER_NAME: "${{ steps.import_gpg.outputs.name }} (Used for package signing)" # key comment, if any, seems required
           PACKAGE_SIGNER_EMAIL: ${{ steps.import_gpg.outputs.email }}
+          PACKAGE_SIGNER_KEYID: ${{ steps.import_gpg.outputs.keyid }} # key reference, used by reprepro
 
