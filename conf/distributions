@@ -1,7 +1,6 @@
-Origin: deb.adoptopenjdk.net
-Label: deb.adoptopenjdk.net
+Origin: deb.adoptium.net
+Label: deb.adoptium.net
 Codename: stable
 Architectures: amd64 ppc64el arm64 armel s390x source
 Components: main
-Description: AdoptOpenJDK Debian Installer Packages
-SignWith: ! /opt/sign_repo_async.sh
+Description: Adoptium Debian Installer Packages

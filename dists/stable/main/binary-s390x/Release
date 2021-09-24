@@ -1,5 +1,5 @@
 Component: main
-Origin: deb.adoptopenjdk.net
-Label: deb.adoptopenjdk.net
+Origin: deb.adoptium.net
+Label: deb.adoptium.net
 Architecture: s390x
-Description: AdoptOpenJDK Debian Installer Packages
+Description: Adoptium Debian Installer Packages
