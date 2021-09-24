@@ -27,6 +27,12 @@ jobs:
           ref: "repo-adoptium" # branch
           path: src/repo
 
+      - name: Configure git identity for apt repo repo
+        working-directory: src/repo
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
       - name: Set up Node.js 14
         uses: actions/setup-node@v2
         with:

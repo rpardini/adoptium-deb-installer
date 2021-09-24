@@ -29,7 +29,7 @@ const signerEmail = process.env.PACKAGE_SIGNER_EMAIL || "adoptium.deb@pardini.ne
 
 
 // generator version; this is used to add to the generated package's version timestamp (in minutes)
-const generatorVersionIncrement = 0;
+const generatorVersionIncrement = 1;
 
 // we use promisified filesystem functions from node.js
 const regular_fs = require('fs');
