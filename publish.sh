@@ -11,7 +11,7 @@ declare -i PUSH_APT_REPO=${PUSH_APT_REPO:-0}
 declare -i DPUT_LAUNCHPAD=${DPUT_LAUNCHPAD:-0}
 
 GH_PAGES_BRANCH="${GH_PAGES_BRANCH:-repo-adoptium}"
-GH_PAGES_REPO_URL="${GH_PAGES_BRANCH:-git@github.com:rpardini/adoptopenjdk-deb-installer.git}"
+GH_PAGES_REPO_URL="${GH_PAGES_BRANCH:-git@github.com:rpardini/adoptium-deb-installer.git}"
 
 echo "Testing signing..."
 echo "Testing signing" | gpg --sign --armor || true
