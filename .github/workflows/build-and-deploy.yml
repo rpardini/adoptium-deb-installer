@@ -4,7 +4,7 @@ on:
     branches: [ 'adoptium' ] # Run on pushes to main adoptium only
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest # github runners.
     steps:
 
@@ -52,14 +52,34 @@ jobs:
           echo "name:        ${{ steps.import_gpg.outputs.name }}"
           echo "email:       ${{ steps.import_gpg.outputs.email }}"
 
-      - name: Build and deploy
+      - name: Build Source and Binary packages
+        working-directory: src
+        run: ./build.sh
+        env:
+          # key comment "name (comment)", if any, is required by dpkg tooling
+          PACKAGE_SIGNER_NAME: "${{ steps.import_gpg.outputs.name }} (Used for package signing)"
+          PACKAGE_SIGNER_EMAIL: ${{ steps.import_gpg.outputs.email }}
+
+      - name: Test adoptium-17-jdk-hotspot vs debian:stable (amd64)
+        working-directory: src
+        run: ./test.sh
+        env:
+          VERSION: adoptium-17-jdk-hotspot
+          TEST_IMAGE: debian:stable
+
+      - name: Test adoptium-8-jre-hotspot vs ubuntu:hirsute (amd64)
+        working-directory: src
+        run: ./test.sh
+        env:
+          VERSION: adoptium-8-jdk-hotspot
+          TEST_IMAGE: ubuntu:hirsute
+
+      - name: Deploy source packages to Launchpad and binaries to apt repo
         working-directory: src
         run: ./publish.sh
         env:
-          CLEAN_APT_REPO: 0 # 1 will remove all packages, and only re-add those newly built
-          PUSH_APT_REPO: 1
-          DPUT_LAUNCHPAD: 1
-          PACKAGE_SIGNER_NAME: "${{ steps.import_gpg.outputs.name }} (Used for package signing)" # key comment, if any, seems required
-          PACKAGE_SIGNER_EMAIL: ${{ steps.import_gpg.outputs.email }}
+          PUSH_APT_REPO: 1 # using reprepro, and the keyid in PACKAGE_SIGNER_KEYID
+          CLEAN_APT_REPO: 0 # 1 will start the apt repo from scratch
+          UPLOAD_LAUNCHPAD: 1 # using dput; packages have to be signed
           PACKAGE_SIGNER_KEYID: ${{ steps.import_gpg.outputs.keyid }} # key reference, used by reprepro
 
