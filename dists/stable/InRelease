@@ -1,3 +1,6 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
 Origin: deb.adoptium.net
 Label: deb.adoptium.net
 Codename: stable
@@ -62,3 +65,17 @@ SHA256:
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/source/Sources
  59869db34853933b239f1e2219cf7d431da006aa919635478511fabbfc8849d2 20 main/source/Sources.gz
  3d91eeebdeaba3f7a883ce71a60cb83c81ca8a5d3ffb7650c6e986672760f0b1 134 main/source/Release
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEmN8+fLfFKDHpwQTwFcJafqHqyLcFAmFOM9MACgkQFcJafqHq
+yLfwHQv9HvxPCtzNoGoz5coZkdKGQyfdLwC8vxSd3xS4Dm5vKB8iEzZVZYPRjIKc
+sMtrl4ePTzZUlSZb3d+37RFpxNlf4/9xf+Y+azOAIMR4RkOm6BFTg0oIf070QPLq
+59LKrufjx4DTIPyM97Y2+c5MDYXscVuZNqMcYrJP629PMNwGwI1EKYJOtvQhenwm
+DjcCmzMVglaWEuNbo963ALSpEyo1/3+hzTKqPM59wOuH4DesNZAXGmIOatscRoHA
+dGWRuNIYLuK6g1NS7VhfGYN9womuqywshYlDGiHgVMCO7WtY9NazvBN5DsnDJF9W
+uWYmc211q4jojnQmy/vnW14d20iXLw5LwGaAZadS9tPteP1QdwqDcvLwyE4TVwS0
+l7EDgXQc6D2wWrrZ51/8PWJPLgXrcW9iU6jhNQRdE+9EA/nvNfNd7MO1PqjCCK0G
+qRVkpsaU5+YVPkAvTAokPrpcQuLMpyAj7zUOFonB5cL459677L85GRFcd6DyYpVY
++vazffWF
+=utUl
+-----END PGP SIGNATURE-----
