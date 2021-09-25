@@ -7,7 +7,7 @@ BASE_DIR="$(pwd)"
 declare -i RUN_GENERATOR=${RUN_GENERATOR:-1}
 
 echo "::group::Testing signing..."
-echo "Testing signing" | gpg --sign --armor || true
+echo "Testing signing" | gpg --sign --armor
 echo "::endgroup::"
 
 if [[ ${RUN_GENERATOR} -gt 0 ]]; then
