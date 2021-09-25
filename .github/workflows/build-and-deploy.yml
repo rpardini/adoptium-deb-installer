@@ -2,7 +2,8 @@ name: Deploy
 on:
   push:
     branches: [ 'adoptium' ] # Run on pushes to main adoptium only
-
+  schedule:
+    - cron: '0 3 * * *' # Scheduled runs every day at 3am UTC
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest # github runners.
