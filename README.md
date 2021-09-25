@@ -13,37 +13,24 @@ Use these packages at your own risk. These are NOT official packages.
 ## For Ubuntu:
 
 ```bash
-# Make sure 'add-apt-repository' is available
-[[ ! -f /usr/bin/add-apt-repository ]] && sudo apt-get -y install software-properties-common
+[[ ! -f /usr/bin/add-apt-repository ]] && sudo apt-get -y install software-properties-common # Make sure 'add-apt-repository' is available
 sudo add-apt-repository --yes ppa:rpardini/adoptium-installers
-sudo apt-get install adoptium-17-installer # or 8, 11, etc.
+sudo apt-get install adoptium-17-installer # or 8, 11, etc; also adoptium-17-jdk-hotspot-installer-set-default
 ```
 
 ## For Debian:
 
 ```bash
-# update and install support for https:// sources if not already installed
-[[ ! -f /usr/lib/apt/methods/https ]] && sudo apt-get update && sudo apt-get install apt-transport-https
-
-# install requirements for apt update and apt-key when missing
-[[ ! -f /etc/ssl/certs/ca-certificates.crt ]] && sudo apt-get install ca-certificates
-[[ ! -f /usr/bin/dirmngr ]] && sudo apt-get install dirmngr
-[[ ! -f /usr/bin/gnupg ]] && sudo apt-get install gnupg
-
-# add my key to trusted APT keys 
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A1EAC8B7
-# add the package repo to sources 
-echo 'deb https://rpardini.github.io/adoptium-deb-installer stable main' > /etc/apt/sources.list.d/rpardini-adoptium.list 
-# update from sources
-sudo apt-get update
-# install a JDK, see above instructions for Ubuntu for other variants as well
-sudo apt-get install adoptium-17-jdk-hotspot-installer
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A1EAC8B7 # add the builder key
+echo 'deb https://rpardini.github.io/adoptium-deb-installer stable main' > /etc/apt/sources.list.d/rpardini-adoptium.list # add the package repo to sources 
+sudo apt-get update # update from sources
+sudo apt-get install adoptium-17-installer # or 8, 11, etc; also adoptium-17-jdk-hotspot-installer-set-default
 ```
 
 # For developers/builders
 
 This repo produces **source** packages which are then uploaded to Launchpad, where they're built and hosted. The final
-packages produced are essentially just downloader scripts, and try to handle proxy usage, SHA256 checksumming,
+packages produced are essentially just downloader scripts, and try to handle proxy usage, SHA256 verification,
 `update-alternatives` and `update-java-alternatives` as per `java-common` standards.
 
 A huge amount of the actual installer scripting was stolen from
