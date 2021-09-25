@@ -10,6 +10,7 @@
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~impish_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~trusty_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~xenial_source.changes
+./adoptium-16-jdk-hotspot-installer_202108231543~16.0.2b7~bionic_source.changes
 ./adoptium-16-jdk-hotspot-installer_202108231543~16.0.2b7~focal_source.changes
 ./adoptium-16-jdk-hotspot-installer_202108231543~16.0.2b7~hirsute_source.changes
 ./adoptium-16-jdk-hotspot-installer_202108231543~16.0.2b7~impish_source.changes
