@@ -15,7 +15,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
 
-      - name: Checkout this repo/branch
+      - name: Clone and checkout this repo
         uses: actions/checkout@v2
         with:
           path: src
@@ -25,12 +25,13 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Import GPG key
+      - name: Import GPG key from GitHub secrets
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@8c43807e82148a7bafc633cc9584d04bf54be8d0 # v4 # https://github.com/crazy-max/ghaction-import-gpg#usage
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+
 
       - name: Build Source and Binary packages for Adoptium
         working-directory: src
@@ -41,19 +42,21 @@ jobs:
           PACKAGE_SIGNER_EMAIL: ${{ steps.import_gpg.outputs.email }}
           RUN_GENERATOR: 1
 
-      - name: Test adoptium-17-jdk-hotspot vs debian:stable (amd64)
+
+      - name: Test install adoptium-17-jdk-hotspot vs debian:stable (amd64)
         working-directory: src
         run: ./test.sh
         env:
           VERSION: adoptium-17-jdk-hotspot
           TEST_IMAGE: debian:stable
 
-      - name: Test adoptium-8-jre-hotspot vs ubuntu:hirsute (amd64)
+      - name: Test install adoptium-8-jre-hotspot vs ubuntu:hirsute (amd64)
         working-directory: src
         run: ./test.sh
         env:
           VERSION: adoptium-8-jdk-hotspot
           TEST_IMAGE: ubuntu:hirsute
+
 
       - name: Checkout GitHub pages repo
         uses: actions/checkout@v2 # https://github.com/actions/checkout#usage
@@ -67,7 +70,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-
 
       - name: Deploy source packages to Launchpad and binaries to apt repo
         working-directory: src

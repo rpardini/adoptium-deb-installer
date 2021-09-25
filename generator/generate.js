@@ -7,7 +7,7 @@ const wantedJavaVersions = new Set([8, 11, 16, 17]); // official GA releases fro
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
-        distros: new Set(['hirsute'] || ['trusty', 'xenial', 'bionic', 'focal', 'hirsute', 'impish']), // LTS ESM releases + last release + next
+        distros: new Set(['trusty', 'xenial', 'bionic', 'focal', 'hirsute', 'impish']), // LTS ESM releases + last release + next
         standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,
