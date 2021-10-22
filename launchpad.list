@@ -4,6 +4,12 @@
 ./adoptium-11-jdk-hotspot-installer_202109151157~11.0.12b7~impish_source.changes
 ./adoptium-11-jdk-hotspot-installer_202109151157~11.0.12b7~trusty_source.changes
 ./adoptium-11-jdk-hotspot-installer_202109151157~11.0.12b7~xenial_source.changes
+./adoptium-11-jdk-hotspot-installer_202110212203~11.0.13b8+arm+ppc64le~11.0.12b7~bionic_source.changes
+./adoptium-11-jdk-hotspot-installer_202110212203~11.0.13b8+arm+ppc64le~11.0.12b7~focal_source.changes
+./adoptium-11-jdk-hotspot-installer_202110212203~11.0.13b8+arm+ppc64le~11.0.12b7~hirsute_source.changes
+./adoptium-11-jdk-hotspot-installer_202110212203~11.0.13b8+arm+ppc64le~11.0.12b7~impish_source.changes
+./adoptium-11-jdk-hotspot-installer_202110212203~11.0.13b8+arm+ppc64le~11.0.12b7~trusty_source.changes
+./adoptium-11-jdk-hotspot-installer_202110212203~11.0.13b8+arm+ppc64le~11.0.12b7~xenial_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~bionic_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~focal_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~hirsute_source.changes
@@ -34,6 +40,12 @@
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~impish_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~trusty_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~xenial_source.changes
+./adoptium-8-jdk-hotspot-installer_202110212208~8u302b08+x64~8u312b07~bionic_source.changes
+./adoptium-8-jdk-hotspot-installer_202110212208~8u302b08+x64~8u312b07~focal_source.changes
+./adoptium-8-jdk-hotspot-installer_202110212208~8u302b08+x64~8u312b07~hirsute_source.changes
+./adoptium-8-jdk-hotspot-installer_202110212208~8u302b08+x64~8u312b07~impish_source.changes
+./adoptium-8-jdk-hotspot-installer_202110212208~8u302b08+x64~8u312b07~trusty_source.changes
+./adoptium-8-jdk-hotspot-installer_202110212208~8u302b08+x64~8u312b07~xenial_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~bionic_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~focal_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~hirsute_source.changes
