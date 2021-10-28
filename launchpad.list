@@ -40,6 +40,12 @@
 ./adoptium-17-jdk-hotspot-installer_202109241252~17b35~impish_source.changes
 ./adoptium-17-jdk-hotspot-installer_202109241252~17b35~trusty_source.changes
 ./adoptium-17-jdk-hotspot-installer_202109241252~17b35~xenial_source.changes
+./adoptium-17-jdk-hotspot-installer_202110271339~17b35+aarch64+x64~17.0.1b12~bionic_source.changes
+./adoptium-17-jdk-hotspot-installer_202110271339~17b35+aarch64+x64~17.0.1b12~focal_source.changes
+./adoptium-17-jdk-hotspot-installer_202110271339~17b35+aarch64+x64~17.0.1b12~hirsute_source.changes
+./adoptium-17-jdk-hotspot-installer_202110271339~17b35+aarch64+x64~17.0.1b12~impish_source.changes
+./adoptium-17-jdk-hotspot-installer_202110271339~17b35+aarch64+x64~17.0.1b12~trusty_source.changes
+./adoptium-17-jdk-hotspot-installer_202110271339~17b35+aarch64+x64~17.0.1b12~xenial_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~bionic_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~focal_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~hirsute_source.changes
