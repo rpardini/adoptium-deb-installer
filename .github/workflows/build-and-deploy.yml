@@ -51,12 +51,12 @@ jobs:
           VERSION: adoptium-17-jdk-hotspot
           TEST_IMAGE: debian:stable
 
-      - name: Test install adoptium-8-jre-hotspot vs ubuntu:hirsute (amd64)
+      - name: Test install adoptium-8-jre-hotspot vs ubuntu:rolling (amd64)
         working-directory: src
         run: ./test.sh
         env:
           VERSION: adoptium-8-jdk-hotspot
-          TEST_IMAGE: ubuntu:hirsute
+          TEST_IMAGE: ubuntu:rolling
 
 
       - name: Checkout GitHub pages repo

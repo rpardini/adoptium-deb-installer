@@ -5,7 +5,7 @@ BASE_DIR="$(pwd)"
 
 # Config
 VERSION=${VERSION:-adoptium-8-jdk-hotspot}
-TEST_IMAGE="${TEST_IMAGE:-ubuntu:hirsute}"
+TEST_IMAGE="${TEST_IMAGE:-ubuntu:rolling}"
 
 # Run via docker
 cat <<EOD | docker run --rm -i -v $(pwd)/packages:/packages -e DEBIAN_FRONTEND=noninteractive "${TEST_IMAGE}" /bin/bash -e
