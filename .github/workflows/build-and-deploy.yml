@@ -12,6 +12,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo 'man-db man-db/auto-update boolean false' | sudo debconf-set-selections
+          sudo apt-get -q -y update
           sudo apt-get -q -y install devscripts debhelper dput reprepro eatmydata parallel
         env:
           DEBIAN_FRONTEND: noninteractive
