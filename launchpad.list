@@ -313,6 +313,12 @@
 ./adoptium-18-jdk-hotspot-installer_202207251400~18.0.2b9+arm+s390x~18.0.1b10~jammy_source.changes
 ./adoptium-18-jdk-hotspot-installer_202207251400~18.0.2b9+arm+s390x~18.0.1b10~trusty_source.changes
 ./adoptium-18-jdk-hotspot-installer_202207251400~18.0.2b9+arm+s390x~18.0.1b10~xenial_source.changes
+./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~bionic_source.changes
+./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~focal_source.changes
+./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~impish_source.changes
+./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~jammy_source.changes
+./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~trusty_source.changes
+./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~xenial_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~bionic_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~focal_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~hirsute_source.changes
