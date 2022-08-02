@@ -319,6 +319,12 @@
 ./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~jammy_source.changes
 ./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~trusty_source.changes
 ./adoptium-18-jdk-hotspot-installer_202207281427~18.0.2b9+s390x~18.0.1b10~xenial_source.changes
+./adoptium-18-jdk-hotspot-installer_202208011720~18.0.2b9~bionic_source.changes
+./adoptium-18-jdk-hotspot-installer_202208011720~18.0.2b9~focal_source.changes
+./adoptium-18-jdk-hotspot-installer_202208011720~18.0.2b9~impish_source.changes
+./adoptium-18-jdk-hotspot-installer_202208011720~18.0.2b9~jammy_source.changes
+./adoptium-18-jdk-hotspot-installer_202208011720~18.0.2b9~trusty_source.changes
+./adoptium-18-jdk-hotspot-installer_202208011720~18.0.2b9~xenial_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~bionic_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~focal_source.changes
 ./adoptium-8-jdk-hotspot-installer_202109151218~8u302b08~hirsute_source.changes
@@ -404,6 +410,12 @@
 ./adoptium-8-jdk-hotspot-installer_202207271143~8u342b07+arm~8u332b09~jammy_source.changes
 ./adoptium-8-jdk-hotspot-installer_202207271143~8u342b07+arm~8u332b09~trusty_source.changes
 ./adoptium-8-jdk-hotspot-installer_202207271143~8u342b07+arm~8u332b09~xenial_source.changes
+./adoptium-8-jdk-hotspot-installer_202208011317~8u342b07~bionic_source.changes
+./adoptium-8-jdk-hotspot-installer_202208011317~8u342b07~focal_source.changes
+./adoptium-8-jdk-hotspot-installer_202208011317~8u342b07~impish_source.changes
+./adoptium-8-jdk-hotspot-installer_202208011317~8u342b07~jammy_source.changes
+./adoptium-8-jdk-hotspot-installer_202208011317~8u342b07~trusty_source.changes
+./adoptium-8-jdk-hotspot-installer_202208011317~8u342b07~xenial_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~bionic_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~focal_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~hirsute_source.changes
@@ -477,3 +489,9 @@
 ./adoptium-8-jre-hotspot-installer_202207271143~8u342b07+arm~8u332b09~jammy_source.changes
 ./adoptium-8-jre-hotspot-installer_202207271143~8u342b07+arm~8u332b09~trusty_source.changes
 ./adoptium-8-jre-hotspot-installer_202207271143~8u342b07+arm~8u332b09~xenial_source.changes
+./adoptium-8-jre-hotspot-installer_202208011317~8u342b07~bionic_source.changes
+./adoptium-8-jre-hotspot-installer_202208011317~8u342b07~focal_source.changes
+./adoptium-8-jre-hotspot-installer_202208011317~8u342b07~impish_source.changes
+./adoptium-8-jre-hotspot-installer_202208011317~8u342b07~jammy_source.changes
+./adoptium-8-jre-hotspot-installer_202208011317~8u342b07~trusty_source.changes
+./adoptium-8-jre-hotspot-installer_202208011317~8u342b07~xenial_source.changes
