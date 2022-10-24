@@ -3,7 +3,7 @@
 // config
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
-const wantedJavaVersions = new Set([8, 11, 16, 17, 18]); // official GA releases from adoptium
+const wantedJavaVersions = new Set([8, 11, 16, 17, 18, 19]); // official GA releases from adoptium
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
