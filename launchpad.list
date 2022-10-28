@@ -548,6 +548,12 @@
 ./adoptium-8-jdk-hotspot-installer_202210251143~8u345b01+x64~8u352b08~kinetic_source.changes
 ./adoptium-8-jdk-hotspot-installer_202210251143~8u345b01+x64~8u352b08~trusty_source.changes
 ./adoptium-8-jdk-hotspot-installer_202210251143~8u345b01+x64~8u352b08~xenial_source.changes
+./adoptium-8-jdk-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~bionic_source.changes
+./adoptium-8-jdk-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~focal_source.changes
+./adoptium-8-jdk-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~jammy_source.changes
+./adoptium-8-jdk-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~kinetic_source.changes
+./adoptium-8-jdk-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~trusty_source.changes
+./adoptium-8-jdk-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~xenial_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~bionic_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~focal_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~hirsute_source.changes
@@ -658,3 +664,9 @@
 ./adoptium-8-jre-hotspot-installer_202210251143~8u345b01+x64~8u352b08~kinetic_source.changes
 ./adoptium-8-jre-hotspot-installer_202210251143~8u345b01+x64~8u352b08~trusty_source.changes
 ./adoptium-8-jre-hotspot-installer_202210251143~8u345b01+x64~8u352b08~xenial_source.changes
+./adoptium-8-jre-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~bionic_source.changes
+./adoptium-8-jre-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~focal_source.changes
+./adoptium-8-jre-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~jammy_source.changes
+./adoptium-8-jre-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~kinetic_source.changes
+./adoptium-8-jre-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~trusty_source.changes
+./adoptium-8-jre-hotspot-installer_202210271317~8u352b08+aarch64+arm~8u345b01~xenial_source.changes
