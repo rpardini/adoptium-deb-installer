@@ -1,41 +1,41 @@
 Package: adoptium-11-installer
 Source: adoptium-11-jdk-hotspot-installer
-Version: 202211020620~11.0.17b8+s390x~11.0.16.1b1
+Version: 202211041211~11.0.17b8
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 8
-Depends: adoptium-11-jdk-hotspot-installer (= 202211020620~11.0.17b8+s390x~11.0.16.1b1)
-Recommends: adoptium-11-jdk-hotspot-set-default (= 202211020620~11.0.17b8+s390x~11.0.16.1b1)
+Depends: adoptium-11-jdk-hotspot-installer (= 202211041211~11.0.17b8)
+Recommends: adoptium-11-jdk-hotspot-set-default (= 202211041211~11.0.17b8)
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-11-jdk-hotspot-installer/adoptium-11-installer_202211020620~11.0.17b8+s390x~11.0.16.1b1_all.deb
-Size: 1616
-SHA256: 19bd133d465571d025261e12ec094190b11cb6b86056f61d2fe23cc39e63b2c2
-SHA1: 5426b50cbee1bce7180b41056941046d0fb93ea0
-MD5sum: 106f7e58edf636de36cad0bd08649d6e
+Filename: pool/main/a/adoptium-11-jdk-hotspot-installer/adoptium-11-installer_202211041211~11.0.17b8_all.deb
+Size: 1596
+SHA256: ec6a54d9047d0823e4034e23f25663d7add9c83b5a31d09b450f221739740a35
+SHA1: 2fd3693ddcfa166c6b284b694656156b67553059
+MD5sum: 37d166ca122dcc8eba8e1ef1ba563ebb
 Description: Virtual package for Adoptium Temurin JDK 11 with Hotspot
  Virtual package depending Adoptium Temurin JDK 11 with Hotspot
  This package depends on adoptium-11-jdk-hotspot-installer
 
 Package: adoptium-11-jdk-hotspot-installer
-Version: 202211020620~11.0.17b8+s390x~11.0.16.1b1
+Version: 202211041211~11.0.17b8
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 60
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
 Recommends: fonts-dejavu-extra
-Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptium-11-jdk-hotspot-set-default (= 202211020620~11.0.17b8+s390x~11.0.16.1b1)
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptium-11-jdk-hotspot-set-default (= 202211041211~11.0.17b8)
 Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java10-runtime, java10-runtime-headless, java10-sdk, java10-sdk-headless, java11-runtime, java11-runtime-headless, java11-sdk, java11-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-11-jdk-hotspot-installer/adoptium-11-jdk-hotspot-installer_202211020620~11.0.17b8+s390x~11.0.16.1b1_all.deb
-Size: 5452
-SHA256: 3f8b7875143311c358231f7aa8fc51ec837bc74e9eabe12ef228b84aa795dd29
-SHA1: f874744f4d0fb24d4f43cd8c6a8d323b2c6bdc26
-MD5sum: e3833a1d6e7cc98e0633fa3fcc8c362c
+Filename: pool/main/a/adoptium-11-jdk-hotspot-installer/adoptium-11-jdk-hotspot-installer_202211041211~11.0.17b8_all.deb
+Size: 5412
+SHA256: 40399852fb3df664c03ee0d323c4ba209b560befe45d598425369d0677ab3a1b
+SHA1: ad2666c218edb3594d0498353ca0ff4eebd1fd8f
+MD5sum: 5dded53cd08568f5dc42500eb0b043e3
 Description: Adoptium Temurin JDK 11 with Hotspot
  Installer package for Adoptium Temurin JDK 11 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -44,43 +44,43 @@ Description: Adoptium Temurin JDK 11 with Hotspot
 
 Package: adoptium-11-jdk-hotspot-set-default
 Source: adoptium-11-jdk-hotspot-installer
-Version: 202211020620~11.0.17b8+s390x~11.0.16.1b1
+Version: 202211041211~11.0.17b8
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 14
-Pre-Depends: adoptium-11-jdk-hotspot-installer (= 202211020620~11.0.17b8+s390x~11.0.16.1b1)
+Pre-Depends: adoptium-11-jdk-hotspot-installer (= 202211041211~11.0.17b8)
 Conflicts: adoptium-default, adoptopenjdk-default, amazoncorretto-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java8-set-default, oracle-java9-set-default
 Provides: adoptium-default
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-11-jdk-hotspot-installer/adoptium-11-jdk-hotspot-set-default_202211020620~11.0.17b8+s390x~11.0.16.1b1_all.deb
-Size: 1932
-SHA256: 1c5e90adb14fb70d5395cd08abcfb2a36335510804191643f0a205e4f9c3760f
-SHA1: e2895b66b4318b43b55032030d4129c956690801
-MD5sum: c5d639c8e6330ed6bddeeec675ff6181
+Filename: pool/main/a/adoptium-11-jdk-hotspot-installer/adoptium-11-jdk-hotspot-set-default_202211041211~11.0.17b8_all.deb
+Size: 1904
+SHA256: 4a62408dd25bb271f5aeb1ba457fab7cddbca7a80801cc70c9359e8f571cc1fd
+SHA1: db1997da99e8b949dae11ceac1937c410ad37fd0
+MD5sum: 537e6b8a6b33442018f9670261aa9165
 Description: Set Adoptium Temurin JDK 11 with Hotspot as default
  Sets Adoptium Temurin JDK 11 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
 
 Package: adoptium-11-jre-hotspot-installer
-Version: 202211020620~11.0.17b8+s390x~11.0.16.1b1
+Version: 202211041211~11.0.17b8
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 60
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
 Recommends: fonts-dejavu-extra
-Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptium-11-jre-hotspot-set-default (= 202211020620~11.0.17b8+s390x~11.0.16.1b1)
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptium-11-jre-hotspot-set-default (= 202211041211~11.0.17b8)
 Provides: default-jre, default-jre-headless, java-runtime, java-runtime-headless, java10-runtime, java10-runtime-headless, java11-runtime, java11-runtime-headless, java2-runtime, java2-runtime-headless, java5-runtime, java5-runtime-headless, java6-runtime, java6-runtime-headless, java7-runtime, java7-runtime-headless, java8-runtime, java8-runtime-headless, java9-runtime, java9-runtime-headless
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-11-jre-hotspot-installer/adoptium-11-jre-hotspot-installer_202211020620~11.0.17b8+s390x~11.0.16.1b1_all.deb
-Size: 5392
-SHA256: a62bbdb2ccfc5eed91bd7c954622ab95ddddc84f9f12f209c078aa8cabc294e2
-SHA1: 677535c0d05a915953adab05ddd3505327cba055
-MD5sum: fb9bbc5910e8b185dca9380116e88f24
+Filename: pool/main/a/adoptium-11-jre-hotspot-installer/adoptium-11-jre-hotspot-installer_202211041211~11.0.17b8_all.deb
+Size: 5356
+SHA256: 32e912b61c12f46715791b707788b9edbccca534da99f30526275146deca1e1a
+SHA1: 8d8707d743251e93790914971a9d57524de862d9
+MD5sum: 9d61fdf79171cbf1561edbe611712075
 Description: Adoptium Temurin JRE 11 with Hotspot
  Installer package for Adoptium Temurin JRE 11 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -89,21 +89,21 @@ Description: Adoptium Temurin JRE 11 with Hotspot
 
 Package: adoptium-11-jre-hotspot-set-default
 Source: adoptium-11-jre-hotspot-installer
-Version: 202211020620~11.0.17b8+s390x~11.0.16.1b1
+Version: 202211041211~11.0.17b8
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 14
-Pre-Depends: adoptium-11-jre-hotspot-installer (= 202211020620~11.0.17b8+s390x~11.0.16.1b1)
+Pre-Depends: adoptium-11-jre-hotspot-installer (= 202211041211~11.0.17b8)
 Conflicts: adoptium-default, adoptopenjdk-default, amazoncorretto-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java8-set-default, oracle-java9-set-default
 Provides: adoptium-default
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-11-jre-hotspot-installer/adoptium-11-jre-hotspot-set-default_202211020620~11.0.17b8+s390x~11.0.16.1b1_all.deb
-Size: 1928
-SHA256: f435be5ce551d5beea5cbfd8a0551b0b128465d43d890c1abb16d9e460cdf388
-SHA1: 60dd4b8cda1c8c1f852ec0832b21687964d21e09
-MD5sum: 24e5765c55b5ee138fa1dd3472007386
+Filename: pool/main/a/adoptium-11-jre-hotspot-installer/adoptium-11-jre-hotspot-set-default_202211041211~11.0.17b8_all.deb
+Size: 1904
+SHA256: f8e3604b10acd5fc627e664bddbe7990aa0ba6e9a35a64084da368db1e42be6a
+SHA1: 7cfc810d84424dc6f01670d6c4a897698a969b45
+MD5sum: 7930deb3371d8cc4d8acb368b6a1a4e3
 Description: Set Adoptium Temurin JRE 11 with Hotspot as default
  Sets Adoptium Temurin JRE 11 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
@@ -305,42 +305,42 @@ Description: Set Adoptium Temurin JDK 18 with Hotspot as default
 
 Package: adoptium-19-installer
 Source: adoptium-19-jdk-hotspot-installer
-Version: 202211031355~19.0.1b10+s390x~19b36
+Version: 202211041721~19.0.1b10
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 8
-Depends: adoptium-19-jdk-hotspot-installer (= 202211031355~19.0.1b10+s390x~19b36)
-Recommends: adoptium-19-jdk-hotspot-set-default (= 202211031355~19.0.1b10+s390x~19b36)
+Depends: adoptium-19-jdk-hotspot-installer (= 202211041721~19.0.1b10)
+Recommends: adoptium-19-jdk-hotspot-set-default (= 202211041721~19.0.1b10)
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-19-jdk-hotspot-installer/adoptium-19-installer_202211031355~19.0.1b10+s390x~19b36_all.deb
-Size: 1612
-SHA256: 6a451dc8ca13a008311e379a3a35b3428fa319a82a064b14e12712d2e0321379
-SHA1: 5541ca9c5f32ea6e5a4952f04006c9037981f6d2
-MD5sum: a4d6aa92fe56cc64261cb8f30401edc8
+Filename: pool/main/a/adoptium-19-jdk-hotspot-installer/adoptium-19-installer_202211041721~19.0.1b10_all.deb
+Size: 1596
+SHA256: 80f5b40976189a23ce9f37fd1940b26dde9eb0cafc90d47e5f9b47f6c15c073f
+SHA1: 57ffd408205690ed3da7f5f8d65b58e3da249136
+MD5sum: d6ee51053381808ad53554ae78b8ce61
 Description: Virtual package for Adoptium Temurin JDK 19 with Hotspot
  Virtual package depending Adoptium Temurin JDK 19 with Hotspot
  This package depends on adoptium-19-jdk-hotspot-installer
 
 Package: adoptium-19-jdk-hotspot-installer
-Version: 202211031355~19.0.1b10+s390x~19b36
+Version: 202211041721~19.0.1b10
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 60
 Pre-Depends: wget, ca-certificates, bash (>= 4.0)
 Depends: java-common (>= 0.24), locales, libxrender1, libxtst6, libxi6, libfontconfig1, libasound2
 Recommends: fonts-dejavu-extra
-Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptium-19-jdk-hotspot-set-default (= 202211031355~19.0.1b10+s390x~19b36)
+Suggests: fonts-ipafont-gothic, fonts-ipafont-mincho, fonts-wqy-microhei, fonts-wqy-zenhei, fonts-indic, adoptium-19-jdk-hotspot-set-default (= 202211041721~19.0.1b10)
 Provides: default-jdk, default-jdk-headless, default-jre, default-jre-headless, java-compiler, java-runtime, java-runtime-headless, java-sdk, java-sdk-headless, java10-runtime, java10-runtime-headless, java10-sdk, java10-sdk-headless, java11-runtime, java11-runtime-headless, java11-sdk, java11-sdk-headless, java12-runtime, java12-runtime-headless, java12-sdk, java12-sdk-headless, java13-runtime, java13-runtime-headless, java13-sdk, java13-sdk-headless, java14-runtime, java14-runtime-headless, java14-sdk, java14-sdk-headless, java15-runtime, java15-runtime-headless, java15-sdk, java15-sdk-headless, java16-runtime, java16-runtime-headless, java16-sdk, java16-sdk-headless, java17-runtime, java17-runtime-headless, java17-sdk, java17-sdk-headless, java18-runtime, java18-runtime-headless, java18-sdk, java18-sdk-headless, java19-runtime, java19-runtime-headless, java19-sdk, java19-sdk-headless, java2-runtime, java2-runtime-headless, java2-sdk, java2-sdk-headless, java5-runtime, java5-runtime-headless, java5-sdk, java5-sdk-headless, java6-runtime, java6-runtime-headless, java6-sdk, java6-sdk-headless, java7-runtime, java7-runtime-headless, java7-sdk, java7-sdk-headless, java8-runtime, java8-runtime-headless, java8-sdk, java8-sdk-headless, java9-runtime, java9-runtime-headless, java9-sdk, java9-sdk-headless
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-19-jdk-hotspot-installer/adoptium-19-jdk-hotspot-installer_202211031355~19.0.1b10+s390x~19b36_all.deb
-Size: 5508
-SHA256: ced5d76c5c2a33e28579d6d4e619825bbcacc54d832b7d1ac96189e909d1d1f5
-SHA1: b52b630a10d2bdbc7c2ee12aa096578277419231
-MD5sum: ee4f78159ca2c0a09b638e14d539084a
+Filename: pool/main/a/adoptium-19-jdk-hotspot-installer/adoptium-19-jdk-hotspot-installer_202211041721~19.0.1b10_all.deb
+Size: 5488
+SHA256: 6bacfb2349d18a9cfa17ab9f7cdd3f9d63cc0dddfd43c5189cbc9de5f97bac93
+SHA1: 4e56b4e89129984d14b95ed2ce3f033fcd4868f4
+MD5sum: f2ac8fdf8f13f5a87527d0a4d84f1ad7
 Description: Adoptium Temurin JDK 19 with Hotspot
  Installer package for Adoptium Temurin JDK 19 with Hotspot.
  This package does not contain binary files, but is only a downloader/installer.
@@ -349,21 +349,21 @@ Description: Adoptium Temurin JDK 19 with Hotspot
 
 Package: adoptium-19-jdk-hotspot-set-default
 Source: adoptium-19-jdk-hotspot-installer
-Version: 202211031355~19.0.1b10+s390x~19b36
+Version: 202211041721~19.0.1b10
 Architecture: all
 Maintainer: Adoptium .deb Installer Key (Used for package signing) <adoptium.deb@pardini.net>
 Installed-Size: 14
-Pre-Depends: adoptium-19-jdk-hotspot-installer (= 202211031355~19.0.1b10+s390x~19b36)
+Pre-Depends: adoptium-19-jdk-hotspot-installer (= 202211041721~19.0.1b10)
 Conflicts: adoptium-default, adoptopenjdk-default, amazoncorretto-default, oracle-java6-set-default, oracle-java7-set-default, oracle-java8-set-default, oracle-java9-set-default
 Provides: adoptium-default
 Homepage: https://adoptium.net/
 Priority: optional
 Section: java
-Filename: pool/main/a/adoptium-19-jdk-hotspot-installer/adoptium-19-jdk-hotspot-set-default_202211031355~19.0.1b10+s390x~19b36_all.deb
-Size: 1928
-SHA256: a4a59149195890e5df81f1d880e2664bd043812abe60fffd94ca48c35fbe4369
-SHA1: 3579cfb2315ebdc106bfc4b84db113857c03d8a2
-MD5sum: 84b23d5c80a28ad0f5fa7bdb4d746fad
+Filename: pool/main/a/adoptium-19-jdk-hotspot-installer/adoptium-19-jdk-hotspot-set-default_202211041721~19.0.1b10_all.deb
+Size: 1904
+SHA256: 42123ce99334bbfc222c6583de9c35eb1ff1999e6214851553a3c0bd78edd625
+SHA1: b187f927afccdb63b5561b3563970e4dc45616b5
+MD5sum: 7d952404f00c8783598753bd348e7a6b
 Description: Set Adoptium Temurin JDK 19 with Hotspot as default
  Sets Adoptium Temurin JDK 19 with Hotspot as the system default.
  This will set JAVA_HOME, and run update-java-alternatives for you.
