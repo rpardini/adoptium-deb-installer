@@ -6,3 +6,7 @@
 
 %:
 	dh $@
+
+# Use xz (not zstd) compression for deb packages
+override_dh_builddeb:
+	dh_builddeb -- -Zxz

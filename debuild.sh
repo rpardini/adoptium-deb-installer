@@ -24,6 +24,8 @@ fi
 
 if [[ "a$BUILD_BINARY_PACKAGES" == "atrue" ]]; then
 	echo "::group::BINARY $jdkVersion $distribution"
+	# For binaries, passing -Zxz to debuild is not enough; see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=998010
+	# So there's stuff in debian/rules for this
 	eatmydata debuild -Zxz # full build; use xz compression, not zstd (which is default in Ubuntu 22+)
 	echo "Build done! Moving packages..."
 	mkdir -p "${DEST_DIR}/binaries/"
