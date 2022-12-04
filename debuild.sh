@@ -24,7 +24,7 @@ fi
 
 if [[ "a$BUILD_BINARY_PACKAGES" == "atrue" ]]; then
   echo "::group::BINARY $jdkVersion $distribution"
-  eatmydata debuild # full build
+  eatmydata debuild -Zxz # full build; use xz compression, not zstd (which is default in Ubuntu 22+)
   echo "Build done! Moving packages..."
   mkdir -p "${DEST_DIR}/binaries/"
   mv -v "${BUILD_OUTPUT_DIR}"/adoptium* "${DEST_DIR}/binaries/"
@@ -33,7 +33,7 @@ fi
 
 if [[ "a$BUILD_SOURCE_PACKAGES" == "atrue" ]]; then
   echo "::group::SOURCE $jdkVersion $distribution"
-  eatmydata debuild -S # source-only build
+  eatmydata debuild -S -Zxz # source-only build; use xz compression, not zstd (which is default in Ubuntu 22+)
   echo "Build done! Moving packages..."
   mkdir -p "${DEST_DIR}/sourcepkg/"
   mv -v "${BUILD_OUTPUT_DIR}"/adoptium* "${DEST_DIR}/sourcepkg/"

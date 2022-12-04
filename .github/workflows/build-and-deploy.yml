@@ -18,18 +18,18 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
 
       - name: Clone and checkout this repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: src
 
-      - name: Set up Node.js 14
-        uses: actions/setup-node@v2
+      - name: Set up Node.js 16
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Import GPG key from GitHub secrets
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@8c43807e82148a7bafc633cc9584d04bf54be8d0 # v4 # https://github.com/crazy-max/ghaction-import-gpg#usage
+        uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # v5.2.0 # https://github.com/crazy-max/ghaction-import-gpg/releases
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
@@ -68,7 +68,7 @@ jobs:
 
 
       - name: Checkout GitHub pages repo
-        uses: actions/checkout@v2 # https://github.com/actions/checkout#usage
+        uses: actions/checkout@v3 # https://github.com/actions/checkout#usage
         with:
           repository: rpardini/adoptium-deb-installer
           ref: "repo-adoptium" # branch
