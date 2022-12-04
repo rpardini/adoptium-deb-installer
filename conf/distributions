@@ -4,4 +4,4 @@ Codename: stable
 Architectures: amd64 ppc64el arm64 armel s390x source
 Components: main
 Description: Adoptium Debian Installer Packages
-SignWith: 63FF2EEC3156A973
+SignWith: 15C25A7EA1EAC8B7
