@@ -45,6 +45,13 @@ jobs:
           RUN_GENERATOR: 1
 
 
+      - name: Test install adoptium-17-jre-hotspot vs debian:stable (amd64)
+        working-directory: src
+        run: ./test.sh
+        env:
+          VERSION: adoptium-17-jre-hotspot
+          TEST_IMAGE: debian:stable
+
       - name: Test install adoptium-17-jdk-hotspot vs debian:stable (amd64)
         working-directory: src
         run: ./test.sh
