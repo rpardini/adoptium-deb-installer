@@ -156,6 +156,12 @@
 ./adoptium-11-jdk-hotspot-installer_202304191801~11.0.18b10+aarch64+x64~11.0.19b7~kinetic_source.changes
 ./adoptium-11-jdk-hotspot-installer_202304191801~11.0.18b10+aarch64+x64~11.0.19b7~trusty_source.changes
 ./adoptium-11-jdk-hotspot-installer_202304191801~11.0.18b10+aarch64+x64~11.0.19b7~xenial_source.changes
+./adoptium-11-jdk-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~bionic_source.changes
+./adoptium-11-jdk-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~focal_source.changes
+./adoptium-11-jdk-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~jammy_source.changes
+./adoptium-11-jdk-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~kinetic_source.changes
+./adoptium-11-jdk-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~trusty_source.changes
+./adoptium-11-jdk-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~xenial_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~bionic_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~focal_source.changes
 ./adoptium-11-jre-hotspot-installer_202109171847~11.0.12b7~hirsute_source.changes
@@ -314,6 +320,12 @@
 ./adoptium-11-jre-hotspot-installer_202304191801~11.0.18b10+aarch64+x64~11.0.19b7~kinetic_source.changes
 ./adoptium-11-jre-hotspot-installer_202304191801~11.0.18b10+aarch64+x64~11.0.19b7~trusty_source.changes
 ./adoptium-11-jre-hotspot-installer_202304191801~11.0.18b10+aarch64+x64~11.0.19b7~xenial_source.changes
+./adoptium-11-jre-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~bionic_source.changes
+./adoptium-11-jre-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~focal_source.changes
+./adoptium-11-jre-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~jammy_source.changes
+./adoptium-11-jre-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~kinetic_source.changes
+./adoptium-11-jre-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~trusty_source.changes
+./adoptium-11-jre-hotspot-installer_202304211740~11.0.19b7+s390x~11.0.18b10~xenial_source.changes
 ./adoptium-16-jdk-hotspot-installer_202108231543~16.0.2b7~bionic_source.changes
 ./adoptium-16-jdk-hotspot-installer_202108231543~16.0.2b7~focal_source.changes
 ./adoptium-16-jdk-hotspot-installer_202108231543~16.0.2b7~hirsute_source.changes
