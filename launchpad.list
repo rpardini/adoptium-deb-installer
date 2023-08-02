@@ -986,6 +986,12 @@
 ./adoptium-8-jdk-hotspot-installer_202307240758~8u382b05+arm~8u372b07~kinetic_source.changes
 ./adoptium-8-jdk-hotspot-installer_202307240758~8u382b05+arm~8u372b07~trusty_source.changes
 ./adoptium-8-jdk-hotspot-installer_202307240758~8u382b05+arm~8u372b07~xenial_source.changes
+./adoptium-8-jdk-hotspot-installer_202308010739~8u382b05~bionic_source.changes
+./adoptium-8-jdk-hotspot-installer_202308010739~8u382b05~focal_source.changes
+./adoptium-8-jdk-hotspot-installer_202308010739~8u382b05~jammy_source.changes
+./adoptium-8-jdk-hotspot-installer_202308010739~8u382b05~kinetic_source.changes
+./adoptium-8-jdk-hotspot-installer_202308010739~8u382b05~trusty_source.changes
+./adoptium-8-jdk-hotspot-installer_202308010739~8u382b05~xenial_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~bionic_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~focal_source.changes
 ./adoptium-8-jre-hotspot-installer_202108261014~8u302b08~hirsute_source.changes
@@ -1162,3 +1168,9 @@
 ./adoptium-8-jre-hotspot-installer_202307240758~8u382b05+arm~8u372b07~kinetic_source.changes
 ./adoptium-8-jre-hotspot-installer_202307240758~8u382b05+arm~8u372b07~trusty_source.changes
 ./adoptium-8-jre-hotspot-installer_202307240758~8u382b05+arm~8u372b07~xenial_source.changes
+./adoptium-8-jre-hotspot-installer_202308010739~8u382b05~bionic_source.changes
+./adoptium-8-jre-hotspot-installer_202308010739~8u382b05~focal_source.changes
+./adoptium-8-jre-hotspot-installer_202308010739~8u382b05~jammy_source.changes
+./adoptium-8-jre-hotspot-installer_202308010739~8u382b05~kinetic_source.changes
+./adoptium-8-jre-hotspot-installer_202308010739~8u382b05~trusty_source.changes
+./adoptium-8-jre-hotspot-installer_202308010739~8u382b05~xenial_source.changes
