@@ -3,11 +3,11 @@
 // config
 const architectures = new Set(['x64', 'aarch64', 'ppc64le', 's390x', 'arm']);
 const archMapJdkToDebian = {'x64': 'amd64', 'aarch64': 'arm64', 'ppc64le': 'ppc64el', 's390x': 's390x', 'arm': 'armel'}; //subtle differences
-const wantedJavaVersions = new Set([8, 11, 17, 18, 19]); // official GA releases from adoptium
+const wantedJavaVersions = new Set([8, 11, 17, 21]); // official GA releases from adoptium
 const linuxesAndDistros = new Set([
     {
         name: 'ubuntu',
-        distros: new Set(['trusty', 'xenial', 'bionic', 'focal', 'jammy', 'kinetic']), // LTS ESM releases + last release + next, but not the ones frozen, like hir.sute or gro.ovy
+        distros: new Set(['trusty', 'xenial', 'bionic', 'focal', 'jammy', 'mantic']), // LTS ESM releases + last release + next, but not the ones frozen, like hir.sute or gro.ovy
         standardsVersion: "3.9.7",
         useDistroInVersion: true,
         singleBinaryForAllArches: false,

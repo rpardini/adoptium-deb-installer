@@ -59,11 +59,11 @@ jobs:
           VERSION: adoptium-17-jdk-hotspot
           TEST_IMAGE: debian:stable
 
-      - name: Test install adoptium-19-jdk-hotspot vs debian:stable (amd64)
+      - name: Test install adoptium-21-jdk-hotspot vs debian:stable (amd64)
         working-directory: src
         run: ./test.sh
         env:
-          VERSION: adoptium-19-jdk-hotspot
+          VERSION: adoptium-21-jdk-hotspot
           TEST_IMAGE: debian:stable
 
       - name: Test install adoptium-8-jre-hotspot vs ubuntu:rolling (amd64)
