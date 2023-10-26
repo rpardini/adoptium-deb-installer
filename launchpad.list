@@ -650,6 +650,12 @@
 ./adoptium-17-jdk-hotspot-installer_202310231659~17.0.9b9+arm+s390x~17.0.8.1b1~mantic_source.changes
 ./adoptium-17-jdk-hotspot-installer_202310231659~17.0.9b9+arm+s390x~17.0.8.1b1~trusty_source.changes
 ./adoptium-17-jdk-hotspot-installer_202310231659~17.0.9b9+arm+s390x~17.0.8.1b1~xenial_source.changes
+./adoptium-17-jdk-hotspot-installer_202310251101~17.0.9b9+arm~17.0.8.1b1~bionic_source.changes
+./adoptium-17-jdk-hotspot-installer_202310251101~17.0.9b9+arm~17.0.8.1b1~focal_source.changes
+./adoptium-17-jdk-hotspot-installer_202310251101~17.0.9b9+arm~17.0.8.1b1~jammy_source.changes
+./adoptium-17-jdk-hotspot-installer_202310251101~17.0.9b9+arm~17.0.8.1b1~mantic_source.changes
+./adoptium-17-jdk-hotspot-installer_202310251101~17.0.9b9+arm~17.0.8.1b1~trusty_source.changes
+./adoptium-17-jdk-hotspot-installer_202310251101~17.0.9b9+arm~17.0.8.1b1~xenial_source.changes
 ./adoptium-17-jre-hotspot-installer_202211061939~17.0.5b8~bionic_source.changes
 ./adoptium-17-jre-hotspot-installer_202211061939~17.0.5b8~focal_source.changes
 ./adoptium-17-jre-hotspot-installer_202211061939~17.0.5b8~jammy_source.changes
@@ -741,6 +747,12 @@
 ./adoptium-17-jre-hotspot-installer_202310231658~17.0.9b9+arm+s390x~17.0.8.1b1~mantic_source.changes
 ./adoptium-17-jre-hotspot-installer_202310231658~17.0.9b9+arm+s390x~17.0.8.1b1~trusty_source.changes
 ./adoptium-17-jre-hotspot-installer_202310231658~17.0.9b9+arm+s390x~17.0.8.1b1~xenial_source.changes
+./adoptium-17-jre-hotspot-installer_202310251100~17.0.9b9+arm~17.0.8.1b1~bionic_source.changes
+./adoptium-17-jre-hotspot-installer_202310251100~17.0.9b9+arm~17.0.8.1b1~focal_source.changes
+./adoptium-17-jre-hotspot-installer_202310251100~17.0.9b9+arm~17.0.8.1b1~jammy_source.changes
+./adoptium-17-jre-hotspot-installer_202310251100~17.0.9b9+arm~17.0.8.1b1~mantic_source.changes
+./adoptium-17-jre-hotspot-installer_202310251100~17.0.9b9+arm~17.0.8.1b1~trusty_source.changes
+./adoptium-17-jre-hotspot-installer_202310251100~17.0.9b9+arm~17.0.8.1b1~xenial_source.changes
 ./adoptium-18-jdk-hotspot-installer_202203291231~18b36~bionic_source.changes
 ./adoptium-18-jdk-hotspot-installer_202203291231~18b36~focal_source.changes
 ./adoptium-18-jdk-hotspot-installer_202203291231~18b36~impish_source.changes
